@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-#define N 9;
+#define N 9
 
 void main()
 {
@@ -14,7 +14,7 @@ void main()
     }
 }
 
-void print_grid(int grid[N][N]) // Prints the grid in a square format
+void print_grid(int grid[9][9]) // Prints the grid in a square format
 {
     for (int i = 0; i < 9; i++)
     {
@@ -25,26 +25,25 @@ void print_grid(int grid[N][N]) // Prints the grid in a square format
         }
         printf("/n");
     }
-    return 0;
 }
 
-void change_cell(int grid[N][N],int i, int j, int n) //Changes the value n of a specific cell inside the grid of i,j index
+void change_cell(int grid[9][9],int i, int j, int n) //Changes the value n of a specific cell inside the grid of i,j index
 {
     grid[i][j] = n;
 }
 
 
-bool contains(int arr[], int n)
+int contains(int arr[9], int n)
 {
     for(int i = 0; i < sizeof(arr); i++)
     {
         if(arr[i] == n)
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
 
-bool is_solvable(int grid[N][N])
+int is_solvable(int grid[9][9])
 {
     //Testing rows
     for (int i = 0; i < 9; i++)
@@ -54,13 +53,13 @@ bool is_solvable(int grid[N][N])
             int arr[N];
             if (grid[i][j] != 0)
             {
-                if (!contains(grid[][], grid[i][j])
+                if (!contains(grid[9][9], grid[i][j])
                 {
                    arr[j] += grid[i][j];
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
         }
@@ -71,21 +70,21 @@ bool is_solvable(int grid[N][N])
     {
         for (int i = 0; j < 9; i++)
         {
-            int arr[N];
+            int arr[9];
             if (grid[i][j] != 0)
             {
-                if (!contains(grid[][], grid[i][j])
+                if (!contains(grid[9][9], grid[i][j])
                 {
                    arr[i] += grid[i][j];
                 }
                 else
                 {
-                    return false;
+                    return 0;
                 }
             }
         }
     }
-
+    /*
     //Testing 3*3 squares
     for (int i = 0; i < 9; j+=3)
     {
@@ -96,7 +95,7 @@ bool is_solvable(int grid[N][N])
             {
                 if (!contains(grid[][], grid[i][j])
                 {
-                    /* code */
+                    *\
                 }
                 
             }
