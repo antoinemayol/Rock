@@ -1,7 +1,5 @@
 #include<stdio.h>
 
-#define N 9
-
 void print_grid(int grid[9][9]);
 int contains(int arr[], int n);
 int is_solvable(int grid[9][9]);
@@ -21,7 +19,9 @@ void main()
          {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
          {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
          {0, 0, 5, 2, 0, 6, 3, 0, 0} };
-    print_grid(grid);
+        int test[9] = grid[0];
+        printf("%d", is_unique(test));
+        ///printf("%d",is_solvable(grid));
 }
 
 void print_grid(int grid[9][9]) // Prints the grid in a square format
@@ -54,47 +54,67 @@ int contains(int arr[], int n)
     return 0;
 }
 
+int is_unique(int arr[9])
+{
+    int tmp[9];
+    for(int i = 0; i < 9; i++)
+    {
+        if (arr[i] != 0)
+        {
+            printf("yess %d", arr[i]);
+            if(contains(tmp, arr[i]))
+            {
+                return 0;
+            }
+            else
+            {
+                tmp[i] = arr[i];
+            }
+        }
+    }
+    return 1;
+}
+
 int is_solvable(int grid[9][9])
 {
-    //Testing rows
-    for (int i = 0; i < 9; i++)
+    //Testing rows and columns
+    for(int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < 9; j++)
+        if (!is_unique(grid[i]))
         {
-            int arr[N];
-            if (grid[i][j] != 0)
-            {
-                int *grd = &grid[9][9];
-                if (!contains(grd, grid[i][j]))
-                {
-                   arr[j] += grid[i][j];
-                }
-                else
-                {
-                    return 0;
-                }
-            }
+            printf("error in rows");
+            printf("%d", i);
+            return 0;
+        }
+        
+        int tmp_arr[9];
+        for (int j = 0; j < 9; i++)
+        {
+            tmp_arr[i] = grid[i][j];
+        }
+        if(!is_unique(tmp_arr))
+        {
+            printf("error in columns");
+            return 0;
         }
     }
-
-    //Testing columns
-    for (int j = 0; j < 9; j++)
-    {
-        for (int i = 0; i < 9; i++)
+    for (int k = 0; k < 9; k++) // Testing 3 by 3 square
         {
-            int arr[9];
-            if (grid[i][j] != 0)
+            int tmp[9];
+            int count = 0;
+            for (int l = (k /3) *3; l < 3; l++)
             {
-                int *grd = &grid[9][9];
-                if (!contains(grd, grid[i][j]))
+                for(int m = (k % 3)*3; m < 3; m++)
                 {
-                   arr[i] += grid[i][j];
-                }
-                else
-                {
-                    return 0;
+                    tmp[count] = grid[l][m];
+                    count++;
                 }
             }
+            if(!is_unique(tmp))
+            {
+                printf("error in squares");
+                return 0;
+            }
         }
-    }
+    return 1;
 }
