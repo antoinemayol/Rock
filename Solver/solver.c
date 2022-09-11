@@ -5,6 +5,7 @@ int contains(int arr[], int n);
 int is_solvable(int grid[9][9]);
 void change_cell(int grid[9][9],int i, int j, int n);
 int test_grid[9][9];
+int is_unique(int arr[9]);
 
 
 
@@ -19,9 +20,7 @@ void main()
          {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
          {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
          {0, 0, 5, 2, 0, 6, 3, 0, 0} };
-        int test[9] = grid[0];
-        printf("%d", is_unique(test));
-        ///printf("%d",is_solvable(grid));
+    printf("%d",is_solvable(grid));
 }
 
 void print_grid(int grid[9][9]) // Prints the grid in a square format
@@ -57,11 +56,11 @@ int contains(int arr[], int n)
 int is_unique(int arr[9])
 {
     int tmp[9];
-    for(int i = 0; i < 9; i++)
+    for (int i = 0; i < 9; i++)
     {
         if (arr[i] != 0)
         {
-            printf("yess %d", arr[i]);
+            //printf("yess %d", arr[i]);
             if(contains(tmp, arr[i]))
             {
                 return 0;
@@ -80,13 +79,19 @@ int is_solvable(int grid[9][9])
     //Testing rows and columns
     for(int i = 0; i < 9; i++)
     {
-        if (!is_unique(grid[i]))
+        printf("%d", i);
+        int row[9];
+        
+        for (int j = 0; j < 9; i++)
         {
-            printf("error in rows");
-            printf("%d", i);
-            return 0;
+            row[i] = grid[i][j];
         }
         
+        if (!is_unique(row))
+        {
+            printf("error in row : %d\n", i);
+            return 0;
+        }
         int tmp_arr[9];
         for (int j = 0; j < 9; i++)
         {
