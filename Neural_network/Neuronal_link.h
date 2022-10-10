@@ -2,7 +2,7 @@
 #define NEURAL_LINK
 #include <string.h>
 
-void Initialisation(double **X,size_t lenX,double W[][2]);
+double* Initialisation(size_t lenX);
 void modele(double **X,double **W, double b, size_t lenXW,double A[]);
 
 
