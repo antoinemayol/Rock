@@ -5,32 +5,36 @@
 
 
 
-void Initialisation(double **X,size_t lenX, double W[][2])
+double* Initialisation(size_t lenX)
 {
-	srand(1);
-	for (int y = 0; y < 2;y++)
-	{
-		for (size_t i = 0; i < lenX;i++)
+	
+	double* res = calloc(0,sizeof(int)*2*lenX);
+	srand(2);
+	for (size_t i = 0; i < lenX*2;i++)
 		{	
-			W[y][i] = rand()%10;
+			double tmp = rand();
+			printf("tmp : %f\n",tmp);
+			printf("res %zu : %f\n",i,tmp/10);
+			res[i] = tmp/(double)10;
 			//printf("W init : %f\n",W[y][i]);
 		}
-	}
-	
+	return res;
 }
 
 
 
-void  modele(double **X, double **W,double b,size_t lenXW,double A[])
+double*  modele(double* X, double* W,double b,size_t lenXW)
 {
-	double Z[] = {0};
+	double *Z = calloc(0,sizeof(int)*lenXW);
+	double *A = calloc(0,sizeof(int)*lenXW);
 	int j =0;
 	for(size_t i = 0;i < lenXW;i++)
 	{
-		Z[i] = X[j][i]*W[j][i] + X[j+1][i]*W[j+1][i] + b;
+		Z[i] = X[j * lenXW + i]*W[j * lenXW + i] + X[(j+1)*lenXW + i]* W[(j+1)*lenXW +i] + b;
 	}
 	for(size_t y = 0; y < lenXW;y++)
 	{
 		A[y] = 1/(1-exp(Z[y]));
 	}	
+	return A;
 }
