@@ -1,5 +1,6 @@
 #include "math_tool.h"
 #include "Neuronal_link.h"
+#include "nerons.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -99,6 +100,9 @@ int main(int argc, char** argv)
 	*/
 	printf("Somme : %f \n",sum(0,te,(size_t)3));
 	printf("Logloss : %f \n",logloss(A2,Y22,3));
+
+	node tmp = give_node(2,3,4,6,5,"test");
+	printf(tmp.name);
 	
 	return 0;
 }

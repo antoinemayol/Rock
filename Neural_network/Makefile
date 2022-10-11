@@ -18,6 +18,9 @@ mtest: testMath.o math_tool.o
 ntest: testNeural.o Neuronal_link.o
 	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
+ftest: testNodes.o nerons.o
+	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
+
 
 -include ${DEP}
 
