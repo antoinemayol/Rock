@@ -13,8 +13,8 @@ double* Initialisation(size_t lenX)
 	for (size_t i = 0; i < lenX*2;i++)
 		{	
 			double tmp = rand();
-			printf("tmp : %f\n",tmp);
-			printf("res %zu : %f\n",i,tmp/10);
+			//printf("tmp : %f\n",tmp);
+			//printf("res %zu : %f\n",i,tmp/10);
 			res[i] = tmp/(double)10;
 			//printf("W init : %f\n",W[y][i]);
 		}
@@ -30,11 +30,13 @@ double*  modele(double* X, double* W,double b,size_t lenXW)
 	int j =0;
 	for(size_t i = 0;i < lenXW;i++)
 	{
-		Z[i] = X[j * lenXW + i]*W[j * lenXW + i] + X[(j+1)*lenXW + i]* W[(j+1)*lenXW +i] + b;
+		Z[i] = X[j * lenXW + i] * W[j * lenXW + i] + X[(j+1)*lenXW + i]* W[(j+1)*lenXW +i] + b;
 	}
 	for(size_t y = 0; y < lenXW;y++)
 	{
-		A[y] = 1/(1-exp(Z[y]));
+		printf("z_id : %fi \n",Z[y]);
+
+		A[y] = 1/(1+exp(-(Z[y])));
 	}	
 	return A;
 }

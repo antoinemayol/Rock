@@ -3,7 +3,7 @@
 #include <string.h>
 
 double* Initialisation(size_t lenX);
-void modele(double **X,double **W, double b, size_t lenXW,double A[]);
+double* modele(double *X,double *W, double b, size_t lenXW);
 
 
 #endif
