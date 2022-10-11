@@ -8,7 +8,7 @@ LDLIBS =
 
 all: testM testN
 
-SRC = testMath.c testNeural.c math_tool.c Neuronal_link.c
+SRC = testMath.c testNeural.c math_tool.c Neuronal_link.c testNodes.c nerons.c
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
@@ -31,5 +31,6 @@ clean:
 	${RM} ${DEP}
 	${RM} mtest
 	${RM} ntest
+	${RM} ftest
 
 # END
