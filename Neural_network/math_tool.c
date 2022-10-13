@@ -40,9 +40,39 @@ double sigmoide(double z)
 	return 1 / 1 + exp(-z);
 }
 
-/*double gradient()
+/*double* gradient(double *A, double *Y,double x*,size_t len)
 {
-	
+	double *res = calloc(0,sizeint(int)*3);
+	size_t i = 0;
+	while i < len:
+	{
+		res[0] += x[i]*(A[i]-Y[i]); 
+		res[1] += x[len + i]*(A[i]-Y[i]);
+		res[2] += (A[i] - Y[i]);
+		i+=1;
+		if (i >= len):
+		{
+			res[0] = res[0] * (1/len);
+			res[1] = res[1] * (1/len);
+		}
+
+	}
+	return res;
 }*/
+
+void update(double* res,double b,double *W, double learning_rate,double len)
+{
+	for(size_t i =0; i<2;i++)
+	{
+		for(size_t y = 0 ; y < len;y++)
+		{
+			W[i * len + y] -= learning_rate * res[i]; 
+		}
+	}
+	b -= learning_rate * res[2];
+}
+
+
+
 
 

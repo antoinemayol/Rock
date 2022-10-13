@@ -28,15 +28,16 @@ int main()
 	double *A = modele(X,w,b,5);
 	for(int y = 0; y < 5;y++)
 		{
+			A[y] -= 0.0001;
 			printf("A_id %u : %f\n",y,A[y]);
 		}
 	
 	//si A[i] <= 1, alors on a log(1 - A[i]) = -infini
 	//don faut absolument eviter ça sinon logloss marche pas
-	A[0] = 0.62;
-	A[1] = 0.74;
+	//A[0] = 0.62;
+	//A[1] = 0.74;
 
-	double logl = logloss(A,Y,5);
+	double logl = logloss(A,Y,len);
 	printf("logl : %f\n",logl);
 
 	return 0;
