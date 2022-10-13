@@ -8,11 +8,11 @@ LDLIBS = `pkg-config --libs sdl2 SDL2_image`
 
 all: display grayscale
 
-SRC = display.c grayscale.c main.c
+SRC = display.c grayscale.c blur.c main.c 
 OBJ = ${SRC:.c=.o}
 EXE = ${SRC:.c=}
 
-main: main.o display.o grayscale.o
+main: main.o display.o blur.o grayscale.o
 
 display: display.o
 grayscale: grayscale.o

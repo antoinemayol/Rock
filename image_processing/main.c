@@ -4,6 +4,7 @@
 
 #include "display.h"
 #include "grayscale.h"
+#include "blur.h"
 
 
 // Event loop that calls the relevant event handler.
@@ -80,6 +81,7 @@ int main(int argc, char** argv)
    
    //processing grayscale
    surface_to_grayscale(surface);
+   gaussian_blur(surface);
    SDL_Texture* grayscale =  SDL_CreateTextureFromSurface(renderer, surface);
    SDL_FreeSurface(surface);
 
