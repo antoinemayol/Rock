@@ -1,5 +1,6 @@
 #include "math_tool.h"
 #include "Neuronal_link.h"
+#include "nerons.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
