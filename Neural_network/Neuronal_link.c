@@ -34,9 +34,12 @@ double*  modele(double* X, double* W,double b,size_t lenXW)
 	}
 	for(size_t y = 0; y < lenXW;y++)
 	{
-		printf("z_id : %fi \n",Z[y]);
+
 
 		A[y] = 1/(1+exp(-(Z[y])));
-	}	
+	}
+	//peut etre penser à free(Z) peut etre pas mal mais à voir,
+	//je le met au cas-où
+	free(Z);
 	return A;
 }

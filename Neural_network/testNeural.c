@@ -31,7 +31,13 @@ int main()
 			printf("A_id %u : %f\n",y,A[y]);
 		}
 	
+	//si A[i] <= 1, alors on a log(1 - A[i]) = -infini
+	//don faut absolument eviter ça sinon logloss marche pas
+	A[0] = 0.62;
+	A[1] = 0.74;
 
+	double logl = logloss(A,Y,5);
+	printf("logl : %f\n",logl);
 
 	return 0;
 }

@@ -19,6 +19,11 @@ double logloss(double as[], double ys[], size_t m)
 	double res = 0;
 	for(long unsigned int i = 0; i < m; i++)
 	{
+		/*printf("tmp : %f\n",res);
+		printf("log(as[i]) : %f\n",log(as[i]));
+		printf("ys[i] : %f\n",ys[i]);
+		printf("log(1 - as[i]) : %f\n",log(1-as[i]));
+		printf("1 - ys[i]) : %f\n\n",(1-ys[i]));*/
 		res = res + ys[i] * log(as[i]) + (1-ys[i]) * log(1 - as[i]);
 	}
 
@@ -35,9 +40,9 @@ double sigmoide(double z)
 	return 1 / 1 + exp(-z);
 }
 
-double gradient()
+/*double gradient()
 {
 	
-}
+}*/
 
 

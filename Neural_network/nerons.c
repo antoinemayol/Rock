@@ -15,14 +15,18 @@ node give_node(double wht, double _x1, double _x2, double _w1, double _w2, char*
 	n.x2 = _x2;
 	n.w1 = _w1;
 	n.w2 = _w2;
-	n.name = _name;	
+	n.name = _name;
+
 	size_t len = strlen(_name);
 	n.path = malloc((len + strlen("neurones/") + strlen(".txt"))*sizeof(char));
 	concat_path(n.path,"neurones/",_name,".txt",(len + 13));
+
 	refresh(&n);	
 	return n;
 }
 
+
+//permet de créer le chemin d'un noeud
 void concat_path(char* res,char* s1, char* s2, char* s3, int maxpath)
 {
 	int k = 0;
