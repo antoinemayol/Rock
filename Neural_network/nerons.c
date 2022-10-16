@@ -58,18 +58,22 @@ void refresh(node *n)
 		errx(1,"can't open file !");
 	}
 
-	fprintf(f,"name : %s \n",n->name);
-	fprintf(f,"weight : %f \n",n->weight);
-	fprintf(f,"X1 : %f \n",n->x1);
-	fprintf(f,"X2 : %f \n",n->x2);
-	fprintf(f,"W1 : %f \n",n->w1);
-	fprintf(f,"W2 : %f \n",n->w2);
+	fprintf(f,"%s\n",n->name);
+	fprintf(f,"b\n");
+	fprintf(f,"%f\n",n->weight);
+	fprintf(f,"x\n");
+	fprintf(f,"%f\n",n->x1);
+	fprintf(f,"%f\n",n->x2);
+	fprintf(f,"w\n");
+	fprintf(f,"%f\n",n->w1);
+	fprintf(f,"%f\n",n->w2);
 	fclose(f);
 }
 
-void fromfile(char* path)
+//version hardcodé pour XOR
+node fromfile(char* path)
 {
-	//node n;
+	node n;
 	FILE *f = fopen(path,"r");
 	if(f == NULL)
    	{
@@ -78,12 +82,47 @@ void fromfile(char* path)
 		
 	char *line =NULL;
 	size_t len = 0;
-
+	getline(&line, &len, f);
+	n.name = line;
 	while(getline(&line, &len, f) != -1)
 	{
-		printf("line length : %zd\n",strlen(line));
+		printf("Actual line : %s",line);
+		switch(line[0])
+		{
+			case 'b':
+				getline(&line,&len,f);
+				double k;
+				sscanf(line,"%lf",&k);
+				n.weight = k;
+				break;
+
+			case 'x':
+				getline(&line,&len,f);
+				double x1;
+				sscanf(line,"%lf",&x1);
+				n.x1 = x1;
+
+				getline(&line,&len,f);
+				double x2;
+				sscanf(line,"%lf",&x2);
+				n.x2 = x2;
+				break;
+
+			case 'w':
+				getline(&line,&len,f);
+				double w1 = 0.0;
+				sscanf(line,"%lf",&w1);
+				n.w1 = w1;
+
+				getline(&line,&len,f);
+				double w2 = 0.0;
+				sscanf(line,"%lf",&w2);
+				n.w2 = w2;
+				break;
+		}
 	}
 
 	fclose(f);
 	free(line);
+	return n;
 }
