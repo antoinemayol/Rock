@@ -81,7 +81,11 @@ int main(int argc, char** argv)
    
    //processing grayscale
    surface_to_grayscale(surface);
-   gaussian_blur(surface);
+
+   //Applying convolution with gaussian blur kernel
+   apply_kernel(surface);
+
+   //Creating texture from processed image
    SDL_Texture* grayscale =  SDL_CreateTextureFromSurface(renderer, surface);
    SDL_FreeSurface(surface);
 
