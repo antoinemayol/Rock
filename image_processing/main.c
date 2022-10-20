@@ -6,7 +6,6 @@
 #include "grayscale.h"
 #include "blur.h"
 
-
 // Event loop that calls the relevant event handler.
 //
 // renderer: Renderer to draw on.
@@ -83,7 +82,9 @@ int main(int argc, char** argv)
    surface_to_grayscale(surface);
 
    //Applying convolution with gaussian blur kernel
-   apply_kernel(surface);
+   float ker_gauss[9]= {1,2,1,2,4,2,1,2,1};
+
+   apply_kernel(surface, ker_gauss, 9, 0.0625);
 
    //Creating texture from processed image
    SDL_Texture* grayscale =  SDL_CreateTextureFromSurface(renderer, surface);
