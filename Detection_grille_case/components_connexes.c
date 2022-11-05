@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <stdlib.h>
 
 void print_mat(int l, int w, int matrix[l*w])
 {
@@ -20,18 +21,18 @@ void print_mat(int l, int w, int matrix[l*w])
     }
     printf("\n");
 }
-int get_obj_nb(int equivalence[1000])
+int get_obj_nb(int *equivalence)
 {
     int nb_obj = 0;
     for(int i = 0; i < 1000; ++i)
     {
-        if(equivalence[i] != 0 && equivalence[i] == i )
+        if(*(equivalence + i) != 0 && *(equivalence+i) == i )
             nb_obj ++;
     }
     return nb_obj;
 }
 
-void apply_equivalence(int l, int w, int output[l*w], int equivalence[1000])
+void apply_equivalence(int l, int w, int output[l*w], int *equivalence)
 {
     /* Apply equivalence on the matrix
      * ARGS:
@@ -42,10 +43,16 @@ void apply_equivalence(int l, int w, int output[l*w], int equivalence[1000])
      * OUT:
      *  none
      */
+
+
     for(int i = 0; i < l; ++i)
         for(int j = 0; j < w; ++j)
-            if(output[i*w + j] != equivalence[output[i*w + j]])
-                output[i*w + j] = equivalence[output[i*w + j]];
+        {
+
+            if(output[i*w + j] != *(equivalence + output[i*w + j]))
+                output[i*w + j] = *(equivalence + output[i*w + j]);
+        }
+
 }
 
 int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
@@ -60,7 +67,9 @@ int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
      *  -nb_obj (int) : number of obj in matrix
      */
     int part_number = 0;
-    int equivalence[1000] = {0};
+    int *equivalence = malloc(1000*sizeof(int));
+    for(int i = 0; i<1000; i++)
+        *(equivalence +i) = 0;
     for(int i = 0; i < l; ++i)
     {
         for(int j = 0; j < w; ++j)
@@ -72,13 +81,13 @@ int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
                     if(i>0&&matrix[(i-1)*w + j]==1 &&
                             output[(i-1)*w + j]<output[i*w + j-1])
                     {
-                        equivalence[output[i*w+ j-1]] = output[(i-1)*w +j];
+                        *(equivalence + output[i*w+ j-1]) = output[(i-1)*w +j];
                         output[i*w + j] = output[(i-1)*w + j];
                     }
                     else
                     {
                         if(i>0&&matrix[(i-1)*w + j]==1)
-                            equivalence[output[(i-1)*w + j]] = output[i*w + j-1];
+                            *(equivalence + output[(i-1)*w + j]) = output[i*w + j-1];
                         output[i*w + j] = output[i*w + j-1];
                     }
                 }
@@ -88,13 +97,14 @@ int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
                 {
                     ++part_number;
                     output[i*w + j] = part_number;
-                    equivalence[part_number] = part_number;
+                    *(equivalence + part_number) = part_number;
                 }
             }
         }
     }
     apply_equivalence(l,w,output,equivalence);
-    int nb_obj = get_obj_nb(equivalence);
+    int nb_obj = get_obj_nb(equivalence); 
+    free(equivalence);
     return nb_obj;
 }
 
@@ -124,7 +134,7 @@ int calculate_size(int x1, int y1, int x2, int y2)
     return (x2 - x1+1)*(y2 - y1+1);
 }
 
-void get_biggest_size(int nb_obj, int mat[5*nb_obj], int pos[4])
+void get_biggest_size(int nb_obj, int mat[5*nb_obj], int pos[5])
 {
     int biggest = 0;
 
@@ -138,11 +148,12 @@ void get_biggest_size(int nb_obj, int mat[5*nb_obj], int pos[4])
             {
                 pos[j] = mat[i*5 + 1 + j];
             }
+            pos[4] = i+1;
         }
     }
 }
 
-void get_biggest_submat(int l, int w, int matrix[l*w], int nb_obj, int pos[4])
+void get_biggest_submat(int l, int w, int matrix[l*w], int nb_obj, int pos[5])
 {
     int current_obj_index = 1;
     int submat_size[5*nb_obj] ; //ex: nb,x1,y1,x2,y2
@@ -177,7 +188,7 @@ void get_biggest_submat(int l, int w, int matrix[l*w], int nb_obj, int pos[4])
 
 }
 
-void extract_biggest_obj(int pos[4],int l, int w, int mat[l*w], int final[])
+void extract_biggest_obj(int pos[5],int l, int w, int mat[l*w], int final[])
 {
     int l2 = pos[2] - pos[0]+1;
     int w2 = pos[3] - pos[1]+1;
@@ -185,12 +196,15 @@ void extract_biggest_obj(int pos[4],int l, int w, int mat[l*w], int final[])
     {
         for(int j = 0; j < w2; j++)
         {
-            final[i*w2 + j] =mat[(pos[0]+i)*w +(pos[1]+j)];
+            if(mat[(pos[0]+i)*w +(pos[1]+j)] == pos[4])
+                final[i*w2 + j] = 1;
+            else
+                final[i*w2+j] = 0;
         }
     }
 }
 
-void connected_components(int l, int w, int matrix[l*w], int output[l*w])
+void connected_components(int l, int w, int matrix[l*w])
 {
     /* Reconize the sudoku on the picture
      * ARGS:
@@ -201,13 +215,18 @@ void connected_components(int l, int w, int matrix[l*w], int output[l*w])
      * OUT:
      *  none
      */
+    int output[l*w];
+    for(int i =0; i< l;i++)
+        for(int j=0; j<w; j++)
+            *(output + i*w +j) = 0;
 
     int nb_obj = get_partitioned_matrix(l,w,matrix,output);
-    int pos[4];
+    int pos[5];
+
     get_biggest_submat(l, w, output, nb_obj, pos);
-   
     int final[calculate_size(pos[0], pos[1], pos[2], pos[3])];
-    extract_biggest_obj(pos, l, w,matrix, final);
+
+    extract_biggest_obj(pos, l, w,output, final);
     print_mat(pos[2] - pos[0] +1 , pos[3] - pos[1]+1, final);
 
 }
