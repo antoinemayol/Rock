@@ -8,16 +8,17 @@
 double* Initialisation(size_t lenX)
 {
 	
-	double* res = calloc(0,sizeof(int)*2*lenX);
+	double* res = malloc(sizeof(int)*lenX*2);
 	srand(2);
-	for (size_t i = 0; i < lenX*2;i++)
+	for (size_t i = 0; i < lenX;i++)
 		{	
 			double tmp = rand();
-			//printf("tmp : %f\n",tmp);
-			//printf("res %zu : %f\n",i,tmp/10);
-			res[i] = tmp/(double)10;
-			//printf("W init : %f\n",W[y][i]);
+			printf("tmp : %f\n",tmp);
+			printf("res %zu : %f\n",i,(tmp/10));
+			*(res+i) = (tmp/(double)10);
+			printf("W init : %f\n",res[i]);
 		}
+	printf("RES : %d\n",res[0]);
 	return res;
 }
 

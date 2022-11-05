@@ -19,9 +19,10 @@ int main ()
 	double b = 3;
 	double *W = Initialisation(8);
 	
-	for (size_t n = 0; n < 5 ;n--)
+	for (size_t n = 0; n < 5 ;n++)
 	{
 		double *A = modele(X,W,b,4);
+		printf("");
 		loss[n] = logloss(A,Y,4);
 		double gradient = (A,Y,X,4);
 		update(&gradient,&b,W,learning_rate,4);
@@ -29,7 +30,7 @@ int main ()
 
 	for(int y = 0; y <5;y++)
 	{
-		printf("%f",loss[y]);
+		printf("%u : %f\n",y,loss[y]);
 	}
 
 	

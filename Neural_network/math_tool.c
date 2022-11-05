@@ -41,6 +41,11 @@ double sigmoide(double z)
 	return 1 / 1 + exp(-z);
 }
 
+double Dsigmoide(double z)
+{
+	return z * (1 - z);
+}
+
 double* gradient(double *A, double *Y,double *x,size_t len)
 {
 	double *res = calloc(0,sizeof(int)*3);
