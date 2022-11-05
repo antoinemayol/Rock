@@ -61,7 +61,7 @@ double* gradient(double *A, double *Y,double *x,size_t len)
 	return res;
 }
 
-void update(double* res,double* b,double* W, double learning_rate,double len)
+void update(double* res,double* b,double* W, double learning_rate,size_t len)
 {
 	for(size_t i =0; i<2;i++)
 	{
