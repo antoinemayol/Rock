@@ -1,7 +1,7 @@
 #include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <math.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "image.h"
@@ -11,74 +11,48 @@
 
 
 /*Modifies a convultion kernel by mutiplying each values by k*/
-void generate_kernel(double **ker, double k)
+void generate_kernel(double ker[3][3])
 {
     int klen = 3;
     for (int i =0; i < klen; i++)
     {
         for(int j = 0; j<klen; j++)
         {
-            ker[i][j] = k * ker[i][j];
+            ker[i][j] = 0.0625 * ker[i][j];
         }
     }
 }
 
 /*Creates a copy of the surface, runs the algo on the copy and applies it on the original */
-void blur(Image image, double **ker, float x)
-{ 
-    generate_kernel(ker,x);
+void blur(Image image, double ker[3][3])
+{
+    generate_kernel(ker);
     Pixel** pixels = image.pixels;
     //int klen = sqrt(m);
-    int klen = 3;
+    //int klen = 2;
     int w = image.w;
     int h = image.h;
 
     //Creating a copy of the initial surface
-    Image temp = image_copy(image);
+    Image temp = image_copy(&image);
     Pixel **tpix = temp.pixels;
-    
-    for(int i=klen; i<h; i++)
+
+    for(int i=1; i<h-1; i++)
     {
-        for(int j=klen; j<w; j++)
+        for(int j=1; j<w-1; j++)
         {
             /*Applying kernel to each pixel of the image */
             unsigned int sum = 0;
-            for(int k = -klen; k<klen-1; k++)
+            for(int k = -1; k<2; k++)
             {
-                for(int l = -klen; l<klen; l++)
+                for(int l = -1; l<2; l++)
                 {
-                    sum+= tpix[i+k][j+l].r * ker[i+k][j+l]; 
+                    sum+= tpix[i+k][j+l].r * ker[k+1][l+1];
                 }
             }
             set_rgb(&pixels[i][j], sum, sum, sum);
         }
     }
-    /*
-    for (int z = 3; z < len-3; z++)
-    {
-        Uint8 acc = 0;
-        int n = 0;
-        Uint8 r,g,b;
-        get_rgb(tpix[z], format, &r, &g, &b);
-
-        for(int k = -klen; k < klen; k++)
-        {
-            for(int l = -klen; l < klen; l++)
-            {
-                int i = z / W;
-                int j = z % W;
-                SDL_GetRGB(tpix[(z+k) * W + (z+l)], format, &r, &g, &b);
-                acc += ker[n] * r;
-                n++;
-                //if((i+k) >= 0 && (i+k) < H && (i+l) >= 0 && (j+l) < W)
-                //{
-                   // SDL_GetRGB(tpix[(i+k) * W + (j+l)], format, &r, &g, &b);
-                    //acc += ker[n] * r;
-                    //n++;
-                //}
-            }
-        }
-        pixels[z] = SDL_MapRGB(format, acc, acc, acc);
-    } */
+    free_image(&temp);
 }
 

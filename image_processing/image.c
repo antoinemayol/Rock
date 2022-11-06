@@ -2,8 +2,9 @@
 #include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
+#include <stdio.h>
 #include "image.h"
+
 
 /*****************************************************/
 /**********************CONVERTER**********************/
@@ -86,54 +87,56 @@ void set_pixel(SDL_Surface *surface,Uint32 pixel, unsigned x, unsigned y)
 
 
 /*Creates an Image from the built surface*/
-Image create_image(SDL_Surface* surface)
+Image create_image(SDL_Surface *surface)
 {
     //Initializing parameters
-    Pixel **pixels = NULL;
     int w = surface->w;
     int h = surface->h;
-    SDL_PixelFormat* format = surface->format;
     SDL_Color color;
     //Calling constructor/creating image
-    Image image;
-    image.pixels = pixels;
-    image.w = w;
-    image.h = h;
-
+    Image image = { .pixels = NULL, .w = w, .h = h};
+    
     //Allocatiing memory for pixels array(simple then double dimension)
     image.pixels = (Pixel **)calloc(h, sizeof(Pixel *));
-    for (int p; p < h; p++)
+    for (int p = 0; p < h; p++)
     {
         image.pixels[p] = (Pixel *)calloc(w, sizeof(Pixel));
+        if (image.pixels[p] == NULL)
+        {
+            errx(EXIT_FAILURE, "Cmon man...");
+        }
     }
-    
+   
     //filling image pixels one by one from surface pixels
-    for(int i = 0; i < h; i++)
+    for( int i = 0;
+ i < h; i++)
     {
-        for(int j = 0; j < w; j++)
+        for(int j = 0;
+j < w; j++)
         {
             Uint32 pix = get_pixel(surface, i, j);
-            SDL_GetRGB(pix, format, &color.r, &color.g, &color.b);
+            SDL_GetRGB(pix, surface->format, &color.r, &color.g, &color.b);
             image.pixels[i][j].r = color.r; 
             image.pixels[i][j].g = color.g; 
             image.pixels[i][j].b = color.b; 
         }
     }
+
     return image;
 }
 
-SDL_Surface* create_surface(Image image)
+SDL_Surface* create_surface(Image *image)
 {
     //Initializing new surface
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, image.w, image.h, 32, 0 , 0, 0, 0);
-    int h = image.h;
-    int w = image.w;
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, image->w, image->h, 32, 0 , 0, 0, 0);
+    int h = image->h;
+    int w = image->w;
     for(int i=0; i<h; i++)
     {
         for(int j=0; j<w; j++)
         {
             //Getting pixel from image and setting new pixel to surface
-            Pixel pix = image.pixels[i][j];
+            Pixel pix = image->pixels[i][j];
             Uint32 pixel= SDL_MapRGB(surface->format, pix.r, pix.g, pix.b);
             set_pixel(surface, pixel, i, j);
         }
@@ -166,19 +169,19 @@ void free_image(Image *image)
 }
 
 /*Deep copies an image*/
-Image image_copy(Image source)
+Image image_copy(Image *source)
 {
     //Initializing new image
     Image dest;
     dest.pixels = NULL;
-    int w = source.w;
-    int h = source.h;
+    int w = source->w;
+    int h = source->h;
     dest.w = w;
     dest.h = h;
     
     //Allocating memory for new pixels array
     dest.pixels = (Pixel **)calloc(h, sizeof(Pixel *));
-    for (int p; p < h; p++)
+    for (int p = 0; p < h; p++)
     {
         dest.pixels[p] = (Pixel *)calloc(w, sizeof(Pixel)); 
     }
@@ -188,9 +191,8 @@ Image image_copy(Image source)
     {
         for(int j = 0; j<w; j++)
         {
-            dest.pixels[i][j] = source.pixels[i][j];
+            dest.pixels[i][j] = source->pixels[i][j];
         }
     }
-    free_image(&dest);
     return dest;
 }

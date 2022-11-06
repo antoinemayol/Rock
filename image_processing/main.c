@@ -1,6 +1,8 @@
 #include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "display.h"
 #include "grayscale.h"
@@ -14,20 +16,18 @@ int main(int argc, char** argv)
     {
         errx(EXIT_FAILURE, "Usage: image-file");
     }
-    SDL_Surface* surface = load_image(argv[1]);
-    draw(surface);
+    SDL_Surface *surface = load_image(argv[1]);
+
+    Image image = create_image(surface);
+    grayscale(&image);
+    //Applying Gaussian Blur
+    double ker_gauss[3][3]= {
+        {1.0,2.0,1.0},
+        {2.0,4.0,2.0},
+        {1.0,2.0,1.0}};
+    blur(image, ker_gauss);
+    SDL_Surface *processed = create_surface(&image);
+    draw(processed);
+
     return 0;
 }
-    //Image image = create_image(surface);
-    
-    //Converting image into grayscale
-    //grayscale(image);
-    
-    //Applying Gaussian Blur
-    //double **ker_gauss= {
-      //  {1,2,1},
-        //{2,4,2},
-        //{1,2,1}};
-    //blur(image, ker, 9, 0.0625);
-    //SDL_Surface *processed = create_surface(image);
-    //draw(processed);

@@ -3,6 +3,7 @@
 
 #include "image.h"
 
-void blur(Image image, double **ker, double x);
+void generate_kernel(double ker[3][3]);
+void blur(Image image, double ker[3][3]);
 
 #endif

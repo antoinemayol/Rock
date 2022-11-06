@@ -3,31 +3,29 @@
 
 
 /*********************STRUCTS**********************/
-typedef struct Pixel Pixel;
-typedef struct Image Image;
 
-struct Pixel
+ typedef struct Pixel
 {
     unsigned int r;
     unsigned int g;
     unsigned int b;
-};
+} Pixel;
 
 
-struct Image
+typedef struct Image
 {
     Pixel **pixels;
     int w;
     int h;
-};
+} Image;
 
 
 /*********************METHODS**********************/
-
+void free_image(Image *image);
 Image create_image(SDL_Surface* surface);
-SDL_Surface* create_surface(Image image);
+SDL_Surface* create_surface(Image *image);
 void get_rgb(Pixel pixel, unsigned int *r, unsigned int *g, unsigned *b);
 void set_rgb(Pixel *pixel, unsigned int r, unsigned int g, unsigned int b);
-Image image_copy(Image source);
+Image image_copy(Image *source);
 
 #endif
