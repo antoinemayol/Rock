@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <stdlib.h>
 
-void print_mat(int l, int w, int matrix[l*w])
+void print_mat(int l, int w, int *matrix)
 {
     /* Print a matrix
      * ARGS:
@@ -16,7 +16,7 @@ void print_mat(int l, int w, int matrix[l*w])
     for(int i = 0 ; i < l ; ++i)
     {
     	for (int j = 0; j < w; ++j)
-    		printf("%d ", (i*w + j)[matrix]);
+    		printf("%d", (i*w + j)[matrix]);
     	printf("\n");
     }
     printf("\n");
