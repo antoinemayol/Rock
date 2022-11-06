@@ -8,6 +8,7 @@
 //
 const int INIT_WIDTH = 640;
 const int INIT_HEIGHT = 400;
+const float INIT_ANGLE = 30;
 
 void draw(SDL_Renderer* renderer, SDL_Texture* texture)
 {
@@ -15,11 +16,50 @@ void draw(SDL_Renderer* renderer, SDL_Texture* texture)
     SDL_RenderPresent(renderer);
 }
 
+void draw2(SDL_Surface *surface)
+{
+
+
+    //Initializing and checking possible startup errors
+    if(SDL_Init(SDL_INIT_VIDEO) != 0)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+    SDL_Window* window= SDL_CreateWindow("Diplay", 0, 0, 640, 480, SDL_WINDOW_RESIZABLE);
+    if(window == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if(renderer == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+   //resizing
+   int w = surface->w;
+   int h = surface->h;
+   SDL_SetWindowSize(window, w, h);
+    
+   //creating texture from image
+   SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+   //SDL_Texture* processed =  SDL_CreateTextureFromSurface(renderer, surface);
+   SDL_FreeSurface(surface);
+
+   //calling the main loop
+   event_loop(renderer, texture);
+   //test_loop(renderer, texture, processed);
+   
+   //Destroying objects
+   SDL_DestroyRenderer(renderer);
+   SDL_DestroyTexture(texture);
+   //SDL_DestroyTexture(grayscale);
+   SDL_DestroyWindow(window);
+   SDL_Quit();
+
+   
+
+}
+   
+
 void event_loop(SDL_Renderer* renderer, SDL_Texture* texture,SDL_Surface* surface,float angle)
 {
-    draw(renderer,texture);
-
+    
     SDL_Event event;
+    
 
     while(1)
     {
@@ -33,30 +73,14 @@ void event_loop(SDL_Renderer* renderer, SDL_Texture* texture,SDL_Surface* surfac
             case SDL_WINDOWEVENT:
                 if(event.window.event == SDL_WINDOWEVENT_RESIZED)
                 {
-                    draw(renderer,texture);
+                   draw(renderer,texture);
                 }
                 break;
             case SDL_KEYDOWN:
-                if (event.type == KEYDOWN)
-                { 
-                    SDL_Surface *res = SDL_RotationCentrala(surface,angle);
-                    const char *img_P = argv[1];
-                    SDL_Texture* texture= IMG_LoadTexture(renderer,img_P);
-                    if(texture == NULL)
-                        errx(EXIT_FAILURE, "%s", SDL_GetError());
+                 SDL_Surface *res = SDL_RotationCentrala(surface,angle);
+                 SDL_Texture* te = SDL_CreateTextureFromSurface(renderer, res);
+                 draw(renderer,te);
 
-                    SDL_Surface* surface= load_image(img_P);
-
-                    // Gets the width and the height of the texture.
-                    int w = surface->w;
-                    int h = surface->h;
-
-                    if (SDL_QueryTexture(texture, NULL, NULL, &w, &h) != 0)
-                        errx(EXIT_FAILURE, "%s", SDL_GetError());
-
-                    draw(renderer,texture);
-
-                }
         }
     }
     SDL_Quit();
@@ -113,9 +137,16 @@ int main(int argc, char** argv)
 
     SDL_SetWindowSize(window, w, h);
     
-    float angle = 30;
+    float angle = INIT_ANGLE;
     // - Dispatch the events.
-    event_loop(renderer,texture,surface,angle);
+    //event_loop(renderer,texture,surface,angle);
+
+    SDL_Surface *result = SDL_RotationCentrala(surface,angle);
+    if(SDL_SaveBMP(result,"imageRot.bmp") != 0)
+    {
+        printf("SDL_SaveBMP failed: %s\n", SDL_GetError());
+    }
+
 
 
     // - Destroy the objects.i

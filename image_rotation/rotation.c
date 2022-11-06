@@ -7,7 +7,7 @@
 
 
 /*permet de déterminer la valeur d'un pixel au position x,y*/
-Uint32 inline SDL_LirePixel(SDL_Surface* surface, int x, int y)
+Uint32  SDL_LirePixel(SDL_Surface* surface, int x, int y)
 {
   int bpp = surface->format->BytesPerPixel;
  
@@ -36,7 +36,7 @@ Uint32 inline SDL_LirePixel(SDL_Surface* surface, int x, int y)
  
  
 /*permet d'écrire un pixel au position x,y*/
-void inline SDL_EcrirePixel(SDL_Surface* surface, int x, int y, Uint32 pixel)
+void SDL_EcrirePixel(SDL_Surface* surface, int x, int y, Uint32 pixel)
 {
     int bpp = surface->format->BytesPerPixel; 
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp; 
@@ -79,7 +79,7 @@ SDL_Surface* SDL_RotationCentrala(SDL_Surface* origine, float angle)
  int j;
  Uint32 couleur;
  int mx, my;
- float d;
+ 
  int bx, by;
  float angle_radian;
  
