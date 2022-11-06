@@ -21,7 +21,6 @@ void concat_path(char* res,char* s1, char* s2, char* s3, char *s4, int maxpath)
 
 	for(size_t i = 0; k < maxpath && s3[i] != '\0'; i++)
 	{
-		printf("s3 : %c",s3[i]);
 		res[k]=s3[i];
 		k+=1;
 	}
