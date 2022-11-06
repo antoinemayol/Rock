@@ -9,7 +9,7 @@ LDLIBS =
 #all: mtest ntest ftest
 	#${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
-SRC = testMath.c testNeural.c math_tool.c Neuronal_link.c testNodes.c nerons.c main.c
+SRC = testMath.c testNeural.c math_tool.c Neuronal_link.c testNodes.c nerons.c main.c save_and_load.c
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
@@ -25,7 +25,7 @@ ntest: testNeural.o Neuronal_link.o
 ftest: testNodes.o nerons.o
 	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
-main: main.o math_tool.o Neuronal_link.o
+main: main.o math_tool.o Neuronal_link.o save_and_load.o
 	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
 -include ${DEP}

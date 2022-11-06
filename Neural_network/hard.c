@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>
+#include "save_and_load.h"
 
 double getRandom(double lower, double upper)
 {
@@ -12,7 +12,7 @@ double getRandom(double lower, double upper)
 
 double sig(double z)
 {
-	return 1 / 1 + exp(-z);
+	return 1 / (1 + exp(-z));
 }
 double Dsig(double z)
 {
@@ -34,10 +34,17 @@ void mix(int *array, size_t n)
     }
 }
 
+void SaveAll()
+{
+	
+}
+
 #define nbIn 2
 #define nbHidLay 1
 #define nbHidNod 2
 #define nbOut 1
+
+
 
 #define nbTest 4
 
@@ -64,28 +71,28 @@ int main()
 	{
 		for(int j = 0; j < nbHidNod; j++)
 		{
-			hidWght[i * nbHidNod + j] = getRandom(-10,10);
+			hidWght[i * nbHidNod + j] = (double)rand()/(double)RAND_MAX; //getRandom(-10,10);
 		}
 	}
 
 	for(int i = 0; i < nbHidNod; i++)
 	{
-		hidLayBias[i] = getRandom(-10,10);
+		hidLayBias[i] = (double)rand()/(double)RAND_MAX;//getRandom(-10,10);
 		for(int j = 0; j < nbOut; j++)
 		{
-			outWght[i * nbOut + j] = getRandom(-10,10);
+			outWght[i * nbOut + j] = (double)rand()/(double)RAND_MAX;//getRandom(-10,10);
 
 		}
 	}
 
 	for(int i = 0; i < nbOut; i++)
 	{
-		outLayBias[i] = getRandom(-10,10);
+		outLayBias[i] = (double)rand()/(double)RAND_MAX;//getRandom(-10,10);
 	}
 
 	//-----
 
-	for(int step = 0; step < 10; step++)
+	for(int step = 0; step < 10000; step++)
 	{
 		mix(order, nbTest);
 
@@ -160,4 +167,16 @@ int main()
 			}
 		}
 	}
+
+	save(hidWght,1,4);
+	save(hidLayBias,2,2);
+	save(outWght,3,2);
+	save(outLayBias,4,1);
+
+	free(hidLay);
+	free(hidLayBias);
+	free(outLay);
+	free(outLayBias);
+	free(hidWght);
+	free(outWght);
 }
