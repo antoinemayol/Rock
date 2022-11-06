@@ -27,6 +27,8 @@ void shuffle(int *array, size_t n)
     }
 }
 
+void save()
+
 #define numInputs 2
 #define numHiddenNodes 4
 #define numOutputs 1
@@ -58,6 +60,7 @@ int main (void) {
     for (int i=0; i<numInputs; i++) {
         for (int j=0; j<numHiddenNodes; j++) {
             hiddenWeights[i][j] = init_weight();
+			printf("%f\n",hiddenWeights[i][j]);
         }
     }
     for (int i=0; i<numHiddenNodes; i++) {
@@ -72,7 +75,7 @@ int main (void) {
     
     int trainingSetOrder[] = {0,1,2,3};
     
-    int numberOfEpochs = 7500;
+    int numberOfEpochs = 10000;
     // Train the neura[<0;65;38Ml network for a number of epochs
     for(int epochs=0; epochs < numberOfEpochs; epochs++) {
 
@@ -105,7 +108,7 @@ int main (void) {
             }
             
             // Print the results from forward pass
-            printf ("Input:%g  Output:%g    Expected Output: %g\n",
+            printf ("Input:%g %g    Output:%g    Expected Output: %g\n",
                     training_inputs[i][0], training_inputs[i][1],
                     outputLayer[0], training_outputs[i][0]);
 
