@@ -1,19 +1,17 @@
-# Makefile
-
 CC = gcc
 CPPFLAGS =
-CFLAGS = -Wall -Wextra -O3 `pkg-config --cflags sdl2 SDL2_image`
+CFLAGS = -Wall  -Wextra -O3 `pkg-config --cflags sdl2 SDL2_image`
 LDFLAGS =
 LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
 
-all: display 
+all: display grayscale
 
-SRC = display.c main.c 
+SRC = $(shell find -name "*.c")
 OBJ = ${SRC:.c=.o}
 EXE = ${SRC:.c=}
 
-main: main.o display.o 
-
+main: $(OBJ)
+	gcc -o main $(CFLAGS) $^ $(LDLIBS)
 
 
 .PHONY: clean
