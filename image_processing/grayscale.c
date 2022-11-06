@@ -2,14 +2,32 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-SDL_Surface* load_image(const char* path)
+#include "image.h"
+
+/*Converts an RGB Pixel to grayscale*/
+void pixel_to_grayscale(Pixel pixel)
 {
-    SDL_Surface* s = IMG_Load(path);
-    SDL_Surface* surface = SDL_ConvertSurfaceFormat(s, SDL_PIXELFORMAT_RGB888, 0);
-    SDL_FreeSurface(s);
-    return surface;
+    unsigned int r,g,b;
+    get_rgb(pixel, &r, &g, &b);
+    unsigned int average = 0.3*r + 0.59*g + 0.11*b;
+    set_rgb(&pixel, average, average, average);
 }
 
+/* Applying grayscale to all pixels*/
+void grayscale(Image *image)
+{
+    Pixel **pixels = image->pixels;
+    for(int i =0; i<image->h; i++)
+    {
+        for(int j = 0; j<image->w; j++)
+        {
+            pixel_to_grayscale(pixels[i][j]);
+        }
+    }
+}
+
+
+/*
 Uint32 pixel_to_grayscale(Uint32 pixel_color, SDL_PixelFormat* format)
 {
     Uint8 r, g, b;
@@ -29,6 +47,6 @@ void surface_to_grayscale(SDL_Surface* surface)
         pixels[i] = pixel_to_grayscale(pixels[i], format);  
     }
     SDL_UnlockSurface(surface);
-}
+}*/
 
 
