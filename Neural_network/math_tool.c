@@ -2,6 +2,7 @@
 #include "Neuronal_link.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 double sum(int s_index, double list[], size_t len)
 {
@@ -40,36 +41,42 @@ double sigmoide(double z)
 	return 1 / 1 + exp(-z);
 }
 
-/*double* gradient(double *A, double *Y,double x*,size_t len)
+double Dsigmoide(double z)
 {
-	double *res = calloc(0,sizeint(int)*3);
+	return z * (1 - z);
+}
+
+double* gradient(double *A, double *Y,double *x,size_t len)
+{
+	double *res = calloc(0,sizeof(int)*3);
 	size_t i = 0;
-	while i < len:
+	while (i < len)
 	{
-		res[0] += x[i]*(A[i]-Y[i]); 
-		res[1] += x[len + i]*(A[i]-Y[i]);
-		res[2] += (A[i] - Y[i]);
+		*res += *(x+i) * (*(A + i )- *(Y + i)); 
+		*(res + 1) += x[len + i] * (*(A+i)-*(Y+i));
+		*(res+2) += ( *(A+i) - *(Y+i));
 		i+=1;
-		if (i >= len):
+		if (i >= len)
 		{
-			res[0] = res[0] * (1/len);
-			res[1] = res[1] * (1/len);
+			*res = *res * (1/len);
+			*(res+1) = *(res+1) * (1/len);
 		}
 
 	}
 	return res;
-}*/
+}
 
-void update(double* res,double b,double *W, double learning_rate,double len)
+void update(double* res,double* b,double* W, double learning_rate,size_t len)
 {
 	for(size_t i =0; i<2;i++)
 	{
 		for(size_t y = 0 ; y < len;y++)
 		{
-			W[i * len + y] -= learning_rate * res[i]; 
+			*(W+y) -= (learning_rate * *(res+i)); 
+			
 		}
 	}
-	b -= learning_rate * res[2];
+	*b = learning_rate * *(res+2);
 }
 
 

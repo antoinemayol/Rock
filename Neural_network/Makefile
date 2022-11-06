@@ -2,14 +2,14 @@
 
 CC = gcc
 CPPFLAGS = -MMD
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -fsanitize=address
 LDFLAGS =
 LDLIBS =
 
 #all: mtest ntest ftest
 	#${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
-SRC = testMath.c testNeural.c math_tool.c Neuronal_link.c testNodes.c nerons.c
+SRC = testMath.c testNeural.c math_tool.c Neuronal_link.c testNodes.c nerons.c main.c
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
@@ -25,6 +25,8 @@ ntest: testNeural.o Neuronal_link.o
 ftest: testNodes.o nerons.o
 	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
+main: main.o math_tool.o Neuronal_link.o
+	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
 -include ${DEP}
 
@@ -36,6 +38,7 @@ clean:
 	${RM} mtest
 	${RM} ntest
 	${RM} ftest
+	${RM} main
 	${RM} all
 
 # END
