@@ -4,6 +4,7 @@
 #include "image.h"
 
 void generate_kernel(double ker[3][3]);
-void blur(Image image, double ker[3][3]);
+void blur(Image *image, double ker[3][3]);
+void inverse(Image *image);
 
 #endif

@@ -27,5 +27,7 @@ SDL_Surface* create_surface(Image *image);
 void get_rgb(Pixel pixel, unsigned int *r, unsigned int *g, unsigned *b);
 void set_rgb(Pixel *pixel, unsigned int r, unsigned int g, unsigned int b);
 Image image_copy(Image *source);
+void set_all(Pixel *pixel, unsigned int k);
+int* export_array(Image *image);
 
 #endif

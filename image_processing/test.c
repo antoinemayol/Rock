@@ -10,14 +10,9 @@
 #include "image.h"
 #include "otsu.h"
 
-int main(int argc, char** argv)
+int* test(void)
 {
-    // Checks the number of arguments.
-    if (argc != 2)
-    {
-        errx(EXIT_FAILURE, "Usage: image-file");
-    }
-    SDL_Surface *surface = load_image(argv[1]);
+    SDL_Surface *surface = load_image("images/image_01.jpeg");
 
     Image image = create_image(surface);
     grayscale(&image);
@@ -31,9 +26,6 @@ int main(int argc, char** argv)
     //TODO: Reogarnise directories
     //TODO: Sobel(detecrtion de contours)
     final_process(&image);
-    //TEST: int* matrix = export_array(&image);
-    SDL_Surface *processed = create_surface(&image);
-    draw(processed);
-
-    return 0;
+    int* matrix = export_array(&image);
+    return matrix;
 }

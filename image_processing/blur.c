@@ -22,19 +22,32 @@ void generate_kernel(double ker[3][3])
         }
     }
 }
+/*Switches 1 to 0 and 0 to 1*/
+void inverse(Image *image)
+{
+    for(int i=0; i<image->h; i++)
+    {
+        for(int j=0; j<image->w; j++)
+        {
+            int inv = 255-image->pixels[i][j].r;
+            set_all(&image->pixels[i][j], inv);
+        }
+    }
+}
+
 
 /*Creates a copy of the surface, runs the algo on the copy and applies it on the original */
-void blur(Image image, double ker[3][3])
+void blur(Image *image, double ker[3][3])
 {
     generate_kernel(ker);
-    Pixel** pixels = image.pixels;
+    Pixel** pixels = image->pixels;
     //int klen = sqrt(m);
     //int klen = 2;
-    int w = image.w;
-    int h = image.h;
+    int w = image->w;
+    int h = image->h;
 
     //Creating a copy of the initial surface
-    Image temp = image_copy(&image);
+    Image temp = image_copy(image);
     Pixel **tpix = temp.pixels;
 
     for(int i=1; i<h-1; i++)

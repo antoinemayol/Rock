@@ -8,17 +8,12 @@ LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
 
 all: display grayscale
 
-#SRC = display.c grayscale.c blur.c image.c main.c 
 SRC = $(shell find -name "*.c")
 OBJ = ${SRC:.c=.o}
 EXE = ${SRC:.c=}
 
 main: $(OBJ)
 	gcc -o main $(CFLAGS) $^ $(LDLIBS)
-#main: main.o display.o blur.o grayscale.o image.o
-
-#display: display.o
-#grayscale: grayscale.o
 
 .PHONY: clean
 

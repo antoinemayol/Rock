@@ -158,6 +158,25 @@ void set_rgb(Pixel *pixel, unsigned int r, unsigned int g, unsigned int b)
     pixel->b = b;
 }
 
+void set_all(Pixel *pixel, unsigned int k)
+{
+    pixel->r = k;
+    pixel->g = k;
+    pixel->b = k;
+
+}
+
+int* export_array(Image *image)
+{
+    int len = image->w * image->h;
+    int* arr = malloc(w*h*sizeof(int))
+    for(int i = 0; i<len; i++)
+    {
+        arr[i] = image->pixels[i].r;
+    }
+    return arr;
+}
+
 /*Frees memory from created image addressed size*/
 void free_image(Image *image)
 {
