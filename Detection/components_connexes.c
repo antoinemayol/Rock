@@ -21,6 +21,7 @@ void print_mat(int l, int w, int *matrix)
     }
     printf("\n");
 }
+
 int get_obj_nb(int *equivalence)
 {
     int nb_obj = 0;

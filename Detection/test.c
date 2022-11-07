@@ -75,17 +75,19 @@ int main()
         1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
             };
-    
+
+    hough_traitement(lenght, width, input);
+    /* 
     double max_p = lenght;
     double mat_size = 180*max_p*2;
     
-    int* haugh_val = malloc(mat_size*sizeof(int));
+    int* hough_val = malloc(mat_size*sizeof(int));
     //connected_components(lenght,width,input);
     
-    haugh_transform(lenght, width, input, haugh_val);
-    print_graph((int)(max_p*2),180,haugh_val);
-
-    free(haugh_val);
+    hough_transform(lenght, width, input, hough_val);
+    print_graph((int)(max_p*2),180,hough_val);
+    free(hough_val);
+    */
     return 0;
 }
 
