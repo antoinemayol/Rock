@@ -1,24 +1,26 @@
 # Makefile
 
-CC = gcc -fsanitize=address
-CPPFLAGS = -MMD
-CFLAGS = -Wall -Wextra -std=c99 -O0 -g
+CC = gcc
+CPPFLAGS =
+CFLAGS = -Wall -g -Wextra 
 LDFLAGS =
-LDLIBS =
+LDLIBS = -lm 
 
-SRC = components_connexes.c test.c
+
+SRC = $(shell find -name "*.c")
 OBJ = ${SRC:.c=.o}
-DEP = ${SRC:.c=.d}
+EXE = ${SRC:.c=}
 
-test: ${OBJ}
+all: main
 
--include ${DEP}
+main: $(OBJ)
+	gcc -o main $(CFLAGS) $^ $(LDLIBS)
 
 .PHONY: clean
 
 clean:
 	${RM} ${OBJ}
-	${RM} ${DEP}
-	${RM} test
+	${RM} ${EXE}
+	${RM} main
 
 # END
