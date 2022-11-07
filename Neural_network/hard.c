@@ -1,14 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <err.h>
 #include "save_and_load.h"
-
-double getRandom(double lower, double upper)
-{
-	double range = upper - lower;
-	double div = RAND_MAX / range;
-	return lower + (rand() / div);
-}
 
 double sig(double z)
 {
@@ -34,11 +28,6 @@ void mix(int *array, size_t n)
     }
 }
 
-void SaveAll()
-{
-	
-}
-
 #define nbIn 2
 #define nbHidLay 1
 #define nbHidNod 2
@@ -48,51 +37,67 @@ void SaveAll()
 
 #define nbTest 4
 
-int main()
+int main(int argc, char **argv)
 {
+	if(argc != 1)
+	{
+		errx(1,"invoke command with 1 arguments !\n");
+	}
+	
+	int limit = atoi(argv[0]);
+
+	if(limit < 0 || limit > 50000)
+	{
+		errx(1,"limit is too high !\n");
+	}
 
 	// INIT ARRAYS
 	double pas = 0.1f;
-
+	
+	//Arrays of neurons
 	double *hidLay = malloc(nbHidNod * sizeof(double));
 	double *outLay = malloc(nbOut * sizeof(double));
 
+	//Arrays of neurons bias
 	double *hidLayBias = malloc(nbHidNod * sizeof(double));
 	double *outLayBias = malloc(nbOut * sizeof(double));
 
+	//Arrays of Weight
 	double *hidWght = malloc((nbIn * nbHidNod) * sizeof(double));
 	double *outWght = malloc((nbHidNod * nbOut) * sizeof(double));
-
+	
+	//Inputs and expected outputs
 	double trainIn[nbTest][nbIn] = {{0.0f,0.0f},{1.0f,0.0f},{0.0f,1.0f},{1.0f,1.0f}};
     double trainOut[nbTest][nbOut] = {{0.0f},{1.0f},{1.0f},{0.0f}};
 	int order[4] = {0,1,2,3};
-
+	
+	//Initialize layers with random value close to 0
 	for(int i = 0; i < nbIn; i++)
 	{
 		for(int j = 0; j < nbHidNod; j++)
 		{
-			hidWght[i * nbHidNod + j] = (double)rand()/(double)RAND_MAX; //getRandom(-10,10);
+			hidWght[i * nbHidNod + j] = (double)rand()/(double)RAND_MAX;
 		}
 	}
 
 	for(int i = 0; i < nbHidNod; i++)
 	{
-		hidLayBias[i] = (double)rand()/(double)RAND_MAX;//getRandom(-10,10);
+		hidLayBias[i] = (double)rand()/(double)RAND_MAX;
 		for(int j = 0; j < nbOut; j++)
 		{
-			outWght[i * nbOut + j] = (double)rand()/(double)RAND_MAX;//getRandom(-10,10);
+			outWght[i * nbOut + j] = (double)rand()/(double)RAND_MAX;
 
 		}
 	}
 
 	for(int i = 0; i < nbOut; i++)
 	{
-		outLayBias[i] = (double)rand()/(double)RAND_MAX;//getRandom(-10,10);
+		outLayBias[i] = (double)rand()/(double)RAND_MAX;
 	}
 
 	//-----
 
-	for(int step = 0; step < 10000; step++)
+	for(int step = 0; step < limit; step++)
 	{
 		mix(order, nbTest);
 
@@ -122,6 +127,7 @@ int main()
 				outLay[j] = sig(z);
 			}
 
+			//Printing results as they come
 		    printf ("Input:%g %g Output:%g    Expected Output: %g\n",
                     trainIn[i][0], trainIn[i][1],
                     outLay[0], trainOut[i][0]);	
@@ -130,10 +136,11 @@ int main()
 
 			//BACKPROPAGATION
 
+			//Compute difference between result and expected
 			double *deltaOut = malloc(nbOut * sizeof(double));
 			for(int j =0; j < nbOut; j++)
 			{
-				double errorOut = (trainOut[i][j] - outLay[j]);
+				double errorOut = (trainOut[i][j] - outLay[j]); 
 				deltaOut[j] = errorOut * Dsig(outLay[j]);
 			}
 
@@ -148,6 +155,7 @@ int main()
 				deltaHid[j] = errorHid * Dsig(hidLay[j]);
 			}
 			
+			//Update weights between nodes
 			for(int j = 0; j < nbOut; j++)
 			{
 				outLayBias[j] += deltaOut[j] * pas;
@@ -168,11 +176,13 @@ int main()
 		}
 	}
 
+	//Save neurons in "neurones/" folder
 	save(hidWght,1,4);
 	save(hidLayBias,2,2);
 	save(outWght,3,2);
 	save(outLayBias,4,1);
 
+	//Release memory
 	free(hidLay);
 	free(hidLayBias);
 	free(outLay);
