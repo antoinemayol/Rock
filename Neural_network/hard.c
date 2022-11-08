@@ -39,12 +39,13 @@ void mix(int *array, size_t n)
 
 int main(int argc, char **argv)
 {
-	if(argc != 1)
+	if(argc != 2)
 	{
 		errx(1,"invoke command with 1 arguments !\n");
 	}
 	
-	int limit = atoi(argv[0]);
+	int limit = atoi(argv[1]);
+	printf("setted limit : %lu\n",limit);
 
 	if(limit < 0 || limit > 50000)
 	{
@@ -176,7 +177,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	//Save neurons in "neurones/" folder
+	//Save neurons and weights in "neurones/" folder
 	save(hidWght,1,4);
 	save(hidLayBias,2,2);
 	save(outWght,3,2);
