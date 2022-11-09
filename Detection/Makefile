@@ -14,7 +14,7 @@ EXE = ${SRC:.c=}
 all: main
 
 main: $(OBJ)
-	gcc -o main $(CFLAGS) $^ $(LDLIBS)
+	gcc -fsanitize=address -o main $(CFLAGS) $^ $(LDLIBS)
 
 .PHONY: clean
 
