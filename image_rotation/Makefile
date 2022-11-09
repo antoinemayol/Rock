@@ -10,8 +10,11 @@ SRC = $(shell find -name "*.c")
 OBJ = ${SRC:.c=.o}
 EXE = ${SRC:.c=}
 
-main: $(OBJ)
+main: rotation.o main.o
 	gcc -o main $(CFLAGS) $^ $(LDLIBS)
+
+disp: display.o
+	gcc -o disp $(CFLAGS) $^ $(LDLIBS)
 
 
 .PHONY: clean
@@ -20,5 +23,6 @@ clean:
 	${RM} ${OBJ}
 	${RM} ${EXE}
 	${RM} main
+	${RM} disp
 
 # END
