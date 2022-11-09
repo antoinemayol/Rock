@@ -37,22 +37,8 @@ void mix(int *array, size_t n)
 
 #define nbTest 4
 
-int main(int argc, char **argv)
+void proceed(int limit)
 {
-	if(argc != 2)
-	{
-		errx(1,"invoke command with 1 arguments !\n");
-	}
-	
-	int limit = atoi(argv[1]);
-	printf("SETTED LIMIT : %d\n\n",limit);
-
-	if(limit < 0 || limit > 50000)
-	{
-		errx(1,"limit is too high !\n");
-	}
-
-	// INIT ARRAYS
 	double pas = 0.1f;
 	
 	//Arrays of neurons
@@ -191,4 +177,24 @@ int main(int argc, char **argv)
 	free(outLayBias);
 	free(hidWght);
 	free(outWght);
+}
+
+int main(int argc, char **argv)
+{
+	if(argc != 2)
+	{
+		errx(1,"invoke command with 1 arguments !\n");
+	}
+	
+	int limit = atoi(argv[1]);
+	printf("SETTED LIMIT : %d\n\n",limit);
+
+	if(limit < 0 || limit > 50000)
+	{
+		errx(1,"limit is too high !\n");
+	}
+	
+	proceed(limit);
+	return 0;
+
 }
