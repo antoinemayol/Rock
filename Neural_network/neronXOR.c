@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	}
 	
 	int limit = atoi(argv[1]);
-	printf("setted limit : %lu\n",limit);
+	printf("SETTED LIMIT : %d\n\n",limit);
 
 	if(limit < 0 || limit > 50000)
 	{
@@ -129,10 +129,12 @@ int main(int argc, char **argv)
 			}
 
 			//Printing results as they come
-		    printf ("Input:%g %g Output:%g    Expected Output: %g\n",
-                    trainIn[i][0], trainIn[i][1],
-                    outLay[0], trainOut[i][0]);	
-
+			if(limit-step <= 1)
+			{
+		    	printf ("Input : |%g|%g| Output : %g    Expected Output: %g\n",
+                    	trainIn[i][0], trainIn[i][1],
+                    	outLay[0], trainOut[i][0]);	
+			}
 			//-----
 
 			//BACKPROPAGATION
@@ -176,7 +178,6 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-
 	//Save neurons and weights in "neurones/" folder
 	save(hidWght,1,4);
 	save(hidLayBias,2,2);
