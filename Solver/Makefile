@@ -2,7 +2,7 @@
 
 CC = gcc
 CPPFLAGS = -MMD
-CFLAGS = -Wall -Wextra -fsanitize=address
+CFLAGS = -Wall -Wextra 
 LDFLAGS =
 LDLIBS =
 
@@ -25,10 +25,6 @@ main: parser.o solver.o
 clean:
 	${RM} ${OBJ}
 	${RM} ${DEP}
-	${RM} mtest
-	${RM} ntest
-	${RM} ftest
 	${RM} main
-	${RM} all
 
 # END

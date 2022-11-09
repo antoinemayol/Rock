@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include "parser.h"
+#include <err.h>
 
 
 #define C 9
@@ -20,9 +21,14 @@ int test_grid[9][9];
 /*------------------------------------------------------*/
 
 
-int main()
+int main(int argc,char **argv)
 {
-    	
+    if(argc != 2)
+    {
+        errx(1,"Invoke with 1 argument !");
+    }
+
+    char* fi = argv[1];
 	/*int res[9*9] = {
 		7, 5, 1,  8, 4, 3,  9, 2, 6,
 		8, 9, 3,  6, 2, 5,  1, 7, 4, 
@@ -39,20 +45,9 @@ int main()
 	printf("\n ------------------------------\n\n");
 	
 	
-	int to_solve[9*9] = 
-    {
-        9,0,0,1,0,0,0,0,5,
-        0,0,5,0,9,0,2,0,1,
-        8,0,0,0,4,0,0,0,0,
-        0,0,0,0,8,0,0,0,0,
-        0,0,0,7,0,0,0,0,0,
-        0,0,0,0,2,6,0,0,9,
-        2,0,0,3,0,0,0,0,6,
-        0,0,0,2,0,0,9,0,0,
-        0,0,1,9,0,4,5,7,0
-    };
+	int to_solve[9*9] = {0};
 
-
+    file_to_sudok(fi,to_solve);
 	print_grid(to_solve);
 
 	printf("\n ------------------------------\n\n");
@@ -62,6 +57,8 @@ int main()
 	print_grid(to_solve);
 
 	printf("\n ------------------------------\n\n");
+
+    sudok_to_file(to_solve,fi);
 
 	return 0;
 }
