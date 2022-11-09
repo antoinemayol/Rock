@@ -72,6 +72,7 @@ char *ai_to_st(int sudok[9*9])
 //Write the sudoku "s" converted by ai_to_st into the "path" file
 void writeS(char* s,char* path)
 {
+	//Compute the name of the new file with ".result"
     size_t len = strlen(path);
     char* r = ".result";
     char* name = malloc((len+7)*sizeof(char));
@@ -83,13 +84,15 @@ void writeS(char* s,char* path)
     {
         name[i]=r[i-len];
     }
-
+	
+	//Openning the file
 	FILE *f = fopen(name,"w");
 	if(f == NULL)
 	{
 		errx(1,"can't open file !");
 	}
-
+	
+	//Write into the file "f" the grid in the desired format
     for(int i = 1; i<=9*9; i++)
     {
         char tmp = s[i-1];
@@ -118,6 +121,7 @@ void writeS(char* s,char* path)
     }
 }
 
+//Function to convert an int array into a sudoku file
 void sudok_to_file(int sudok[9*9], char* path)
 {
     char* s = ai_to_st(sudok);
