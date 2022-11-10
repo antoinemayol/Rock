@@ -6,7 +6,7 @@
 
 
 
-/*permet de déterminer la valeur d'un pixel au position x,y*/
+/*Determine pixel value at position x,y*/
 Uint32  SDL_LirePixel(SDL_Surface* surface, int x, int y)
 {
   int bpp = surface->format->BytesPerPixel;
@@ -33,7 +33,7 @@ Uint32  SDL_LirePixel(SDL_Surface* surface, int x, int y)
 }
  
  
-/*permet d'écrire un pixel au position x,y*/
+/*Write pixels to position x,y*/
 void SDL_EcrirePixel(SDL_Surface* surface, int x, int y, Uint32 pixel)
 {
     int bpp = surface->format->BytesPerPixel; 
