@@ -16,7 +16,7 @@ void print_mat(int l, int w, int *matrix)
     for(int i = 0 ; i < l ; ++i)
     {
     	for (int j = 0; j < w; ++j)
-    		printf("%d", (i*w + j)[matrix]);
+    		printf("%d ", (i*w + j)[matrix]);
     	printf("\n");
     }
     printf("\n");
@@ -229,6 +229,7 @@ void connected_components(int l, int w, int* matrix)
 
     extract_biggest_obj(pos, l, w,output, final);
     print_mat(l,w,matrix);
+    printf("Extracted matrix:\n");
     print_mat(pos[2] - pos[0] +1 , pos[3] - pos[1]+1, final);
 
 }
