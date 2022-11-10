@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
     //Applying Gaussian Blur
     Image image3 = image_copy(&image2);
-    gaussian_blur(&image3, 5);
+    gaussian_blur(&image3, 3);
 
     //Inversing colors
     Image image4 = image_copy(&image3);
