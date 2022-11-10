@@ -3,8 +3,9 @@
 
 #include "image.h"
 
-void generate_kernel(double ker[3][3]);
-void blur(Image *image, double ker[3][3]);
+void convolution(Image *image, double **ker, int n);
 void inverse(Image *image);
+void gaussian_blur(Image *image, int n);
+double** generate_kernel(int n);
 
 #endif
