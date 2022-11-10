@@ -125,6 +125,7 @@ j < w; j++)
     return image;
 }
 
+/*Creates an SDL Surface from an Image*/
 SDL_Surface* create_surface(Image *image)
 {
     //Initializing new surface
@@ -144,6 +145,7 @@ SDL_Surface* create_surface(Image *image)
     return surface;
 }
 
+/* Gets r g and values of a pixel*/
 void get_rgb(Pixel pixel, unsigned int *r, unsigned int *g, unsigned *b)
 {
     *r = pixel.r;
@@ -151,6 +153,7 @@ void get_rgb(Pixel pixel, unsigned int *r, unsigned int *g, unsigned *b)
     *b = pixel.b;
 }
 
+/*Set r b and b values for each pixels*/
 void set_rgb(Pixel *pixel, unsigned int r, unsigned int g, unsigned int b)
 {
     pixel->r = r;
@@ -158,6 +161,7 @@ void set_rgb(Pixel *pixel, unsigned int r, unsigned int g, unsigned int b)
     pixel->b = b;
 }
 
+/*Sets all pixels values to k*/
 void set_all(Pixel *pixel, unsigned int k)
 {
     pixel->r = k;
@@ -166,13 +170,16 @@ void set_all(Pixel *pixel, unsigned int k)
 
 }
 
+/*Extracts the pixels array to a binary matrix*/
 int* export_array(Image *image)
 {
-    int len = image->w * image->h;
-    int* arr = malloc(w*h*sizeof(int))
-    for(int i = 0; i<len; i++)
+    int *arr = malloc(sizeof(int)*image->w*image->h);
+    for(int i = 0; i<image->h; i++)
     {
-        arr[i] = image->pixels[i].r;
+        for(int j = 0; j<image->w; j++)
+        {
+            arr[i*image->w+j] = ((int)image->pixels[i][j].r == 255);
+        }
     }
     return arr;
 }

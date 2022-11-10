@@ -19,11 +19,11 @@ void render(SDL_Renderer* renderer, SDL_Texture* texture)
 }
 
 /*Loop for testing purposes --> Switches from original to processed image when pressing a key */
-void test_loop(SDL_Renderer *renderer, SDL_Texture *colored, SDL_Texture *grayscale)
+void test_loop(SDL_Renderer *renderer, SDL_Texture **textures, int steps)
 {
     SDL_Event event;
-    SDL_Texture* t = colored;
-    //draw(renderer, t);
+    //draw(renderer, t)
+    int i=0;
     while (1)
     {
         SDL_WaitEvent(&event);
@@ -37,20 +37,34 @@ void test_loop(SDL_Renderer *renderer, SDL_Texture *colored, SDL_Texture *graysc
             }
             case SDL_WINDOWEVENT_RESIZED:
             {
-                render(renderer, t);
+                render(renderer, textures[i]);
                 break;
             }
             case SDL_KEYDOWN:
             {
-                if (t == colored)
+                if(event.key.keysym.sym == SDLK_RIGHT)
                 {
-                    t = grayscale;
+                    if(i < steps-1)
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        i=0;
+                    }
                 }
-                else
+                if (event.key.keysym.sym == SDLK_LEFT)
                 {
-                    t = colored;
+                    if(i > 0)
+                    {
+                        i--;
+                    }
+                    else
+                    {
+                        i=steps-1;
+                    }
                 }
-                render(renderer, t);
+                render(renderer, textures[i]);
                 break;
 
             }
@@ -83,7 +97,8 @@ void event_loop(SDL_Renderer *renderer, SDL_Texture *texture)
 
 }
 
-int draw(SDL_Surface *surface)
+/*Draws the final processed image using SDL */
+int draw(SDL_Surface **surfaces, int steps)
 {
     //Initializing and checking possible startup errors
     if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -95,22 +110,26 @@ int draw(SDL_Surface *surface)
     if(renderer == NULL)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
    //resizing
-   int w = surface->w;
-   int h = surface->h;
+   int w = surfaces[0]->w;
+   int h = surfaces[0]->h;
    SDL_SetWindowSize(window, w, h);
-    
+
+   SDL_Texture **textures = malloc(sizeof(SDL_Texture*)*steps);
    //creating texture from image
-   SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-   //SDL_Texture* processed =  SDL_CreateTextureFromSurface(renderer, surface);
-   SDL_FreeSurface(surface);
+   for(int i=0; i<steps; i++)
+   {
+        textures[i] =  SDL_CreateTextureFromSurface(renderer, surfaces[i]);
+   }
 
    //calling the main loop
-   event_loop(renderer, texture);
-   //test_loop(renderer, texture, processed);
+   test_loop(renderer, textures, steps);
    
    //Destroying objects
    SDL_DestroyRenderer(renderer);
-   SDL_DestroyTexture(texture);
+   for(int i = 0; i<steps; i++)
+   {
+        SDL_DestroyTexture(textures[i]);
+   }
    //SDL_DestroyTexture(grayscale);
    SDL_DestroyWindow(window);
    SDL_Quit();
