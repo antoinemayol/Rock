@@ -119,7 +119,7 @@ int deg_approximation(int deg,int biais, int cible)
 
 int** extract_intersection(int* horizontal_equ, int* vertical_equ, int lenh, int lenv)
 {
-    int threshold = 2;
+    //int threshold = 2;
     int **coordonates = malloc(sizeof(int *)*81);
     
     for(int i = 0; i < lenh - 1; i++)
