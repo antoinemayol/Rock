@@ -4,15 +4,19 @@
 #include <err.h>
 #include "save_and_load.h"
 
+//Sigmoid function
 double sig(double z)
 {
 	return 1 / (1 + exp(-z));
 }
+
+//Derivate of sigmoid function
 double Dsig(double z)
 {
 	return z * (1 - z);
 }
 
+//Randomly mix an array
 void mix(int *array, size_t n)
 {
     if (n > 1)
@@ -33,12 +37,21 @@ void mix(int *array, size_t n)
 #define nbHidNod 2
 #define nbOut 1
 
+//The network look like this :
+// Input 1 -- O -- O
+// 	           \ /  \
+//              X    O -- Output
+//             / \  /
+// Input 2 -- O -- O 
+
 
 
 #define nbTest 4
 
+//Proceeding the creation and the application of neural network for XOR
 void proceed(int limit)
 {
+	//Setting learning rate
 	double pas = 0.1f;
 	
 	//Arrays of neurons
@@ -164,11 +177,13 @@ void proceed(int limit)
 			}
 		}
 	}
-	//Save neurons and weights in "neurones/" folder
+	//Save neurons, weights and biases in "neurones/" folder
 	save(hidWght,1,4);
-	save(hidLayBias,2,2);
-	save(outWght,3,2);
-	save(outLayBias,4,1);
+	save(hidLay,2,2);
+	save(hidLayBias,3,2);
+	save(outWght,4,2);
+	save(outLay,5,1);
+	save(outLayBias,6,1);
 
 	//Release memory
 	free(hidLay);
