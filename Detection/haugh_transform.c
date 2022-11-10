@@ -23,7 +23,7 @@ void print_graph(int l, int w, int *matrix)
             else{
                 printf("\033[0;31m");
             }
-    		printf("●\033[0m");
+    		printf("● \033[0m");
         }
     	printf("\n");
     }
@@ -32,9 +32,10 @@ void print_graph(int l, int w, int *matrix)
 
 void print_case(int **coo, int* mat, int width)
 {
-    /* Print a matrix
+    /* Print cases of the sudoku
      * ARGS:
-     *  -lenght (int) : lenght of the matrix
+     *  -coo (int**) : coodrinates of cases
+     *  -width (int) : width of the matrix
      *  -matrix (int[]) : the matrix to print
      * OUT:
      *  none
@@ -183,6 +184,15 @@ int** get_equation(int phi,int roh, int *hough_val)
 
 void stock_cases(int** coo, int* matrix, int width, int** cases)
 {
+    /* Stock all matrix of cases
+     * ARGS:
+     *  -coo (int**) cordonates of cases
+     *  -width (int) : width of the matrix
+     *  -matrix (int[]) : the matrix to print
+     *  -cases (int**) : destination pointers
+     * OUT:
+     *  none
+     */
     int nb_case = 81;
     for(int i = 0 ; i < nb_case ; ++i)
     {
@@ -209,9 +219,9 @@ int** hough_traitement(int l, int w, int *mat)
     int* hough_val = malloc(mat_size*sizeof(int));
 
     hough_transform(l, w, mat, hough_val);
-
+    print_graph(max_p*2, 180, hough_val);
     int** coo = get_equation((int)max_p,90,hough_val);
-    //print_case(coo, mat, w);
+    print_case(coo, mat, w);
 
     int** cases = malloc(sizeof(int *)*nb_cases);
 
