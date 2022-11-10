@@ -221,7 +221,7 @@ int** hough_traitement(int l, int w, int *mat)
     hough_transform(l, w, mat, hough_val);
     print_graph(max_p*2, 180, hough_val);
     int** coo = get_equation((int)max_p,90,hough_val);
-    //print_case(coo, mat, w);
+    print_case(coo, mat, w);
 
     int** cases = malloc(sizeof(int *)*nb_cases);
 
