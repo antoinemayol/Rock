@@ -10,8 +10,8 @@
 /* Generates a Gaussian blur kernel of size n*n */
 double** generate_kernel(int n)
 {
-    double sigma = 0.3*(n/2-1)+0.8;
-    //double sigma = 0.5;
+    //double sigma = 0.3*(n/2-1)+0.8;
+    double sigma = 1;
     //Allocating memory
     double **ker = calloc(n, sizeof(double *));
     for(int i = 0; i<n; i++)
