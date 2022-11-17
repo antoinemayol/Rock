@@ -24,11 +24,23 @@ void add_b(Brain *b, double d)
 	b->array = res;
 }
 
+void add_array(Brain *b, double* a, size_t len_a)
+{
+	for(size_t i = 0; i < len_a; i++)
+	{
+		add_b(b,a[i]);
+	}
+}
+
 int main()
 {
 	Brain tmp = get_empty();
-	double d = 0.6;
-	add_b(&tmp, d);
-	printf("%f\n",b.array[0]);
-	printf("tmp = %zu",tmp.len);
+	double d[3] = {0.6,0.890,0.369};
+	size_t len = 3;
+	add_array(&tmp, d, len);
+	printf("tmp = %zu\n",tmp.len);
+	for(size_t i = 0; i < tmp.len; i++)
+	{
+		printf("%f\n",tmp.array[i]);
+	}
 }
