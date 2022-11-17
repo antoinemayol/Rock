@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "save_and_load.h"
 
 typedef struct Brain{
 	double* array;
@@ -32,6 +33,15 @@ void add_array(Brain *b, double* a, size_t len_a)
 	}
 }
 
+void save_brain(Brain b, int i)
+{	
+	for(size_t i = 0; i < b.len; i++)
+	{
+		printf("b = %f\n",b.array[i]);
+	}
+	save(b.array, i, b.len);
+}
+
 int main()
 {
 	Brain tmp = get_empty();
@@ -43,4 +53,6 @@ int main()
 	{
 		printf("%f\n",tmp.array[i]);
 	}
+
+	save_brain(tmp, 9);
 }
