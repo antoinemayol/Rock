@@ -19,7 +19,7 @@ Brain get_empty()
 
 void add_b(Brain *b, double d)
 {
-	double* res = realloc(b->array, b->len+1*sizeof(double));
+	double* res = realloc(b->array, (b->len+1)*sizeof(double));
 	res[b->len] = d;
 	b->len+=1;;
 	b->array = res;
@@ -35,11 +35,12 @@ void add_array(Brain *b, double* a, size_t len_a)
 
 void save_brain(Brain b, int i)
 {	
-	for(size_t i = 0; i < b.len; i++)
-	{
-		printf("b = %f\n",b.array[i]);
-	}
 	save(b.array, i, b.len);
+}
+
+void load_brain(char* path)
+{
+
 }
 
 int main()

@@ -35,7 +35,6 @@ void concat_path(char* res,char* s1, char* s2, char* s3, char *s4, int maxpath)
 
 void save(double *a, int i, size_t len)
 {
-	printf("len : %zu\n",len);
 	char *num = malloc(5*sizeof(char));
 	sprintf(num, "%d", i);
 	char *path = malloc(25*sizeof(char));
@@ -49,7 +48,6 @@ void save(double *a, int i, size_t len)
 
 	for(size_t j = 0; j<len; j++)
 	{
-		printf("a : %f\n",a[j]);
 		fprintf(f,"%f\n",a[j]);
 	}
 	fclose(f);
