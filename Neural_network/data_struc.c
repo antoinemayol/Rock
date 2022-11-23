@@ -38,13 +38,16 @@ void save_brain(Brain b, int i)
 	save(b.array, i, b.len);
 }
 
-void load_brain(char* path)
+Brain load_brain(char* path)
 {
-
+	Brain res = get_empty();
+	res.array = load(path, res.len);
+	return res;
 }
 
 int main()
 {
+	/*
 	Brain tmp = get_empty();
 	double d[3] = {0.6,0.890,0.369};
 	size_t len = 3;
@@ -56,4 +59,12 @@ int main()
 	}
 
 	save_brain(tmp, 9);
+	*/
+
+	Brain test = load_brain("neurones/testload");
+	printf("len : %zu\n",test.len);
+	for(size_t i = 0; i<test.len; i++)
+	{
+		printf("test : %f\n",test.array[i]);
+	}
 }

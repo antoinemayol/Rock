@@ -54,25 +54,40 @@ void save(double *a, int i, size_t len)
 
 }
 
-void load(char* path, double* array, size_t len)
+void add_one(double** a, double b, size_t* len)
+{
+	printf("aqui?\n");
+	double* res = realloc(*a,(*len+1)*sizeof(double));
+	res[*len] = b;
+	*len = *(len) + 1;
+	*a = res;
+}
+
+double* load(char* path, size_t* len)
 {
 	FILE *f = fopen(path,"r");
 	if(f == NULL)
 	{
 		errx(1,"Can't open file !");
 	}
-	
+
+	double* array = malloc(sizeof(double));	
 	char* line = NULL;
 	size_t len_l = 0;
 	size_t i = 0;
-	while(i < len && getline(&line, &len_l, f) != -1)
+
+	while(getline(&line, &len_l, f) != -1)
 	{
 		printf("Actual line : %s\n",line);
 		double x;
+		printf("aquiii?\n");
 		sscanf(line,"%lf",&x);
-		array[i] = x;
+		printf("lenload1 : %zu\n",*len);
+		add_one(&array, x, len);
+		printf("lenload2 : %zu\n",*len);
 		i++;
-	}	
+	}
+	return array;
 }
 /*
 int main()
@@ -80,10 +95,13 @@ int main()
 //	double test[4] = {0.0,0.43,2.34,-65};
 //	save(test,0,4);
 //	return 0;
-	double* res = malloc(3*sizeof(double));
-	load("neurones/testload",res,3);
-	for(int i =0; i < 3; i++)
+	size_t len = 0;
+	double* res = load("neurones/testload",&len);
+	for(size_t i =0; i < len; i++)
 	{
-		printf("%f\n",res[i]);
+		printf("res : %f\n",res[i]);
 	}
-}*/
+
+
+}
+*/
