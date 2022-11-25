@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <dirent.h>
 #include "save_and_load.h"
 
 typedef struct Brain{
@@ -41,30 +42,36 @@ void save_brain(Brain b, int i)
 Brain load_brain(char* path)
 {
 	Brain res = get_empty();
-	res.array = load(path, res.len);
+	printf("res.len : %zu",res.len);
+	res.array = load(path, &res.len);
 	return res;
+}
+
+void make_neuronal()
+{
+	Brain* res = malloc(sizeof(Brain));
+
+  	DIR *d;
+  	struct dirent *dir;
+  	d = opendir("neurones/");
+	if (d) 
+	{
+    	while ((dir = readdir(d)) != NULL) 
+		{
+      		printf("%s\n", dir->d_name);
+    	}
+    	closedir(d);
+  	}
 }
 
 int main()
 {
-	/*
+
 	Brain tmp = get_empty();
 	double d[3] = {0.6,0.890,0.369};
 	size_t len = 3;
 	add_array(&tmp, d, len);
-	printf("tmp = %zu\n",tmp.len);
-	for(size_t i = 0; i < tmp.len; i++)
-	{
-		printf("%f\n",tmp.array[i]);
-	}
-
 	save_brain(tmp, 9);
-	*/
-
 	Brain test = load_brain("neurones/testload");
-	printf("len : %zu\n",test.len);
-	for(size_t i = 0; i<test.len; i++)
-	{
-		printf("test : %f\n",test.array[i]);
-	}
+	make_neuronal();
 }

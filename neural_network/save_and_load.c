@@ -82,7 +82,7 @@ double* load(char* path, size_t* len)
 		double x;
 		printf("aquiii?\n");
 		sscanf(line,"%lf",&x);
-		printf("lenload1 : %zu\n",*len);
+		//printf("lenload1 : %zu\n",*len);
 		add_one(&array, x, len);
 		printf("lenload2 : %zu\n",*len);
 		i++;
