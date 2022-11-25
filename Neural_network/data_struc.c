@@ -42,26 +42,45 @@ void save_brain(Brain b, int i)
 Brain load_brain(char* path)
 {
 	Brain res = get_empty();
-	printf("res.len : %zu",res.len);
 	res.array = load(path, &res.len);
 	return res;
 }
 
-void make_neuronal()
+
+//Load all the neurones in "neurones/" folder and
+//returns them is acending order in brain* res 
+Brain* make_neuronal(size_t* count)
 {
 	Brain* res = malloc(sizeof(Brain));
 
-  	DIR *d;
-  	struct dirent *dir;
-  	d = opendir("neurones/");
-	if (d) 
+	struct dirent **namelist;
+   	int n;
+	int i = 0;
+   	n = scandir("neurones/", &namelist, NULL, alphasort);
+   	if (n < 0)
+       	perror("scandir");
+   	else 
 	{
-    	while ((dir = readdir(d)) != NULL) 
+       	while (i<n) 
 		{
-      		printf("%s\n", dir->d_name);
-    	}
-    	closedir(d);
-  	}
+			if(namelist[i]->d_name[0] == 'n')
+			{
+				res = realloc(res, (*count + 1)*sizeof(Brain));
+
+				size_t fullsize = strlen(namelist[i]->d_name)+10;
+				char* path = malloc(fullsize*sizeof(fullsize));
+				strcpy(path,"neurones/");
+				strcat(path,namelist[i]->d_name);
+
+				res[*count] = load_brain(path);
+       			free(namelist[i]);
+				*count = *(count) + 1;
+			}
+			i++;
+       	}
+       	free(namelist);
+   	}
+	return res;
 }
 
 int main()
@@ -71,7 +90,19 @@ int main()
 	double d[3] = {0.6,0.890,0.369};
 	size_t len = 3;
 	add_array(&tmp, d, len);
-	save_brain(tmp, 9);
-	Brain test = load_brain("neurones/testload");
-	make_neuronal();
+	//Brain test = load_brain("neurones/testload");
+	
+	size_t c = 0;
+	Brain* li = make_neuronal(&c);
+	printf("len : %zu",c);
+	for(size_t i =0; i < c; i++)
+	{
+		printf("neu%zu : \n",i);
+		for(size_t j = 0; j < li[i].len; j++)
+		{
+			printf("    val %zu : %f\n",j,li[i].array[j]);
+		}
+	}
+	
+
 }

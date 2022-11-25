@@ -56,7 +56,6 @@ void save(double *a, int i, size_t len)
 
 void add_one(double** a, double b, size_t* len)
 {
-	printf("aqui?\n");
 	double* res = realloc(*a,(*len+1)*sizeof(double));
 	res[*len] = b;
 	*len = *(len) + 1;
@@ -78,13 +77,9 @@ double* load(char* path, size_t* len)
 
 	while(getline(&line, &len_l, f) != -1)
 	{
-		printf("Actual line : %s\n",line);
 		double x;
-		printf("aquiii?\n");
 		sscanf(line,"%lf",&x);
-		//printf("lenload1 : %zu\n",*len);
 		add_one(&array, x, len);
-		printf("lenload2 : %zu\n",*len);
 		i++;
 	}
 	return array;
