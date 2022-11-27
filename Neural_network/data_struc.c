@@ -2,12 +2,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "save_and_load.h"
-
-typedef struct Brain{
-	double* array;
-	size_t len;
-	size_t index;
-}Brain;
+#include "data_struc.h"
 
 Brain get_empty()
 {

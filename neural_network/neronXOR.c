@@ -3,6 +3,7 @@
 #include <math.h>
 #include <err.h>
 #include "save_and_load.h"
+#include "data_struc.h"
 
 //Sigmoid function
 double sig(double z)
@@ -44,7 +45,7 @@ void mix(int *array, size_t n)
 //             / \  /
 // Input 2 -- O -- O 
 
-
+//Créer fonctions qui créer le réseau et l'init
 
 #define nbTest 4
 
