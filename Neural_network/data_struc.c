@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <dirent.h>
+#include <math.h>
 #include "save_and_load.h"
 #include "data_struc.h"
 
@@ -78,26 +79,42 @@ Brain* make_neuronal(size_t* count)
 	return res;
 }
 
+
+//C'EST PAS LA BONNE VAL FAUT MODIF
+Brain* create_base(size_t nb_in, size_t nb_layers, size_t* len)
+{
+	Brain* res = malloc(sizeof(Brain));
+
+	while(*len < nb_layers && nb_in >= 1)
+	{
+		Brain tmp = get_empty();
+		for(size_t i = 0; i < nb_in; i++)
+		{
+			double r = (double)rand()/(double)RAND_MAX;
+			add_b(&tmp,r);
+		}
+		res = realloc(res, (*len + 1)*sizeof(Brain));
+		res[*len] = tmp;
+		//free(tmp);
+
+		nb_in = nb_in/3;
+		*len = *len +1;
+	}
+	return res;
+}
+
 int main()
 {
-
-	Brain tmp = get_empty();
-	double d[3] = {0.6,0.890,0.369};
-	size_t len = 3;
-	add_array(&tmp, d, len);
-	//Brain test = load_brain("neurones/testload");
+	size_t len = 0;
+	Brain* test = create_base(3000, 100, &len);
+	printf("len : %zu\n",len);
 	
-	size_t c = 0;
-	Brain* li = make_neuronal(&c);
-	printf("len : %zu",c);
-	for(size_t i =0; i < c; i++)
+	for(size_t i =0; i < len; i++)
 	{
 		printf("neu%zu : \n",i);
-		for(size_t j = 0; j < li[i].len; j++)
+		for(size_t j = 0; j < test[i].len; j++)
 		{
-			printf("    val %zu : %f\n",j,li[i].array[j]);
+			printf("    val %zu : %f\n",j,test[i].array[j]);
 		}
 	}
-	
-
 }
