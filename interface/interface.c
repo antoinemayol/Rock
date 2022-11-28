@@ -3,6 +3,7 @@
 
 GtkWidget *window;
 GtkLabel *label;
+GtkWidget *file1;
 
 
 
@@ -65,6 +66,7 @@ void button_label()
 	gtk_builder_add_from_file(builder,"inter.glade",NULL);
 
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"Main_theme"));
+	file1 = GTK_WIDGET(gtk_builder_get_object(builder,"file1"));
 
 	gtk_builder_connect_signals(builder,NULL);
 
@@ -72,4 +74,10 @@ void button_label()
 
 	gtk_widget_show_all(window);
 
+}
+
+char *on_file1_file_set(GtkFileChooserButton *f)
+{
+	char *res = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(f));
+	printf("filename : %s\n",res);
 }
