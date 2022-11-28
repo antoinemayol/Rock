@@ -11,7 +11,7 @@ int main (int argc, char *argv[])
 	//Initialize gtk
 	gtk_init(&argc,&argv);
 
-	//gtk bulder
+	
 	GtkBuilder *builder;
 
 	builder = gtk_builder_new();
@@ -34,22 +34,42 @@ int main (int argc, char *argv[])
 
 }
 
+
+void exit_app1()
+{
+	printf("Button clicked : exit_app1");
+	gtk_main_quit();
+
+
+}
+
 void exit_app()
 {
-	printf("Exit function \n");
+	printf("Button clicked\n");
+	
 	gtk_main_quit();
+
 }
 
 void button_cliked()
 {
-	printf("Button clicked\n");
-	
 	exit_app();
-
 }
 
 void button_label()
 {
-	printf("button_label_cliked\n");
-	gtk_label_set_text(label,"Love You Mate");
+	GtkBuilder *builder;
+
+	builder = gtk_builder_new();
+
+	gtk_builder_add_from_file(builder,"inter.glade",NULL);
+
+	window = GTK_WIDGET(gtk_builder_get_object(builder,"Main_theme"));
+
+	gtk_builder_connect_signals(builder,NULL);
+
+	g_object_unref(builder);
+
+	gtk_widget_show_all(window);
+
 }
