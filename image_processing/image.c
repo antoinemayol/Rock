@@ -95,7 +95,7 @@ Image create_image(SDL_Surface *surface)
     SDL_Color color;
     //Calling constructor/creating image
     Image image = { .pixels = NULL, .w = w, .h = h};
-    
+
     //Allocatiing memory for pixels array(simple then double dimension)
     image.pixels = (Pixel **)calloc(h, sizeof(Pixel *));
     for (int p = 0; p < h; p++)
@@ -106,7 +106,7 @@ Image create_image(SDL_Surface *surface)
             errx(EXIT_FAILURE, "Cmon man...");
         }
     }
-   
+
     //filling image pixels one by one from surface pixels
     for( int i = 0;
  i < h; i++)
@@ -116,9 +116,9 @@ j < w; j++)
         {
             Uint32 pix = get_pixel(surface, i, j);
             SDL_GetRGB(pix, surface->format, &color.r, &color.g, &color.b);
-            image.pixels[i][j].r = color.r; 
-            image.pixels[i][j].g = color.g; 
-            image.pixels[i][j].b = color.b; 
+            image.pixels[i][j].r = color.r;
+            image.pixels[i][j].g = color.g;
+            image.pixels[i][j].b = color.b;
         }
     }
 
@@ -143,6 +143,60 @@ SDL_Surface* create_surface(Image *image)
         }
     }
     return surface;
+}
+
+/*Bilinear algorithm applied to the Image in order to resize it to (nw)x(nh)*/
+void resize_image(Image *image, int nw, int nh)
+{
+    //Deep copy of image
+    Image res = image_copy(image);
+
+    //Old image dimensions
+    int iw = image->w;
+    int ih = image->h;
+
+    //Setting size of new image to nh and nw
+    res.w = nw;
+    res.h = nh;
+
+    //Initializing ratios
+    float xr = (iw-1)/(nw-1);
+    float yr = (ih-1)/(nh-1);
+
+    for(int i=0; i<nh; i++)
+    {
+        for(int j=0; j<nw; j++)
+        {
+            //Calculating ratio/index coords
+            unsigned int xl = floor(xr*j);
+            unsigned int xh = ceil(xr*j);
+            unsigned int yl = floor(yr*i);
+            unsigned int yh = ceil(yr*i);
+
+            //Calculating weight values
+            unsigned int xw = (xr*j)-xl;
+            unsigned int yw = (yr*i)-yl;
+
+            //Calculation coefficients
+            unsigned int a = image->pixels[yl][xl].r;
+            unsigned int b = image->pixels[yl][xh].r;
+            unsigned int c = image->pixels[yh][xl].r;
+            unsigned int d = image->pixels[yh][xh].r;
+
+            //Processing final value for pixel
+            unsigned int val= a * (1-xw) * (1-yw)
+                + b * xw * (1-yw)
+                + c * yw * (1-xw)
+                + d * xw * yw;
+
+            //Applying final value to pixel
+            set_all(&res.pixels[i][j], val);
+        }
+    }
+    //Assiging new parameters to image
+    image->pixels = res.pixels;
+    image->w = res.w;
+    image->h = res.h;
 }
 
 /* Gets r g and values of a pixel*/
@@ -204,12 +258,12 @@ Image image_copy(Image *source)
     int h = source->h;
     dest.w = w;
     dest.h = h;
-    
+
     //Allocating memory for new pixels array
     dest.pixels = (Pixel **)calloc(h, sizeof(Pixel *));
     for (int p = 0; p < h; p++)
     {
-        dest.pixels[p] = (Pixel *)calloc(w, sizeof(Pixel)); 
+        dest.pixels[p] = (Pixel *)calloc(w, sizeof(Pixel));
     }
 
     //Copying pixels one by one from source to destination
