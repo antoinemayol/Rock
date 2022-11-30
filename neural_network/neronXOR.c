@@ -3,7 +3,7 @@
 #include <math.h>
 #include <err.h>
 #include "save_and_load.h"
-#include "data_struc.h"
+//#include "data_struc.h"
 
 //Sigmoid function
 double sig(double z)
@@ -33,10 +33,43 @@ void mix(int *array, size_t n)
     }
 }
 
-#define nbIn 2
+#define nbIn 225
 #define nbHidLay 1
-#define nbHidNod 2
-#define nbOut 1
+#define nbHidNod 122
+#define nbOut 9
+/*
+double testMat6[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,
+							 0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,
+							 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
+							 0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,
+							 0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,1,1,1,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+double testMat3[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+*/
 
 //The network look like this :
 // Input 1 -- O -- O
@@ -47,7 +80,7 @@ void mix(int *array, size_t n)
 
 //Créer fonctions qui créer le réseau et l'init
 
-#define nbTest 4
+#define nbTest 2
 
 //Proceeding the creation and the application of neural network for XOR
 void proceed(int limit)
@@ -68,9 +101,43 @@ void proceed(int limit)
 	double *outWght = malloc((nbHidNod * nbOut) * sizeof(double));
 	
 	//Inputs and expected outputs
-	double trainIn[nbTest][nbIn] = {{0.0f,0.0f},{1.0f,0.0f},{0.0f,1.0f},{1.0f,1.0f}};
-    double trainOut[nbTest][nbOut] = {{0.0f},{1.0f},{1.0f},{0.0f}};
-	int order[4] = {0,1,2,3};
+	double trainIn[nbTest][nbIn] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 		0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,
+							 		0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,
+							 		0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+									0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+							 		0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,
+							 		0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
+							 		0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,
+							 		0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,
+							 		0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,
+							 		0,0,0,1,1,1,0,1,1,0,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 
+
+							   		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 		0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+								   };
+
+    double trainOut[nbTest][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f},
+									  {0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
+								// 	    1     2   3    4    5    6    7    8    9
+	int order[2] = {0,1};
 	
 	//Initialize layers with random value close to 0
 	for(int i = 0; i < nbIn; i++)
@@ -97,6 +164,13 @@ void proceed(int limit)
 	}
 
 	//-----
+	printf("rand : %f\n",outLayBias[0]);
+	printf("rand : %f\n",outLayBias[1]);
+	printf("rand : %f\n",outLayBias[2]);
+	printf("rand : %f\n",outLayBias[3]);
+	printf("rand : %f\n",outLayBias[4]);
+	printf("rand : %f\n",outLayBias[5]);
+	printf("rand : %f\n",outLayBias[6]);
 
 	for(int step = 0; step < limit; step++)
 	{
@@ -129,12 +203,12 @@ void proceed(int limit)
 			}
 
 			//Printing results as they come
-			if(limit-step <= 1)
-			{
-		    	printf ("Input : |%g|%g| Output : %g    Expected Output: %g\n",
-                    	trainIn[i][0], trainIn[i][1],
-                    	outLay[0], trainOut[i][0]);	
-			}
+			//if(limit-step <= 1)
+			//{
+		    	printf ("Input : %d \nOutputs :\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n Expected Output: %g\n\n",
+                    	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8],
+						trainOut[i][0]);
+			//}
 			//-----
 
 			//BACKPROPAGATION
