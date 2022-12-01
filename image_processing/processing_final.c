@@ -10,6 +10,7 @@
 #include "image.h"
 #include "threshold.h"
 #include "otsu.h"
+#include "processing_finl.h"
 
 int* image_processing(char* path, int *w, int *h)
 {
