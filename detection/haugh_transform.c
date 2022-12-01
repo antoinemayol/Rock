@@ -130,7 +130,7 @@ int** extract_intersection(int* horizontal_equ, int* vertical_equ, int lenh, int
             *(coo + 1) = *(vertical_equ + j + 1) + 1;
             *(coo + 2) = *(horizontal_equ + i + 1);
             *(coo + 3) = *(vertical_equ + j);
-            *(coordonates + i*(lenv - 1) + j) = coo;        
+            *(coordonates + i*(lenv - 1) + j) = coo;
         }
     return coordonates;
 }
@@ -206,7 +206,7 @@ void stock_cases(int** coo, int* matrix, int width, int** cases)
         for(int j = 0; j < l; j++)
             for(int k = 0; k < w; k++)
                 *(new +j*w + k) = *(matrix +(X1 + j)*width + Y1 + k);
-        *(cases + i) = new;
+        *(cases + (i/9)*9 + 9 - i % 9 - 1) = new;
     } 
 }
 

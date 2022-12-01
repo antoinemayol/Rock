@@ -2,7 +2,7 @@
 
 CC = gcc
 CPPFLAGS =
-CFLAGS = -Wall -g -Wextra 
+CFLAGS = -Wall -g -Wextra -fsanitize=address
 LDFLAGS =
 LDLIBS = -lm 
 
@@ -14,7 +14,7 @@ EXE = ${SRC:.c=}
 all: main
 
 main: $(OBJ)
-	gcc -fsanitize=address -o main $(CFLAGS) $^ $(LDLIBS)
+	gcc -o main $(CFLAGS) $^ $(LDLIBS)
 
 .PHONY: clean
 

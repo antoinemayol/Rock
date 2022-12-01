@@ -22,10 +22,10 @@ int* image_processing(char* path)
     grayscale(&image);
 
     //Bluring image
-    gaussian_blur(&image, 5);
+    gaussian_blur(&image);
 
     //Final binarization process
     final_process(&image);
     sobel(&image);
-    return 0;
+    return ;
 }
