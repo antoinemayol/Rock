@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     Image image5 = image_copy(&image4);
     sobel(&image5);
 
-    SDL_Surface **surfaces = malloc(sizeof(SDL_Surface*)*4);
+    SDL_Surface **surfaces = malloc(sizeof(SDL_Surface*)*5);
     surfaces[0] = create_surface(&image1);
     surfaces[1] = create_surface(&image2);
     surfaces[2] = create_surface(&image3);

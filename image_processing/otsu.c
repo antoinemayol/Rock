@@ -16,7 +16,7 @@ double* get_histo(Image *image)
     {
         for(int j = 0; j<image->w; j++)
         {
-            histo[image->pixels[i][j].r]++;
+            histo[(int)image->pixels[i][j].r]++;
         }
     }
     int N = image->w*image->h;
@@ -40,8 +40,8 @@ double* initialize(int n)
 //Step 5
 double get_sigma(int k, double ut, double *w, double *u)
 {
-    int a = (ut*w[k] - u[k]);
-    int b = (w[k] * (1-w[k]));
+    double a = (ut*w[k] - u[k]);
+    double b = (w[k] * (1-w[k]));
     return (a*a)/b;
 }
 
@@ -59,9 +59,9 @@ double get_omega(double *histo, int k)
 double get_mu(double *histo, int k)
 {
     double res = 0;
-    for(int i = 0; i<= k; i++)
+    for(int i = 0; i< k; i++)
     {
-        res+= i * histo[i];
+        res+= (double)i * histo[i];
     }
     return res;
 }
