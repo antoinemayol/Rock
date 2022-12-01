@@ -80,11 +80,32 @@ void set_pixel(SDL_Surface *surface,Uint32 pixel, unsigned x, unsigned y)
     }
 }
 
+/*Converts a Pixel array to int array*/
+int* pixels_to_int(Image *image)
+{
+    //Getting width and height from image
+    int w = image->w;
+    int h = image->h;
+
+    //Allocating memory for pixels array(simple then double dimension)
+    int *res = malloc(h*w*sizeof(int));
+
+    for (int i = 0; i < h; i++)
+    {
+        for(int j = 0; j < w; j++)
+        {
+            res[i*w+j] = (int)image->pixels[i][j].r;
+        }
+    }
+    return res;
+}
+
 
 /***********************************************/
 /********************IMAGE**********************/
 /***********************************************/
 /*Creates an empty image of size(w)x(h) filled with white pixels*/
+
 Image create_empty_image(int w, int h)
 {
     //Calling constructor/creating image

@@ -9,14 +9,14 @@
 #include "image.h"
 
 //Step 1
-double* get_histo(Image *image)
+float* get_histo(Image *image)
 {
-    double *histo = initialize(256);
+    float *histo = initialize(256);
     for(int i = 0; i<image->h; i++)
     {
         for(int j = 0; j<image->w; j++)
         {
-            histo[(int)image->pixels[i][j].r]++;
+            histo[image->pixels[i][j].r]++;
         }
     }
     int N = image->w*image->h;
@@ -27,9 +27,9 @@ double* get_histo(Image *image)
     return histo;
 }
 
-double* initialize(int n)
+float* initialize(int n)
 {
-    double *arr = malloc(sizeof(double) * n);
+    float *arr = malloc(sizeof(double) * n);
     for(int i = 0; i<n; i++)
     {
         arr[i] = 0;
@@ -38,17 +38,17 @@ double* initialize(int n)
 }
 
 //Step 5
-double get_sigma(int k, double ut, double *w, double *u)
+float get_sigma(double ut, float w, float u)
 {
-    double a = (ut*w[k] - u[k]);
-    double b = (w[k] * (1-w[k]));
+    float a = (ut*w[k] - u[k]);
+    float b = (w[k] * (1-w[k]));
     return (a*a)/b;
 }
 
 //Step 4
-double get_omega(double *histo, int k)
+int get_omega(double *histo, int k)
 {
-    double res = 0;
+    float res = 0;
     for(int i = 0; i <= k; i++)
         res+= histo[i];
 
@@ -56,12 +56,12 @@ double get_omega(double *histo, int k)
 }
 
 //Step 3
-double get_mu(double *histo, int k)
+float get_mu(double *histo, int k)
 {
-    double res = 0;
+    float res = 0;
     for(int i = 0; i< k; i++)
     {
-        res+= (double)i * histo[i];
+        res+= i * histo[i];
     }
     return res;
 }
@@ -78,12 +78,12 @@ void normalize(double *histo, int len)
 //Applying otsu algorithm to get optimal threshold value/
 void otsu(Image *image)
 {
-    double *histo = get_histo(image);
+    float *histo = get_histo(image);
     normalize(histo, image->h * image->w);
-    double *w = initialize(256);
-    double *u = initialize(256);
-    double max = -1;
-    double res;
+    float *w = initialize(256);
+    float *u = initialize(256);
+    float max = -1;
+    float res;
 
     for(int i = 0; i<256; i++)
     {
@@ -94,13 +94,14 @@ void otsu(Image *image)
 
     for(int k=0; k<256; k++)
     {
-        double tmp = get_sigma(k , ut, w, u);
-        if (tmp > max)
+        int tmp = get_sigma(ut, w[k], u[k]);
+        if(tmp > max)
         {
             max = tmp;
             res = k;
         }
     }
+    int threshold = (int)res;
 
     //Threshold
     for(int i = 0; i<image->h; i++)

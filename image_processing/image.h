@@ -30,5 +30,6 @@ Image image_copy(Image *source);
 void set_all(Pixel *pixel, unsigned int k);
 int* export_array(Image *image);
 void resize_image(Image *image, int nw, int nh);
+int* pixels_to_int(Image *image);
 
 #endif

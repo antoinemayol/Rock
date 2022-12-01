@@ -11,13 +11,17 @@
 #include "threshold.h"
 #include "otsu.h"
 
-int* image_processing(char* path)
+int* image_processing(char* path, int *w, int *h)
 {
     //Loading image
     SDL_Surface *surface = load_image(path);
 
     //Converting SDL_Surface to struct Image
     Image image = create_image(surface);
+
+    *w = image.w;
+    *h = image.h;
+
     //Grayscale process
     grayscale(&image);
 
@@ -27,5 +31,9 @@ int* image_processing(char* path)
     //Final binarization process
     final_process(&image);
     sobel(&image);
-    return 0;
+
+    //Converting pixels array to int array
+    int *res = pixels_to_int(&image);
+
+    return res;
 }
