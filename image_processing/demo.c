@@ -9,6 +9,7 @@
 #include "blur.h"
 #include "image.h"
 #include "threshold.h"
+#include "otsu.h"
 
 int main(int argc, char** argv)
 {
@@ -28,37 +29,38 @@ int main(int argc, char** argv)
     Image image2 = image_copy(&image1);
     grayscale(&image2);
 
+    /*
     //Resizing image
     Image image3 = image_copy(&image2);
-    resize_image(&image3, 800, 800);
+    resize_image(&image3, 800, 800);*/
 
     //Applying Gaussian Blur
-    Image image4 = image_copy(&image3);
-    gaussian_blur(&image4, 3);
+    Image image3 = image_copy(&image2);
+    gaussian_blur(&image3, 5);
 
     //Inversing colors
-    Image image5 = image_copy(&image4);
-    inverse(&image5);
+    /*Image image5 = image_copy(&image4);
+    inverse(&image5);*/
 
-    //Final binarization process + Sobel process
-    Image image6 = image_copy(&image5);
-    final_process(&image6);
+    //Final binarization process
+    Image image4 = image_copy(&image3);
+    otsu(&image4);
 
     //Applying Sobel
-    Image image7 = image_copy(&image6);
-    sobel(&image7);
+    Image image5 = image_copy(&image4);
+    sobel(&image5);
 
-    SDL_Surface **surfaces = malloc(sizeof(SDL_Surface*)*6);
+    SDL_Surface **surfaces = malloc(sizeof(SDL_Surface*)*4);
     surfaces[0] = create_surface(&image1);
     surfaces[1] = create_surface(&image2);
     surfaces[2] = create_surface(&image3);
     surfaces[3] = create_surface(&image4);
     surfaces[4] = create_surface(&image5);
-    surfaces[5] = create_surface(&image6);
-    surfaces[6] = create_surface(&image7);
+    //surfaces[5] = create_surface(&image6);
+    //surfaces[6] = create_surface(&image7);
 
     //Drawing step by steps final image
-    draw(surfaces, 7);
+    draw(surfaces, 5);
 
     return 0;
 }

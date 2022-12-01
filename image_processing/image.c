@@ -84,6 +84,35 @@ void set_pixel(SDL_Surface *surface,Uint32 pixel, unsigned x, unsigned y)
 /***********************************************/
 /********************IMAGE**********************/
 /***********************************************/
+/*Creates an empty image of size(w)x(h) filled with white pixels*/
+Image create_empty_image(int w, int h)
+{
+    //Calling constructor/creating image
+    Image image = { .pixels = NULL, .w = w, .h = h};
+
+    //Allocatiing memory for pixels array(simple then double dimension)
+    image.pixels = (Pixel **)calloc(h, sizeof(Pixel *));
+    for (int p = 0; p < h; p++)
+    {
+        image.pixels[p] = (Pixel *)calloc(w, sizeof(Pixel));
+        if (image.pixels[p] == NULL)
+        {
+            errx(EXIT_FAILURE, "Memory allocation error");
+        }
+    }
+
+    //filling image pixels one by one from surface pixels
+    for( int i = 0;i < h; i++)
+    {
+        for(int j = 0;j < w; j++)
+        {
+            image.pixels[i][j].r = 0;
+            image.pixels[i][j].g = 0;
+            image.pixels[i][j].b = 0;
+        }
+    }
+    return image;
+}
 
 
 /*Creates an Image from the built surface*/
@@ -103,7 +132,7 @@ Image create_image(SDL_Surface *surface)
         image.pixels[p] = (Pixel *)calloc(w, sizeof(Pixel));
         if (image.pixels[p] == NULL)
         {
-            errx(EXIT_FAILURE, "Cmon man...");
+            errx(EXIT_FAILURE, "Memory allocation error");
         }
     }
 
@@ -149,19 +178,15 @@ SDL_Surface* create_surface(Image *image)
 void resize_image(Image *image, int nw, int nh)
 {
     //Deep copy of image
-    Image res = image_copy(image);
+    Image res = create_empty_image(nw,nh);
 
     //Old image dimensions
     int iw = image->w;
     int ih = image->h;
 
-    //Setting size of new image to nh and nw
-    res.w = nw;
-    res.h = nh;
-
     //Initializing ratios
-    float xr = (iw-1)/(nw-1);
-    float yr = (ih-1)/(nh-1);
+    float xr = (float)(iw-1)/(nw-1);
+    float yr = (float)(ih-1)/(nh-1);
 
     for(int i=0; i<nh; i++)
     {
@@ -193,10 +218,11 @@ void resize_image(Image *image, int nw, int nh)
             set_all(&res.pixels[i][j], val);
         }
     }
+    *image=res;
     //Assiging new parameters to image
-    image->pixels = res.pixels;
+    /*image->pixels = res.pixels;
     image->w = res.w;
-    image->h = res.h;
+    image->h = res.h;*/
 }
 
 /* Gets r g and values of a pixel*/
