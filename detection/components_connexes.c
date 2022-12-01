@@ -205,7 +205,7 @@ void extract_biggest_obj(int pos[5],int l, int w, int mat[l*w], int final[])
     }
 }
 
-void connected_components(int l, int w, int* matrix)
+int* connected_components(int l, int w, int* matrix,int* l2, int* w2)
 {
     /* Reconize the sudoku on the picture
      * ARGS:
@@ -225,11 +225,16 @@ void connected_components(int l, int w, int* matrix)
     int pos[5];
 
     get_biggest_submat(l, w, output, nb_obj, pos);
-    int final[calculate_size(pos[0], pos[1], pos[2], pos[3])];
+
+    *l2 = pos[2] - pos[0] +1;
+    *w2 = pos[3] - pos[1] +1;
+
+    int* final = malloc(sizeof(int)**l2**w2);
 
     extract_biggest_obj(pos, l, w,output, final);
-    print_mat(l,w,matrix);
-    printf("Extracted matrix:\n");
-    print_mat(pos[2] - pos[0] +1 , pos[3] - pos[1]+1, final);
+    //print_mat(l,w,matrix);
+    //printf("Extracted matrix:\n");
+    //print_mat(pos[2] - pos[0] +1 , pos[3] - pos[1]+1, final);
+    return final;
 
 }

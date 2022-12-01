@@ -1,4 +1,4 @@
-void main()
+int main()
 {
     /*  
      *  1-start graphic interface
@@ -17,5 +17,7 @@ void main()
      *      must return a none empty matrix with solve sudoku
      *  7-resolved sudoku display
     */
+    int* bin_mat = image_processing("images/image_01.jpeg"); 
+    return 1;
 
 }

@@ -26,14 +26,18 @@ int* image_processing(char* path, int *w, int *h)
     grayscale(&image);
 
     //Bluring image
-    gaussian_blur(&image, 5);
+    gaussian_blur(&image);
 
     //Final binarization process
     final_process(&image);
     sobel(&image);
+<<<<<<< HEAD
 
     //Converting pixels array to int array
     int *res = pixels_to_int(&image);
 
     return res;
+=======
+    return ;
+>>>>>>> main
 }
