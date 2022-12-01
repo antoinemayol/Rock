@@ -134,7 +134,7 @@ void proceed(int limit)
 							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 								   };
 
-    double trainOut[nbTest][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f},
+    double trainOut[nbTest][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f},
 									  {0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
 								// 	    1     2   3    4    5    6    7    8    9
 	int order[2] = {0,1};
@@ -164,14 +164,6 @@ void proceed(int limit)
 	}
 
 	//-----
-	printf("rand : %f\n",outLayBias[0]);
-	printf("rand : %f\n",outLayBias[1]);
-	printf("rand : %f\n",outLayBias[2]);
-	printf("rand : %f\n",outLayBias[3]);
-	printf("rand : %f\n",outLayBias[4]);
-	printf("rand : %f\n",outLayBias[5]);
-	printf("rand : %f\n",outLayBias[6]);
-
 	for(int step = 0; step < limit; step++)
 	{
 		mix(order, nbTest);
@@ -189,7 +181,7 @@ void proceed(int limit)
 				{
 					z +=  trainIn[i][k] * hidWght[k * nbHidNod + j];
 				}
-				hidLay[j] = sig(z);
+				hidLay[j] = sig(z/100);
 			}
 
 			for(int j = 0; j < nbOut; j++)
@@ -199,7 +191,9 @@ void proceed(int limit)
 				{
 					z += hidLay[k] * outWght[k*nbOut + j];
 				}
-				outLay[j] = sig(z);
+				printf("Z = %f\n",z);
+				outLay[j] = sig(z/100);
+				printf("outl = %f\n",outLay[j]);
 			}
 
 			//Printing results as they come
@@ -253,12 +247,12 @@ void proceed(int limit)
 		}
 	}
 	//Save neurons, weights and biases in "neurones/" folder
-	save(hidWght,1,4);
-	save(hidLay,2,2);
-	save(hidLayBias,3,2);
-	save(outWght,4,2);
-	save(outLay,5,1);
-	save(outLayBias,6,1);
+	save(hidWght,1,nbIn*nbHidNod);
+	save(hidLay,2,nbHidNod);
+	save(hidLayBias,3,nbHidNod);
+	save(outWght,4,nbOut*nbHidNod);
+	save(outLay,5,nbOut);
+	save(outLayBias,6,nbOut);
 
 	//Release memory
 	free(hidLay);
