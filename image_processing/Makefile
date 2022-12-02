@@ -2,7 +2,7 @@
 
 CC = gcc
 CPPFLAGS =
-CFLAGS = -Wall -g -fsanitize=address -Wextra `pkg-config --cflags sdl2 SDL2_image`
+CFLAGS = -Wall -g -Wextra `pkg-config --cflags sdl2 SDL2_image`
 LDFLAGS =
 LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
 

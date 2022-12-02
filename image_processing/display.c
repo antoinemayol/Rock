@@ -123,13 +123,14 @@ int draw(SDL_Surface **surfaces, int steps)
 
    //calling the main loop
    test_loop(renderer, textures, steps);
-   
+
    //Destroying objects
    SDL_DestroyRenderer(renderer);
    for(int i = 0; i<steps; i++)
    {
         SDL_DestroyTexture(textures[i]);
    }
+   free(textures);
    //SDL_DestroyTexture(grayscale);
    SDL_DestroyWindow(window);
    SDL_Quit();

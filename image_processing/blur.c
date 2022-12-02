@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 
+
 #include "image.h"
 
 /* Generates a Gaussian blur kernel of size n*n */
@@ -99,5 +100,10 @@ void gaussian_blur(Image *image, int n)
 {
     double** ker = generate_kernel(n);
     convolution(image, ker, n);
+    for(int i = 0; i<n; i++)
+    {
+        free(ker[i]);
+    }
+    free(ker);
 }
 

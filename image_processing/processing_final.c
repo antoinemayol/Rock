@@ -27,7 +27,7 @@ int* image_processing(char* path, int *w, int *h)
     grayscale(&image);
 
     //Bluring image
-    gaussian_blur(&image);
+    gaussian_blur(&image,5);
 
     //Final binarization process
     final_process(&image);

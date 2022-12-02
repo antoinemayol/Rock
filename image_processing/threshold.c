@@ -49,6 +49,16 @@ void sobel(Image *image)
             set_all(&image->pixels[i][j], g);
         }
     }
+    free_image(&gx);
+    free_image(&gy);
+    for(int i = 0; i<3; i++)
+    {
+       free(ker_gx[i]);
+       free(ker_gy[i]);
+    }
+    free(ker_gy);
+    free(ker_gx);
+
 }
 
 /*Final process using gaussian convolution adaptive threshold */
