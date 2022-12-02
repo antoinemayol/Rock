@@ -88,22 +88,17 @@ void otsu(Image *image)
         u[i] = get_mu(histo, i);
     }
     float ut = get_mu(histo, 256);
-    printf("MU: %f\n", ut);
 
     for(int k=0; k<256; k++)
     {
         float tmp = get_sigma(ut, w[k], u[k]);
-        printf("W: %f\n", w[k]);
-        printf("U: %f\n", u[k]);
         if(tmp > max)
         {
             max = tmp;
             res = k;
-            printf("BRUH");
         }
     }
     unsigned int threshold = (unsigned int)res;
-    printf("%d\n", threshold);
     //Threshold
     for(int i = 0; i<image->h; i++)
     {

@@ -11,6 +11,7 @@
 #include "threshold.h"
 #include "otsu.h"
 #include "processing_final.h"
+#include "intermediate_process.h"
 
 int* image_processing(char* path, int *w, int *h)
 {
@@ -25,6 +26,9 @@ int* image_processing(char* path, int *w, int *h)
 
     //Grayscale process
     grayscale(&image);
+
+    //Increasing Brightness and inversing colors
+    increase_brightness(&image);
 
     //Bluring image
     gaussian_blur(&image,5);
