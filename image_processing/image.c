@@ -80,7 +80,7 @@ void set_pixel(SDL_Surface *surface,Uint32 pixel, unsigned x, unsigned y)
     }
 }
 
-/*Converts a Pixel array to int array*/
+/*Converts a Pixel array to int array of bytes*/
 int* pixels_to_int(Image *image)
 {
     //Getting width and height from image
@@ -94,7 +94,14 @@ int* pixels_to_int(Image *image)
     {
         for(int j = 0; j < w; j++)
         {
-            res[i*w+j] = image->pixels[i][j].r;
+            if(image->pixels[i][j].r == 0)
+            {
+                res[i*w+j] = 0;
+            }
+            else
+            {
+                res[i*w+j] = 1;
+            }
         }
     }
     return res;
