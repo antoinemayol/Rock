@@ -94,7 +94,7 @@ int* pixels_to_int(Image *image)
     {
         for(int j = 0; j < w; j++)
         {
-            res[i*w+j] = (int)image->pixels[i][j].r;
+            res[i*w+j] = image->pixels[i][j].r;
         }
     }
     return res;

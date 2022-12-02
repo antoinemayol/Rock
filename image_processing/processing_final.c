@@ -30,8 +30,7 @@ int* image_processing(char* path, int *w, int *h)
     gaussian_blur(&image,5);
 
     //Final binarization process
-    final_process(&image);
-    sobel(&image);
+    otsu(&image);
 
     //Converting pixels array to int array
     int *res = pixels_to_int(&image);

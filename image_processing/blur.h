@@ -4,7 +4,6 @@
 #include "image.h"
 
 void convolution(Image *image, double **ker, int n);
-void inverse(Image *image);
 void gaussian_blur(Image *image, int n);
 double** generate_kernel(int n);
 

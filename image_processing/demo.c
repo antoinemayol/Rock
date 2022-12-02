@@ -10,6 +10,7 @@
 #include "image.h"
 #include "threshold.h"
 #include "otsu.h"
+#include "processing_final.h"
 
 int main(int argc, char** argv)
 {
@@ -40,11 +41,11 @@ int main(int argc, char** argv)
 
     //Inversing colors
     /*Image image5 = image_copy(&image4);
-    inverse(&image5);*/
+      inverse(&image5);*/
 
     //Applying Sobel
     /*Image image4 = image_copy(&image3);
-    sobel(&image4);*/
+      sobel(&image4);*/
     //Final binarization process
     Image image4 = image_copy(&image3);
     otsu(&image4);
@@ -72,12 +73,13 @@ int main(int argc, char** argv)
     free(surfaces);
 
     return 0;
-
+}
     //NOTES:
     //Grayscale
     //Contrast
     //Brightness
+    //Noise reducing
     //Gaussian Blur
 
 
-}
+

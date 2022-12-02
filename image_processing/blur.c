@@ -1,10 +1,8 @@
-#include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
 
 #include "image.h"
 
@@ -42,18 +40,6 @@ double** generate_kernel(int n)
         }
     }
     return ker;
-}
-/*Switches 1 to 0 and 0 to 1*/
-void inverse(Image *image)
-{
-    for(int i=0; i<image->h; i++)
-    {
-        for(int j=0; j<image->w; j++)
-        {
-            int inv = 255-image->pixels[i][j].r;
-            set_all(&image->pixels[i][j], inv);
-        }
-    }
 }
 
 /*Creates a copy of the surface, runs the algo on the copy and applies it on the original */
