@@ -71,7 +71,7 @@ void add_one(double** a, double b, size_t* len)
 	*a = res;
 }
 
-double* load(char* path, size_t* len)
+double* load(char* path)
 {
 	FILE *f = fopen(path,"r");
 	if(f == NULL)
@@ -83,12 +83,13 @@ double* load(char* path, size_t* len)
 	char* line = NULL;
 	size_t len_l = 0;
 	size_t i = 0;
+    size_t len = 0;
 
 	while(getline(&line, &len_l, f) != -1)
 	{
 		double x;
 		sscanf(line,"%lf",&x);
-		add_one(&array, x, len);
+		add_one(&array, x, &len);
 		i++;
 	}
 	return array;
@@ -96,15 +97,15 @@ double* load(char* path, size_t* len)
 /*
 int main()
 {
-    double test[4] = {0.0,0.43,2.34,-65};
-	save(test,0,4);
-	return 0;
+    //double test[4] = {0.0,0.43,2.34,-65};
+	//save(test,0,4);
+	//return 0;
 	//size_t len = 0;
-	//double* res = load("neurones/testload",&len);
-	//for(size_t i =0; i < 3; i++)
-	//{
-	//	printf("res : %f\n",res[i]);
-	//}
+	double* res = load("neurones/testload");
+	for(size_t i =0; i < 3; i++)
+	{
+        printf("res : %f\n",res[i]);
+	}
 }
 */
 

@@ -47,7 +47,7 @@ void mix(int *array, size_t n)
 #define nbIn 225
 #define nbHidLay 1
 #define nbHidNod 122
-#define nbOut 9
+#define nbOut 10
 /*
 double testMat6[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
@@ -91,26 +91,26 @@ double testMat3[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
 //Créer fonctions qui créer le réseau et l'init
 
-#define nbTest 4
+#define nbTest 5
 
 //Proceeding the creation and the application of neural network for XOR
 void proceed(int limit)
 {
 	//Setting learning rate
 	double pas = 0.1f;
-	
+
 	//Arrays of neurons
-	double *hidLay = malloc(nbHidNod * sizeof(double));
-	double *outLay = malloc(nbOut * sizeof(double));
+	double *hidLay = load("neurones/nerons2.txt");//malloc(nbHidNod * sizeof(double));
+	double *outLay = load("neurones/nerons5.txt");//malloc(nbOut * sizeof(double));
 
 	//Arrays of neurons bias
-	double *hidLayBias = malloc(nbHidNod * sizeof(double));
-	double *outLayBias = malloc(nbOut * sizeof(double));
+	double *hidLayBias = load("neurones/nerons3.txt");//malloc(nbHidNod * sizeof(double));
+	double *outLayBias = load("neurones/nerons6.txt");//malloc(nbOut * sizeof(double));
 
 	//Arrays of Weight
-	double *hidWght = malloc((nbIn * nbHidNod) * sizeof(double));
-	double *outWght = malloc((nbHidNod * nbOut) * sizeof(double));
-	
+	double *hidWght = load("neurones/nerons1.txt");//malloc((nbIn * nbHidNod) * sizeof(double));
+	double *outWght = load("neurones/nerons4.txt");//malloc((nbHidNod * nbOut) * sizeof(double));
+
 	//Inputs and expected outputs
 	double trainIn[nbTest][nbIn] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							 		0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
@@ -126,7 +126,7 @@ void proceed(int limit)
 							 		0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,
 							 		0,0,0,1,1,1,0,1,1,0,0,0,0,0,0,
 							 		0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
-							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 
+							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 
 							   		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							 		0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
@@ -174,23 +174,38 @@ void proceed(int limit)
 							        0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
 							        0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
 							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+                                    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 								   };
 
-    double trainOut[nbTest][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f},
-									  {0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
-                                      {1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
-                                      {0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
-								// 	    1     2   3    4    5    6    7    8    9
-	int order[4] = {0,1,2,3};
-	
+    double trainOut[nbTest][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f},
+									  {0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
+                                      {0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
+                                      {1.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
+								//      0	  1     2   3    4    5    6    7    8    9
+	int order[5] = {0,1,2,3,4};
+
 	//Initialize layers with random value close to 0
 	for(int i = 0; i < nbIn; i++)
 	{
 		for(int j = 0; j < nbHidNod; j++)
 		{
 			hidWght[i * nbHidNod + j] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
-            printf("hdiw = %f\n",hidWght[i * nbHidNod + j]);
 		}
 	}
 
@@ -219,7 +234,7 @@ void proceed(int limit)
 			int i = order[t];
 
 			//START FORWARD PROPAGATION
-			
+
 			for(int j = 0; j < nbHidNod; j++)
 			{
 				double z = hidLayBias[j];
@@ -245,8 +260,8 @@ void proceed(int limit)
 			//Printing results as they come
 			if(limit-step <= 1)
 			{
-		    	printf ("Input : %d \nOutputs :\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n Expected Output: %g\n\n",
-                    	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8],
+		    	printf ("Input : %d \nOutputs :\n 0 : %f\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n Expected Output: %g\n\n",
+                    	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8], outLay[9],
 						trainOut[i][0]);
 			}
 			//-----
@@ -257,7 +272,7 @@ void proceed(int limit)
 			double *deltaOut = malloc(nbOut * sizeof(double));
 			for(int j =0; j < nbOut; j++)
 			{
-				double errorOut = (trainOut[i][j] - outLay[j]); 
+				double errorOut = (trainOut[i][j] - outLay[j]);
 				deltaOut[j] = errorOut * Dsig(outLay[j]);
 			}
 
@@ -271,7 +286,7 @@ void proceed(int limit)
 				}
 				deltaHid[j] = errorHid * Dsig(hidLay[j]);
 			}
-			
+
 			//Update weights between nodes
 			for(int j = 0; j < nbOut; j++)
 			{
@@ -310,21 +325,13 @@ void proceed(int limit)
 
 void forward(double* input)
 {
-    size_t hiw_len = 0;
-    size_t hil_len = 0;
-    size_t hilb_len = 0;
+    double* hidwgt = load("neurones/nerons1.txt");
+    double* hidlay = load("neurones/nerons2.txt");
+    double* hidlayBias = load("neurones/nerons3.txt");
 
-    size_t outw_len = 0;
-    size_t outl_len = 0;
-    size_t outlb_len = 0;
-
-    double* hidwgt = load("neurones/nerons1.txt",&hiw_len);
-    double* hidlay = load("neurones/nerons2.txt", &hil_len);
-    double* hidlayBias = load("neurones/nerons3.txt", &hilb_len);
-
-    double* outwgt = load("neurones/nerons4.txt", &outw_len);
-    double* outlay = load("neurones/nerons5.txt", &outl_len);
-    double* outlayBias = load("neurones/nerons6.txt", &outlb_len);
+    double* outwgt = load("neurones/nerons4.txt");
+    double* outlay = load("neurones/nerons5.txt");
+    double* outlayBias = load("neurones/nerons6.txt");
 
     for(int j = 0; j < nbHidNod; j++)
     {
@@ -372,7 +379,7 @@ int main(int argc, char **argv)
         proceed(limit);
         return 0;
     }
-    
+
     if(strcmp(argv[1], "--exec") == 0 && argc == 2)
     {
         double testMat6[225] ={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
