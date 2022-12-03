@@ -37,9 +37,18 @@ void save(double *a, int i, size_t len)
 {
 	char *num = malloc(5*sizeof(char));
 	sprintf(num, "%d", i);
-	char *path = malloc(25*sizeof(char));
+	char *path = malloc(21*sizeof(char));
 
-	concat_path(path,"neurones/", "nerons", num,".txt",25);
+    printf("1 = %s\n",path);
+    strcpy(path,"neurones/nerons");
+    printf("2 = %s\n",path);
+    strcat(path,num);
+    printf("3 = %s\n",path);
+    strcat(path,".txt");
+
+    printf("----------\n");
+    printf("4 = path = %s\n",path);
+    printf("----------\n");
 
 	FILE *f = fopen(path,"w");
 	if(f == NULL){
@@ -70,7 +79,7 @@ double* load(char* path, size_t* len)
 		errx(1,"Can't open file !");
 	}
 
-	double* array = malloc(sizeof(double));	
+	double* array = malloc(sizeof(double));
 	char* line = NULL;
 	size_t len_l = 0;
 	size_t i = 0;
@@ -87,16 +96,15 @@ double* load(char* path, size_t* len)
 /*
 int main()
 {
-//	double test[4] = {0.0,0.43,2.34,-65};
-//	save(test,0,4);
-//	return 0;
-	size_t len = 0;
-	double* res = load("neurones/testload",&len);
-	for(size_t i =0; i < len; i++)
-	{
-		printf("res : %f\n",res[i]);
-	}
-
-
+    double test[4] = {0.0,0.43,2.34,-65};
+	save(test,0,4);
+	return 0;
+	//size_t len = 0;
+	//double* res = load("neurones/testload",&len);
+	//for(size_t i =0; i < 3; i++)
+	//{
+	//	printf("res : %f\n",res[i]);
+	//}
 }
 */
+

@@ -1,9 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include <err.h>
+#include <time.h>
 #include "save_and_load.h"
 //#include "data_struc.h"
+
+/* generate a random floating point number from min to max */
+double randfrom(double min, double max)
+{
+
+    double range = (max - min);
+    double div = RAND_MAX / range;
+    return min + (rand() / div);
+}
 
 //Sigmoid function
 double sig(double z)
@@ -80,7 +91,7 @@ double testMat3[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
 //Créer fonctions qui créer le réseau et l'init
 
-#define nbTest 2
+#define nbTest 4
 
 //Proceeding the creation and the application of neural network for XOR
 void proceed(int limit)
@@ -131,36 +142,71 @@ void proceed(int limit)
 							 		0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
 							 		0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
 							 		0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
-							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+							 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+                                    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							        0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							        0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+							        0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+                                    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+							        0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,
+							        0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,
+							        0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,
+							        0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,
+							        0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,
+							        0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,
+							        0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 								   };
 
     double trainOut[nbTest][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f},
-									  {0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
+									  {0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
+                                      {1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
+                                      {0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
 								// 	    1     2   3    4    5    6    7    8    9
-	int order[2] = {0,1};
+	int order[4] = {0,1,2,3};
 	
 	//Initialize layers with random value close to 0
 	for(int i = 0; i < nbIn; i++)
 	{
 		for(int j = 0; j < nbHidNod; j++)
 		{
-			hidWght[i * nbHidNod + j] = (double)rand()/(double)RAND_MAX;
+			hidWght[i * nbHidNod + j] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
+            printf("hdiw = %f\n",hidWght[i * nbHidNod + j]);
 		}
 	}
 
 	for(int i = 0; i < nbHidNod; i++)
 	{
-		hidLayBias[i] = (double)rand()/(double)RAND_MAX;
+		hidLayBias[i] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
 		for(int j = 0; j < nbOut; j++)
 		{
-			outWght[i * nbOut + j] = (double)rand()/(double)RAND_MAX;
+			outWght[i * nbOut + j] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
 
 		}
 	}
 
 	for(int i = 0; i < nbOut; i++)
 	{
-		outLayBias[i] = (double)rand()/(double)RAND_MAX;
+		outLayBias[i] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
 	}
 
 	//-----
@@ -181,7 +227,7 @@ void proceed(int limit)
 				{
 					z +=  trainIn[i][k] * hidWght[k * nbHidNod + j];
 				}
-				hidLay[j] = sig(z/100);
+				hidLay[j] = sig(z);
 			}
 
 			for(int j = 0; j < nbOut; j++)
@@ -191,18 +237,18 @@ void proceed(int limit)
 				{
 					z += hidLay[k] * outWght[k*nbOut + j];
 				}
-				printf("Z = %f\n",z);
-				outLay[j] = sig(z/100);
-				printf("outl = %f\n",outLay[j]);
+				//printf("Z = %f\n",z);
+				outLay[j] = sig(z);
+				//printf("outl = %f\n",outLay[j]);
 			}
 
 			//Printing results as they come
-			//if(limit-step <= 1)
-			//{
+			if(limit-step <= 1)
+			{
 		    	printf ("Input : %d \nOutputs :\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n Expected Output: %g\n\n",
                     	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8],
 						trainOut[i][0]);
-			//}
+			}
 			//-----
 
 			//BACKPROPAGATION
@@ -247,38 +293,138 @@ void proceed(int limit)
 		}
 	}
 	//Save neurons, weights and biases in "neurones/" folder
+	//and release memory
 	save(hidWght,1,nbIn*nbHidNod);
-	save(hidLay,2,nbHidNod);
-	save(hidLayBias,3,nbHidNod);
-	save(outWght,4,nbOut*nbHidNod);
-	save(outLay,5,nbOut);
-	save(outLayBias,6,nbOut);
-
-	//Release memory
-	free(hidLay);
-	free(hidLayBias);
-	free(outLay);
-	free(outLayBias);
 	free(hidWght);
+	save(hidLay,2,nbHidNod);
+	free(hidLay);
+	save(hidLayBias,3,nbHidNod);
+	free(hidLayBias);
+	save(outWght,4,nbOut*nbHidNod);
 	free(outWght);
+	save(outLay,5,nbOut);
+	free(outLay);
+	save(outLayBias,6,nbOut);
+	free(outLayBias);
+}
+
+void forward(double* input)
+{
+    size_t hiw_len = 0;
+    size_t hil_len = 0;
+    size_t hilb_len = 0;
+
+    size_t outw_len = 0;
+    size_t outl_len = 0;
+    size_t outlb_len = 0;
+
+    double* hidwgt = load("neurones/nerons1.txt",&hiw_len);
+    double* hidlay = load("neurones/nerons2.txt", &hil_len);
+    double* hidlayBias = load("neurones/nerons3.txt", &hilb_len);
+
+    double* outwgt = load("neurones/nerons4.txt", &outw_len);
+    double* outlay = load("neurones/nerons5.txt", &outl_len);
+    double* outlayBias = load("neurones/nerons6.txt", &outlb_len);
+
+    for(int j = 0; j < nbHidNod; j++)
+    {
+        double z = hidlayBias[j];
+        for(int k = 0; k < nbIn; k++)
+        {
+            z +=  input[k] * hidwgt[k * nbHidNod + j];
+            //printf("little zhid  = %f\n",z);
+        }
+        //printf("Zhid = %f\n",z);
+        hidlay[j] = sig(z);
+        //printf("hidl = %f\n",hidlay[j]);
+    }
+
+    for(int j = 0; j < nbOut; j++)
+    {
+        double z = outlayBias[j];
+        for(int k = 0; k < nbHidNod; k++)
+        {
+            z += hidlay[k] * outwgt[k*nbOut + j];
+        }
+        //printf("Zout = %f\n",z);
+        outlay[j] = sig(z);
+        //printf("outl = %f\n",outlay[j]);
+    }
+
+    for(int i = 0; i < nbOut; i++)
+    {
+        printf("number %d : %f \n",i+1,outlay[i]);
+    }
 }
 
 int main(int argc, char **argv)
 {
-	if(argc != 2)
-	{
-		errx(1,"invoke command with 1 arguments !\n");
-	}
-	
-	int limit = atoi(argv[1]);
-	printf("SETTED LIMIT : %d\n\n",limit);
+	if(strcmp("--train",argv[1]) == 0 && argc == 3)
+    {
+        int limit = atoi(argv[2]);
+        printf("SETTED LIMIT : %d\n\n",limit);
 
-	if(limit < 0 || limit > 50000)
-	{
-		errx(1,"limit is too high !\n");
-	}
-	
-	proceed(limit);
-	return 0;
+        if(limit < 0 || limit > 50000)
+        {
+            errx(1,"limit is too high !\n");
+        }
+
+        proceed(limit);
+        return 0;
+    }
+    
+    if(strcmp(argv[1], "--exec") == 0 && argc == 2)
+    {
+        double testMat6[225] ={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,
+							 0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,
+							 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
+							 0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,
+							 0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,1,1,1,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+        double testMat1[225] ={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+							 0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+        double testMat1_2[225] ={0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,
+							 0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+							 0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,
+							 0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,
+							 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        forward(testMat1);
+        return 0;
+    }
+    errx(1,"Call with --train {arg} or --exec");
 
 }
