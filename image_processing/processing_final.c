@@ -13,6 +13,11 @@
 #include "processing_final.h"
 #include "intermediate_process.h"
 
+
+
+/*Final method of image_processing
+ *Returns an int array filled with 0 and 1
+ */
 int* image_processing(char* path, int *w, int *h)
 {
     //Loading image
@@ -38,6 +43,26 @@ int* image_processing(char* path, int *w, int *h)
 
     //Converting pixels array to int array
     int *res = pixels_to_int(&image);
+
+    return res;
+}
+
+/*Converts the data sets image to int array*/
+double* train_convert(char *path)
+{
+ //Loading image
+    SDL_Surface *surface = load_image(path);
+
+    //Converting SDL_Surface to struct Image
+    Image image = create_image(surface);
+    //Grayscale process
+    grayscale(&image);
+
+    //Final binarization process
+    otsu(&image);
+
+    //Converting pixels array to int array
+    double *res = pixels_to_double(&image);
 
     return res;
 }

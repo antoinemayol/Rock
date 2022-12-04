@@ -33,7 +33,10 @@ int main(int argc, char** argv)
 
     //Increasing contrasts
     Image image3 = image_copy(&image2);
+    //increase_contrast(&image3, 12);
     increase_brightness(&image3);
+    noise_reduction(&image3);
+
 
     //Applying Gaussian Blur
     Image image4 = image_copy(&image3);

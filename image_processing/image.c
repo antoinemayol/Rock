@@ -107,6 +107,33 @@ int* pixels_to_int(Image *image)
     return res;
 }
 
+/*Converts a Pixel array to double array of bytes*/
+double* pixels_to_double(Image *image)
+{
+    //Getting width and height from image
+    int w = image->w;
+    int h = image->h;
+
+    //Allocating memory for pixels array(simple then double dimension)
+    double *res = malloc(h*w*sizeof(double));
+
+    for (int i = 0; i < h; i++)
+    {
+        for(int j = 0; j < w; j++)
+        {
+            if(image->pixels[i][j].r == 0)
+            {
+                res[i*w+j] = 0;
+            }
+            else
+            {
+                res[i*w+j] = 1;
+            }
+        }
+    }
+    return res;
+}
+
 
 /***********************************************/
 /********************IMAGE**********************/
