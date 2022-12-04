@@ -55,11 +55,6 @@ double* train_convert(char *path)
 
     //Converting SDL_Surface to struct Image
     Image image = create_image(surface);
-    //Grayscale process
-    grayscale(&image);
-
-    //Final binarization process
-    otsu(&image);
 
     //Converting pixels array to int array
     double *res = pixels_to_double(&image);

@@ -121,7 +121,7 @@ double* pixels_to_double(Image *image)
     {
         for(int j = 0; j < w; j++)
         {
-            if(image->pixels[i][j].r == 0)
+            if(image->pixels[i][j].r < 127)
             {
                 res[i*w+j] = 0;
             }
