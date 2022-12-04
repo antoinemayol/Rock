@@ -6,7 +6,8 @@ LDLIBS = `pkg-config --libs gtk+-3.0` -lm `pkg-config --libs sdl2 SDL2_image`
 
 
 
-EXE = interface display
+EXE = interface disp
+IMG = grille.bmp grille_g.bmp
 OBJ = ${all:.c=.o}
 
 
@@ -23,7 +24,7 @@ display: display.o
 
 clean:
 	${RM} $(EXE)
-	${RM} ${OBJ}
-
+	${RM} display.o
+	${RM} $(IMG)
 
 # END

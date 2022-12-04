@@ -8,7 +8,9 @@ GtkWidget *label;
 GtkWidget *file1;
 GtkWidget *image;
 GdkPixbuf *pixbuf;
-int state = 1;
+GtkWidget *buton_next;
+GtkWidget *buton_preview;
+int state = 0;
 
 
 
@@ -19,23 +21,23 @@ int main (int argc, char *argv[])
 	gtk_init(&argc,&argv);
 
 	GtkBuilder *builder;
-	
+
 	builder = gtk_builder_new();
-	
+
 	gtk_builder_add_from_file(builder,"inter.glade", NULL); //load our ui file
-	
+                                                            //
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"MyWindow"));
 
-	
+
 
 	gtk_builder_connect_signals(builder,NULL);
 
 	g_object_unref(builder);
-															
-	
+
+
 	//show the window
 	gtk_widget_show_all(window);
-	
+
 	//run the main loop
 	gtk_main();
 
@@ -53,7 +55,7 @@ void exit_app1()
 void exit_app()
 {
 	printf("Button clicked\n");
-	
+
 	gtk_main_quit();
 
 }
@@ -75,9 +77,10 @@ void button_label()
 	window1 = GTK_WIDGET(gtk_builder_get_object(builder,"Main_theme"));
 	file1 = GTK_WIDGET(gtk_builder_get_object(builder,"file1"));
 	image = GTK_WIDGET(gtk_builder_get_object(builder,"image_grille"));
-	
-	
+    buton_next = GTK_WIDGET(gtk_builder_get_object(builder,"button_next"));
+    buton_preview = GTK_WIDGET(gtk_builder_get_object(builder,"button_preview"));
 
+    state = 1;
 	gtk_builder_connect_signals(builder,NULL);
 
 	g_object_unref(builder);
@@ -96,21 +99,62 @@ char *on_file1_file_set(GtkFileChooserButton *f)
 	pixbuf = gdk_pixbuf_new_from_file(res,NULL);
 	gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
+    gdk_pixbuf_save(pixbuf,"base_grille","png",NULL,NULL);
 
 	return res;
 }
 
+
+
 void button_next()
 {
+    printf("%d\n",state);
 	if(state == 1)
 	{
 		state += 1;
-		//afficher grille pas completé
+		pixbuf = gdk_pixbuf_new_from_file("grille.bmp",NULL);
+	    gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
+
 	}
-	if(state == 2)
+    else if(state == 2)
 	{
 		state += 1;
-		//afficher grille completé
+		pixbuf = gdk_pixbuf_new_from_file("grille_g.bmp",NULL);
+	    gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
+	    gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
+        
 	}
+    else
+        state+=1;
+
+
+}
+
+void button_preview()
+{
+    printf("%d\n",state);
+
+    if(state == 1)
+	{
+		state -= 1;
+		pixbuf = gdk_pixbuf_new_from_file("base_grille.png",NULL);
+	    gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
+	    gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
+
+	}
+    else if(state == 2)
+	{
+		state -= 1;
+		pixbuf = gdk_pixbuf_new_from_file("grille.bmp",NULL);
+	    gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
+	    gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
+	}
+    else
+    {
+        state-=1;
+    }
+
+
+
 
 }

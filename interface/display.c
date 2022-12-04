@@ -137,10 +137,6 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 		int bb[81]; 
 		memcpy(bb, board, 81 * sizeof(int));
 		backtracking(bb,0);
-		for(int i = 0; i < 81; i++)
-		{
-			printf("val : %d\n",bb[i]);
-		}
 		int j = 0;
 		while(j < 81)
 		{
@@ -154,9 +150,9 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 				x[0] = bb[j] + 48;
 				x[1] = '\0';
 			
-				char *target = malloc(sizeof(char)*30);
+				char *target = malloc(sizeof(char)*16);
 
-				strcat(target,"data/num_");
+				strcpy(target,"data/num_");
 				strcat(target,x);
 				strcat(target,"g.png");
 				printf("target :%s\n",target);
@@ -183,6 +179,7 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 	
 	while(i<81)
 	{
+        printf("%d\n",i);
 		if(board[i] != 0)
 		{
 			printf("pos : %d\n",i);
@@ -192,8 +189,9 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 			x[1] = '\0';
 			
 			char *target = malloc(sizeof(char)*30);
+            
 
-			strcat(target,"data/num_");
+			strcpy(target,"data/num_");
 			strcat(target,x);
 			strcat(target,".png");
 			printf("target :%s\n",target);
@@ -209,9 +207,10 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 			SDL_BlitSurface(surface_i,NULL,surface_p,&dstrect);
 			printf("pas de segfault \n");	
 			newT = SDL_CreateTextureFromSurface(renderer,surface_p);
-			free(target);
+		    printf("la vie c'est de la merde\n");
+            free(target);
 		}
-	i+=1;
+	    i+=1;
 	}	
 				
 	return newT;
@@ -258,24 +257,18 @@ int main(int argc, char** argv)
     // - Resize the window according to the size of the image.
     SDL_SetWindowSize(window, w, h);
 
-	SDL_Surface *surface = IMG_Load("/data/blank_grid.png");
-	texture = change_board(grille,state,surface,renderer);
-  	
+	SDL_Surface *surface = IMG_Load("data/blank_grid.png");
+    
+	texture = change_board(grille,1,surface,renderer);
+    
+	SDL_SaveBMP(surface,"grille.bmp");
 
-	if(state == 2)
-	{
-		SDL_SaveBMP(surface,"grille_g.bmp");
-	}
-	else
-	{
-		SDL_SaveBMP(surface,"grille.bmp");
-	}
+    texture = change_board(grille,2,surface,renderer);
 
-
-    // - Dispatch the events.
-    event_loop(renderer, texture);
-
-
+    SDL_SaveBMP(surface,"grille_g.bmp");
+    printf("a\n");
+    event_loop(renderer,texture);
+    
 
     // - Destroy the objects.
     SDL_DestroyTexture(texture);
