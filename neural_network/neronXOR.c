@@ -154,7 +154,7 @@ double testMat3[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
 double** get_trainset(char* num )
 {
-    double** res = malloc(6 * sizeof(625 * sizeof(double)));
+    double** res = malloc(10 * sizeof(625 * sizeof(double)));
     struct dirent **namelist;
    	int n;
 	int i = 0;
@@ -389,7 +389,7 @@ void proceed_from_node(int limit, char* num, int nbData)
     double trainOut[nbOut] = {0.0f};
 						//      0	  1     2   3    4    5    6    7    8    9
     trainOut[nub] = 1.0f;
-	int order[6] = {0,1,2,3,4,5};
+	int order[10] = {0,1,2,3,4,5,6,7,8,9};
 
 	//-----
 	for(int step = 0; step < limit; step++)
@@ -565,6 +565,7 @@ int main(int argc, char **argv)
             proceed_from_node(1000,p,6);
         }
     }*/
+    /*
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -592,4 +593,19 @@ int main(int argc, char **argv)
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     forward(inMat2);
+    */
+    double** test = get_trainset("1");
+
+    for(int i = 0; i<10: i++)
+    {
+        printf("img %u : \n",i);
+        for(int j = 0; j < 625; j++)
+        {
+            if(j % 25 == 0)
+                printf("\n");
+            printf(" %.f ",test[i][j]);
+        }
+        printf("\n");
+    }
+
 }
