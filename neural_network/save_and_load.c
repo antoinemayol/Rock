@@ -39,16 +39,10 @@ void save(double *a, int i, size_t len)
 	sprintf(num, "%d", i);
 	char *path = malloc(21*sizeof(char));
 
-    printf("1 = %s\n",path);
     strcpy(path,"neurones/nerons");
-    printf("2 = %s\n",path);
     strcat(path,num);
-    printf("3 = %s\n",path);
     strcat(path,".txt");
 
-    printf("----------\n");
-    printf("4 = path = %s\n",path);
-    printf("----------\n");
 
 	FILE *f = fopen(path,"w");
 	if(f == NULL){

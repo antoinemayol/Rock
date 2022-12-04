@@ -2,21 +2,21 @@
 
 CC = gcc
 CPPFLAGS = -MMD
-CFLAGS = -Wall -Wextra -lm
+CFLAGS = -Wall -Wextra -lm `pkg-config --cflags sdl2 SDL2_image`
 LDFLAGS =
-LDLIBS =
+LDLIBS = `pkg-config --libs sdl2 SDL2_image`
 
 #all: mtest ntest ftest
 	#${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
-SRC = 	math_tool.c save_and_load.c neronXOR.c ../image_processing/processing_final.c ../image_processing/display.c ../image_processing/grayscale.c ../image_processing/image.c ../image_processing/otsu.c ../image_processing/blur.c
+SRC = 	math_tool.c save_and_load.c neronXOR.c
 
 
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
-nerons: neronXOR.o save_and_load.o math_tool.o ../image_processing/processing_final.o ../image_processing/display.o ../image_processing/image.o ../image_processing/otsu.o ../image_processing/blur.o
-	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
+nerons: neronXOR.o save_and_load.o math_tool.o
+	${CC} ${CPPFLAGS} ${CFLAGS} $^ $(LDLIBS) -o $@
 
 -include ${DEP}
 

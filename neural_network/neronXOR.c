@@ -8,8 +8,63 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "save_and_load.h"
-#include "../image_processing/processing_final.h"
 //#include "data_struc.h"
+
+/*Converts a Surface pixel to a Pixel*/
+Uint32 get_pixel2(SDL_Surface *surface, int x, int y)
+{
+    int b = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + x * surface->pitch + y * b;
+
+    switch (b)
+    {
+    case 1:
+        return *p;
+        break;
+
+    case 2:
+        return *(Uint16 *)p;
+        break;
+
+    case 3:
+        if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+        break;
+
+    case 4:
+        return *(Uint32 *)p;
+        break;
+
+    default:
+        return 0;
+    }
+}
+
+/*Creates an Image from the built surface*/
+double* create_ar(SDL_Surface *surface)
+{
+    //Initializing parameters
+    int w = surface->w;
+    int h = surface->h;
+    printf("!!!\n");
+    SDL_Color color;
+    double* res = malloc(w * h * sizeof(double));
+    //filling image pixels one by one from surface pixels
+    for( int i = 0; i < h; i++)
+    {
+        for(int j = 0; j < w; j++)
+        {
+            Uint32 pix = get_pixel2(surface, i, j);
+            SDL_GetRGB(pix, surface->format, &color.r, &color.g, &color.b);
+            res[i * w +j] = 1 - color.r / 255;
+        }
+    }
+    printf("?\n");
+    return res;
+}
+
 
 /* generate a random floating point number from min to max */
 double randfrom(double min, double max)
@@ -100,12 +155,15 @@ double testMat3[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 double** get_trainset(char* num )
 {
     double** res = malloc(6 * sizeof(625 * sizeof(double)));
-
     struct dirent **namelist;
    	int n;
 	int i = 0;
+    int count = 0;
 
-    char* dir = strcat("dataset/",num);
+    char* dir = malloc(10*sizeof(char));
+    strcpy(dir,"dataset/");
+    strcat(dir,num);
+    strcat(dir,"/");
 
    	n = scandir(dir, &namelist, NULL, alphasort);
    	if (n < 0)
@@ -114,10 +172,31 @@ double** get_trainset(char* num )
 	{
        	while (i<n)
 		{
-            char* fi = strcat(dir,namelist[i]->d_name);
-            double* tmp = train_convert(fi);
+            if(namelist[i]->d_name[0] != '.')
+            {
+                char* fi = malloc(20 * sizeof(char));
+                strcpy(fi,namelist[i]->d_name);
 
-            res[i] = tmp;
+                char* tmpdi = malloc(30 * sizeof(char));
+                strcpy(tmpdi,dir);
+                strcat(tmpdi,fi);
+
+                printf("path = %s\n",tmpdi);
+
+                SDL_Surface *surface = IMG_Load(tmpdi);
+
+                if(surface == NULL)
+                    printf("hah loser\n");
+
+                double* tmp = create_ar(surface);
+                res[count] = tmp;
+
+                count++;
+
+                free(surface);
+                free(fi);
+                free(tmpdi);
+            }
             i++;
        	}
        	free(namelist);
@@ -128,7 +207,7 @@ double** get_trainset(char* num )
 }
 
 //Proceeding the creation and the application of neural network for XOR
-void proceed(int limit)
+void proceed_from_scratch(int limit)
 {
 	//Setting learning rate
 	double pas = 0.1f;
@@ -281,6 +360,137 @@ void proceed(int limit)
 	free(outLayBias);
 }
 
+//Proceeding the creation and the application of neural network for XOR
+void proceed_from_node(int limit, char* num, int nbData)
+{
+    int nub = atoi(num);
+    if(nub > 9 || nub < 0)
+    {
+        errx(1,"num must be between 0 and 9");
+    }
+	//Setting learning rate
+	double pas = 0.1f;
+
+	//Arrays of neurons
+	double *hidLay = load("neurones/nerons2.txt");
+	double *outLay = load("neurones/nerons5.txt");
+
+	//Arrays of neurons bias
+	double *hidLayBias = load("neurones/nerons3.txt");
+	double *outLayBias = load("neurones/nerons6.txt");
+
+	//Arrays of Weight
+	double *hidWght = load("neurones/nerons1.txt");
+	double *outWght = load("neurones/nerons4.txt");
+
+	//Inputs and expected outputs
+	double** trainIn = get_trainset(num);
+
+    double trainOut[nbOut] = {0.0f};
+						//      0	  1     2   3    4    5    6    7    8    9
+    trainOut[nub] = 1.0f;
+	int order[6] = {0,1,2,3,4,5};
+
+	//-----
+	for(int step = 0; step < limit; step++)
+	{
+		mix(order, nbData);
+
+		for(int t = 0; t < nbData ; t++)
+		{
+			int i = t;
+			//START FORWARD PROPAGATION
+
+			for(int j = 0; j < nbHidNod; j++)
+			{
+				double z = hidLayBias[j];
+				for(int k = 0; k < nbIn; k++)
+				{
+					z +=  trainIn[i][k] * hidWght[k * nbHidNod + j];
+				}
+				hidLay[j] = sig(z);
+			}
+			for(int j = 0; j < nbOut; j++)
+			{
+				double z = outLayBias[j];
+				for(int k = 0; k < nbHidNod; k++)
+				{
+					z += hidLay[k] * outWght[k*nbOut + j];
+				}
+				//printf("Z = %f\n",z);
+				outLay[j] = sig(z);
+				//printf("outl = %f\n",outLay[j]);
+			}
+
+			//Printing results as they come
+			if(limit-step <= 1)
+			{
+		    	printf ("Input : %d \nOutputs :\n 0 : %f\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n Expected Output: %g\n\n",
+                    	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8], outLay[9],
+						trainOut[nbData-1]);
+			}
+			//-----
+
+			//BACKPROPAGATION
+
+			//Compute difference between result and expected
+			double *deltaOut = malloc(nbOut * sizeof(double));
+			for(int j =0; j < nbOut; j++)
+			{
+				double errorOut = (trainOut[j] - outLay[j]);
+				deltaOut[j] = errorOut * Dsig(outLay[j]);
+			}
+
+			double *deltaHid = malloc(nbHidNod * sizeof(double));
+			for(int j = 0; j<nbHidNod; j++)
+			{
+				double errorHid = 0.0f;
+				for(int k = 0; k < nbOut; k++)
+				{
+					errorHid += deltaOut[k] * outWght[j * nbOut + k];
+				}
+				deltaHid[j] = errorHid * Dsig(hidLay[j]);
+			}
+
+			//Update weights between nodes
+			for(int j = 0; j < nbOut; j++)
+			{
+				outLayBias[j] += deltaOut[j] * pas;
+				for(int k = 0; k<nbHidNod; k++)
+				{
+					outWght[k * nbOut + j] += hidLay[k] * deltaOut[j] * pas;
+				}
+			}
+
+			for(int j = 0; j < nbHidNod; j++)
+			{
+				hidLayBias[j] += deltaHid[j] * pas;
+				for(int k = 0; k<nbIn; k++)
+				{
+					hidWght[k * nbHidNod + j] += trainIn[i][k] * deltaHid[j] * pas;
+				}
+			}
+		}
+	}
+	//Save neurons, weights and biases in "neurones/" folder
+	//and release memory
+	save(hidWght,1,nbIn*nbHidNod);
+	free(hidWght);
+	save(hidLay,2,nbHidNod);
+	free(hidLay);
+	save(hidLayBias,3,nbHidNod);
+	free(hidLayBias);
+	save(outWght,4,nbOut*nbHidNod);
+	free(outWght);
+	save(outLay,5,nbOut);
+	free(outLay);
+	save(outLayBias,6,nbOut);
+	free(outLayBias);
+
+    free(trainIn);
+}
+
+
 void forward(double* input)
 {
     double* hidwgt = load("neurones/nerons1.txt");
@@ -345,6 +555,41 @@ int main(int argc, char **argv)
         return 0;
     }
     errx(1,"Call with --train {arg} or --exec");
-    */
+    
+    for(int i = 0; i < 80; i++)
+    {
+        for(int j = 1; j <= 9; j++)
+        {
+            char* p = malloc(sizeof(char));
+            sprintf(p,"%d",j);
+            proceed_from_node(1000,p,6);
+        }
+    }*/
+    double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+    forward(inMat2);
 }
