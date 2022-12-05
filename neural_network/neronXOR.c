@@ -48,7 +48,6 @@ double* create_ar(SDL_Surface *surface)
     //Initializing parameters
     int w = surface->w;
     int h = surface->h;
-    printf("!!!\n");
     SDL_Color color;
     double* res = malloc(w * h * sizeof(double));
     //filling image pixels one by one from surface pixels
@@ -61,7 +60,6 @@ double* create_ar(SDL_Surface *surface)
             res[i * w +j] = 1 - color.r / 255;
         }
     }
-    printf("?\n");
     return res;
 }
 
@@ -181,8 +179,6 @@ double** get_trainset(char* num )
                 strcpy(tmpdi,dir);
                 strcat(tmpdi,fi);
 
-                printf("path = %s\n",tmpdi);
-
                 SDL_Surface *surface = IMG_Load(tmpdi);
 
                 if(surface == NULL)
@@ -210,7 +206,7 @@ double** get_trainset(char* num )
 void proceed_from_scratch(int limit)
 {
 	//Setting learning rate
-	double pas = 0.1f;
+	double pas = 0.05f;
 
 	//Arrays of neurons
 	//double *hidLay = load("neurones/nerons2.txt");
@@ -368,8 +364,9 @@ void proceed_from_node(int limit, char* num, int nbData)
     {
         errx(1,"num must be between 0 and 9");
     }
+
 	//Setting learning rate
-	double pas = 0.1f;
+	double pas = 0.01f;
 
 	//Arrays of neurons
 	double *hidLay = load("neurones/nerons2.txt");
@@ -490,6 +487,63 @@ void proceed_from_node(int limit, char* num, int nbData)
     free(trainIn);
 }
 
+void set_scratch()
+{
+	//Arrays of neurons
+	//double *hidLay = load("neurones/nerons2.txt");
+    double *hidLay = malloc(nbHidNod * sizeof(double));
+	//double *outLay = load("neurones/nerons5.txt");
+    double *outLay = malloc(nbOut * sizeof(double));
+
+	//Arrays of neurons bias
+	//double *hidLayBias = load("neurones/nerons3.txt");
+    double *hidLayBias = malloc(nbHidNod * sizeof(double));
+	//double *outLayBias = load("neurones/nerons6.txt");
+    double *outLayBias = malloc(nbOut * sizeof(double));
+
+	//Arrays of Weight
+	//double *hidWght = load("neurones/nerons1.txt");
+    double *hidWght = malloc((nbIn * nbHidNod) * sizeof(double));
+	//double *outWght = load("neurones/nerons4.txt");
+    double *outWght = malloc((nbHidNod * nbOut) * sizeof(double));
+
+	//Initialize layers with random value close to 0
+	for(int i = 0; i < nbIn; i++)
+	{
+		for(int j = 0; j < nbHidNod; j++)
+		{
+			hidWght[i * nbHidNod + j] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
+		}
+	}
+
+	for(int i = 0; i < nbHidNod; i++)
+	{
+		hidLayBias[i] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
+		for(int j = 0; j < nbOut; j++)
+		{
+			outWght[i * nbOut + j] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
+
+		}
+	}
+
+	for(int i = 0; i < nbOut; i++)
+	{
+		outLayBias[i] = randfrom(-0.5,0.5);//(double)rand()/(double)RAND_MAX;
+	}
+
+   	save(hidWght,1,nbIn*nbHidNod);
+	free(hidWght);
+	save(hidLay,2,nbHidNod);
+	free(hidLay);
+	save(hidLayBias,3,nbHidNod);
+	free(hidLayBias);
+	save(outWght,4,nbOut*nbHidNod);
+	free(outWght);
+	save(outLay,5,nbOut);
+	free(outLay);
+	save(outLayBias,6,nbOut);
+	free(outLayBias);
+}
 
 void forward(double* input)
 {
@@ -528,7 +582,7 @@ void forward(double* input)
 
     for(int i = 0; i < nbOut; i++)
     {
-        printf("number %d : %f \n",i+1,outlay[i]);
+        printf("number %d : %f \n",i,outlay[i]);
     }
 }
 
@@ -556,16 +610,18 @@ int main(int argc, char **argv)
     }
     errx(1,"Call with --train {arg} or --exec");
     
-    for(int i = 0; i < 80; i++)
+    set_scratch();
+    for(int i = 0; i < 20; i++)
     {
         for(int j = 1; j <= 9; j++)
         {
             char* p = malloc(sizeof(char));
             sprintf(p,"%d",j);
-            proceed_from_node(1000,p,6);
+            proceed_from_node(100,p,10);
         }
+        printf("done %d iter\n",i+1);
     }*/
-    /*
+    /**/
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -592,11 +648,64 @@ int main(int argc, char **argv)
                            0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+    double inMat9[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+    double inMat7[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
     forward(inMat2);
-    */
+    
+    /*
     double** test = get_trainset("1");
 
-    for(int i = 0; i<10: i++)
+    for(int i = 0; i<10; i++)
     {
         printf("img %u : \n",i);
         for(int j = 0; j < 625; j++)
@@ -606,6 +715,5 @@ int main(int argc, char **argv)
             printf(" %.f ",test[i][j]);
         }
         printf("\n");
-    }
-
+    }*/
 }

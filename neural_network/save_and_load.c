@@ -43,7 +43,6 @@ void save(double *a, int i, size_t len)
     strcat(path,num);
     strcat(path,".txt");
 
-
 	FILE *f = fopen(path,"w");
 	if(f == NULL){
 		errx(1,"Can't open file !");
