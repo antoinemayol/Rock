@@ -9,7 +9,7 @@ for i in range(10):
 
     # draw on the image
     d = ImageDraw.Draw(img)
-    d.text((13, 16), str(i), font = fnt, anchor = 'mm', fill = 'black')
+    d.text((100, 100), str(i), font = fnt, anchor = 'mm', fill = 'black')
 
     img.save("num_hun_" + str(i) + ".png")
 
