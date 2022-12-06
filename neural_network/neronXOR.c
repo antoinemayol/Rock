@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "save_and_load.h"
+#include "datamsnt/mnist.h"
 //#include "data_struc.h"
 
 /*Converts a Surface pixel to a Pixel*/
@@ -101,7 +102,7 @@ void mix(int *array, size_t n)
     }
 }
 
-#define nbIn 625
+#define nbIn 784
 #define nbHidLay 1
 #define nbHidNod 122
 #define nbOut 10
@@ -616,7 +617,7 @@ int main(int argc, char **argv)
         }
         printf("done %d iter\n",i+1);
     }*/
-
+    /*
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -720,7 +721,7 @@ int main(int argc, char **argv)
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
-    forward(inMat2);
+    forward(inMat2);*/
    /*
     double** test = get_trainset("1");
 
@@ -736,4 +737,7 @@ int main(int argc, char **argv)
         printf("\n");
     }
     */
+    load_mnist();
+
+
 }
