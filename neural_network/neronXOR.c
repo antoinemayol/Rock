@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "save_and_load.h"
+#include "datamsnt/mnist.h"
 //#include "data_struc.h"
 
 /*Converts a Surface pixel to a Pixel*/
@@ -101,12 +102,12 @@ void mix(int *array, size_t n)
     }
 }
 
-#define nbIn 625
+#define nbIn 784
 #define nbHidLay 1
 #define nbHidNod 122
 #define nbOut 10
 
-#define nbData 6
+#define nbData 18
 /*
 double testMat6[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
@@ -361,7 +362,7 @@ void proceed_from_scratch(int limit)
 void proceed_from_node(int limit, char* num)
 {
     int nub = atoi(num);
-    if(nub > 9 || nub < 0)
+    if(nub > nbData || nub < 0)
     {
         errx(1,"num must be between 0 and 9");
     }
@@ -385,16 +386,12 @@ void proceed_from_node(int limit, char* num)
 	double** trainIn = get_trainset(num);
 
     double trainOut[nbOut][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
+                               //      0    1     2   3    4    5    6    7    8    9
     for(int i = 0; i < nbOut; i++)
-    {
-        printf("i = %d | trainout = %f\n",i,trainOut[i][0]);
-    }
-			                    //      0	  1     2   3    4    5    6    7    8    9
-    for(int i = 1; i < nbOut; i++)
     {
         trainOut[i][i] = 1.0f;
     }
-	int order[6] = {0,1,2,3,4,5};
+	int order[18] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
 
 	//-----
 	for(int step = 0; step < limit; step++)
@@ -410,18 +407,17 @@ void proceed_from_node(int limit, char* num)
 				double z = hidLayBias[j];
 				for(int k = 0; k < nbIn; k++)
 				{
-					z +=  trainIn[i][k] * hidWght[k * nbHidNod + j];
+					z +=  trainIn[i][k] * hidWght[j * nbHidNod + k];//old : k * nbhidnod + k
 				}
 				hidLay[j] = sig(z);
 			}
     
-            printf("la = %d\n",i);
 			for(int j = 0; j < nbOut; j++)
 			{
 				double z = outLayBias[j];
 				for(int k = 0; k < nbHidNod; k++)
 				{
-					z += hidLay[k] * outWght[k*nbOut + j];
+					z += hidLay[k] * outWght[j*nbOut + k];
 				}
 				outLay[j] = sig(z);
 			}
@@ -460,7 +456,7 @@ void proceed_from_node(int limit, char* num)
 				outLayBias[j] += deltaOut[j] * pas;
 				for(int k = 0; k<nbHidNod; k++)
 				{
-					outWght[k * nbOut + j] += hidLay[k] * deltaOut[j] * pas;
+					outWght[j * nbOut + k] += hidLay[k] * deltaOut[j] * pas;
 				}
 			}
 
@@ -469,7 +465,7 @@ void proceed_from_node(int limit, char* num)
 				hidLayBias[j] += deltaHid[j] * pas;
 				for(int k = 0; k<nbIn; k++)
 				{
-					hidWght[k * nbHidNod + j] += trainIn[i][k] * deltaHid[j] * pas;
+					hidWght[j * nbHidNod + k] += trainIn[i][k] * deltaHid[j] * pas;
 				}
 			}
 		}
@@ -565,12 +561,9 @@ void forward(double* input)
         double z = hidlayBias[j];
         for(int k = 0; k < nbIn; k++)
         {
-            z +=  input[k] * hidwgt[k * nbHidNod + j];
-            //printf("little zhid  = %f\n",z);
+            z +=  input[k] * hidwgt[j * nbHidNod + k];
         }
-        //printf("Zhid = %f\n",z);
         hidlay[j] = sig(z);
-        //printf("hidl = %f\n",hidlay[j]);
     }
 
     for(int j = 0; j < nbOut; j++)
@@ -578,11 +571,9 @@ void forward(double* input)
         double z = outlayBias[j];
         for(int k = 0; k < nbHidNod; k++)
         {
-            z += hidlay[k] * outwgt[k*nbOut + j];
+            z += hidlay[k] * outwgt[j*nbOut + k];
         }
-        //printf("Zout = %f\n",z);
         outlay[j] = sig(z);
-        //printf("outl = %f\n",outlay[j]);
     }
 
     for(int i = 0; i < nbOut; i++)
@@ -614,11 +605,9 @@ int main(int argc, char **argv)
         return 0;
     }
     errx(1,"Call with --train {arg} or --exec");
-    */
-
+    *//*
     set_scratch();
-    
-    for(int i = 0; i < 30; i++)
+    for(int i = 0; i < 50; i++)
     {
         for(int j = 1; j <= nbData; j++)
         {
@@ -627,7 +616,7 @@ int main(int argc, char **argv)
             proceed_from_node(100,p);
         }
         printf("done %d iter\n",i+1);
-    }
+    }*/
     /*
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
@@ -706,9 +695,33 @@ int main(int argc, char **argv)
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    double inMat6[625] = {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                            0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
-    forward(inMat7);
-    */
+    forward(inMat2);*/
    /*
     double** test = get_trainset("1");
 
@@ -719,8 +732,12 @@ int main(int argc, char **argv)
         {
             if(j % 25 == 0)
                 printf("\n");
-            printf(" %.f ",test[i][j]);
+            printf(" %.f, ",test[i][j]);
         }
         printf("\n");
-    }*/
+    }
+    */
+    load_mnist();
+
+
 }
