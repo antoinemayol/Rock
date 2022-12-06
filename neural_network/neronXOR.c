@@ -105,6 +105,8 @@ void mix(int *array, size_t n)
 #define nbHidLay 1
 #define nbHidNod 122
 #define nbOut 10
+
+#define nbData 6
 /*
 double testMat6[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
@@ -178,7 +180,6 @@ double** get_trainset(char* num )
                 char* tmpdi = malloc(30 * sizeof(char));
                 strcpy(tmpdi,dir);
                 strcat(tmpdi,fi);
-
                 SDL_Surface *surface = IMG_Load(tmpdi);
 
                 if(surface == NULL)
@@ -357,7 +358,7 @@ void proceed_from_scratch(int limit)
 }
 
 //Proceeding the creation and the application of neural network for XOR
-void proceed_from_node(int limit, char* num, int nbData)
+void proceed_from_node(int limit, char* num)
 {
     int nub = atoi(num);
     if(nub > 9 || nub < 0)
@@ -383,21 +384,27 @@ void proceed_from_node(int limit, char* num, int nbData)
 	//Inputs and expected outputs
 	double** trainIn = get_trainset(num);
 
-    double trainOut[nbOut] = {0.0f};
-						//      0	  1     2   3    4    5    6    7    8    9
-    trainOut[nub] = 1.0f;
-	int order[18] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
+    double trainOut[nbOut][nbOut] = {{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f}};
+    for(int i = 0; i < nbOut; i++)
+    {
+        printf("i = %d | trainout = %f\n",i,trainOut[i][0]);
+    }
+			                    //      0	  1     2   3    4    5    6    7    8    9
+    for(int i = 1; i < nbOut; i++)
+    {
+        trainOut[i][i] = 1.0f;
+    }
+	int order[6] = {0,1,2,3,4,5};
 
 	//-----
 	for(int step = 0; step < limit; step++)
 	{
 		mix(order, nbData);
 
-		for(int t = 0; t < nbData ; t++)
+		for(int t = 0; t < nbOut /*nbData*/ ; t++)
 		{
 			int i = t;
 			//START FORWARD PROPAGATION
-
 			for(int j = 0; j < nbHidNod; j++)
 			{
 				double z = hidLayBias[j];
@@ -407,6 +414,8 @@ void proceed_from_node(int limit, char* num, int nbData)
 				}
 				hidLay[j] = sig(z);
 			}
+    
+            printf("la = %d\n",i);
 			for(int j = 0; j < nbOut; j++)
 			{
 				double z = outLayBias[j];
@@ -414,27 +423,23 @@ void proceed_from_node(int limit, char* num, int nbData)
 				{
 					z += hidLay[k] * outWght[k*nbOut + j];
 				}
-				//printf("Z = %f\n",z);
 				outLay[j] = sig(z);
-				//printf("outl = %f\n",outLay[j]);
 			}
 
 			//Printing results as they come
 			if(limit-step <= 1)
 			{
-		    	printf ("Input : %d \nOutputs :\n 0 : %f\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n Expected Output: %g\n\n",
-                    	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8], outLay[9],
-						trainOut[nbData-1]);
+		    	printf ("Input : %d \nOutputs :\n 0 : %f\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n",
+                    	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8], outLay[9]);
 			}
 			//-----
 
 			//BACKPROPAGATION
-
 			//Compute difference between result and expected
 			double *deltaOut = malloc(nbOut * sizeof(double));
 			for(int j =0; j < nbOut; j++)
 			{
-				double errorOut = (trainOut[j] - outLay[j]);
+				double errorOut = (trainOut[i][j] - outLay[j]);
 				deltaOut[j] = errorOut * Dsig(outLay[j]);
 			}
 
@@ -610,19 +615,20 @@ int main(int argc, char **argv)
     }
     errx(1,"Call with --train {arg} or --exec");
     */
-   /*
+
     set_scratch();
+    
     for(int i = 0; i < 30; i++)
     {
-        for(int j = 1; j <= 9; j++)
+        for(int j = 1; j <= nbData; j++)
         {
             char* p = malloc(sizeof(char));
             sprintf(p,"%d",j);
-            proceed_from_node(100,p,18);
+            proceed_from_node(100,p);
         }
         printf("done %d iter\n",i+1);
-    }*/
-    
+    }
+    /*
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -702,12 +708,11 @@ int main(int argc, char **argv)
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     forward(inMat7);
-    
-    
-    /*
+    */
+   /*
     double** test = get_trainset("1");
 
-    for(int i = 0; i<18; i++)
+    for(int i = 0; i<9; i++)
     {
         printf("img %u : \n",i);
         for(int j = 0; j < 625; j++)
