@@ -37,7 +37,7 @@ void save(double *a, int i, size_t len)
 {
 	char *num = malloc(5*sizeof(char));
 	sprintf(num, "%d", i);
-	char *path = malloc(21*sizeof(char));
+	char *path = malloc(20*sizeof(char));
 
     strcpy(path,"neurones/nerons");
     strcat(path,num);
@@ -45,7 +45,7 @@ void save(double *a, int i, size_t len)
 
 	FILE *f = fopen(path,"w");
 	if(f == NULL){
-		errx(1,"Can't open file !");
+		errx(1,"Can't open file for save !");
 	}
 
 	for(size_t j = 0; j<len; j++)
@@ -69,7 +69,7 @@ double* load(char* path)
 	FILE *f = fopen(path,"r");
 	if(f == NULL)
 	{
-		errx(1,"Can't open file !");
+		errx(1,"Can't open file for load !");
 	}
 
 	double* array = malloc(sizeof(double));
@@ -85,6 +85,7 @@ double* load(char* path)
 		add_one(&array, x, &len);
 		i++;
 	}
+    fclose(f);
 	return array;
 }
 /*
