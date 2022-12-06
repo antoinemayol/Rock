@@ -610,9 +610,9 @@ int main(int argc, char **argv)
     }
     errx(1,"Call with --train {arg} or --exec");
     */
-    /*
+   /*
     set_scratch();
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 30; i++)
     {
         for(int j = 1; j <= 9; j++)
         {
@@ -701,7 +701,7 @@ int main(int argc, char **argv)
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-    forward(inMat2);
+    forward(inMat7);
     
     
     /*

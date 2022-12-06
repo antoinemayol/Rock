@@ -4,7 +4,7 @@ CC = gcc
 CPPFLAGS = -MMD
 CFLAGS = -Wall -Wextra -lm `pkg-config --cflags sdl2 SDL2_image`
 LDFLAGS =
-LDLIBS = `pkg-config --libs sdl2 SDL2_image`
+LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
 
 #all: mtest ntest ftest
 	#${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
@@ -16,7 +16,7 @@ OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
 nerons: neronXOR.o save_and_load.o math_tool.o
-	${CC} ${CPPFLAGS} ${CFLAGS} $^ $(LDLIBS) -o $@
+	${CC} -o $@ ${CFLAGS} $^ $(LDLIBS)
 
 -include ${DEP}
 
