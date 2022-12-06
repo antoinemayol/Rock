@@ -16,7 +16,9 @@ void print_mat(int l, int w, int *matrix)
     for(int i = 0 ; i < l ; ++i)
     {
     	for (int j = 0; j < w; ++j)
-    		printf("%d ", (i*w + j)[matrix]);
+        {
+            printf("%d",*(matrix + i*w + j));
+        }
     	printf("\n");
     }
     printf("\n");
@@ -25,7 +27,7 @@ void print_mat(int l, int w, int *matrix)
 int get_obj_nb(int *equivalence)
 {
     int nb_obj = 0;
-    for(int i = 0; i < 1000; ++i)
+    for(int i = 0; i < 2000; ++i)
     {
         if(*(equivalence + i) != 0 && *(equivalence+i) == i )
             nb_obj ++;
@@ -33,7 +35,7 @@ int get_obj_nb(int *equivalence)
     return nb_obj;
 }
 
-void apply_equivalence(int l, int w, int output[l*w], int *equivalence)
+void apply_equivalence(int l, int w, int* output, int *equivalence)
 {
     /* Apply equivalence on the matrix
      * ARGS:
@@ -45,7 +47,6 @@ void apply_equivalence(int l, int w, int output[l*w], int *equivalence)
      *  none
      */
 
-
     for(int i = 0; i < l; ++i)
         for(int j = 0; j < w; ++j)
         {
@@ -56,7 +57,7 @@ void apply_equivalence(int l, int w, int output[l*w], int *equivalence)
 
 }
 
-int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
+int get_partitioned_matrix(int l, int w,int* matrix, int* output)
 {
     /* Reconize different part of the picture
      * ARGS:
@@ -68,8 +69,8 @@ int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
      *  -nb_obj (int) : number of obj in matrix
      */
     int part_number = 0;
-    int *equivalence = malloc(1000*sizeof(int));
-    for(int i = 0; i<1000; i++)
+    int equivalence[2000];
+    for(int i = 0; i<2000; i++)
         *(equivalence +i) = 0;
     for(int i = 0; i < l; ++i)
     {
@@ -105,7 +106,8 @@ int get_partitioned_matrix(int l, int w,int matrix[l*w], int output[l*w])
     }
     apply_equivalence(l,w,output,equivalence);
     int nb_obj = get_obj_nb(equivalence); 
-    free(equivalence);
+    
+    printf("%d\n",nb_obj);
     return nb_obj;
 }
 
@@ -189,7 +191,7 @@ void get_biggest_submat(int l, int w, int matrix[l*w], int nb_obj, int pos[5])
 
 }
 
-void extract_biggest_obj(int pos[5],int l, int w, int mat[l*w], int final[])
+void extract_biggest_obj(int pos[5],int l, int w, int mat[l*w], int* final)
 {
     int l2 = pos[2] - pos[0]+1;
     int w2 = pos[3] - pos[1]+1;
@@ -197,10 +199,11 @@ void extract_biggest_obj(int pos[5],int l, int w, int mat[l*w], int final[])
     {
         for(int j = 0; j < w2; j++)
         {
-            if(mat[(pos[0]+i)*w +(pos[1]+j)] == pos[4])
+            final[i*w2 + j] = mat[(pos[0]+i)*w +(pos[1]+j)] != 0;
+            /* if(mat[(pos[0]+i)*w +(pos[1]+j)] == pos[4])
                 final[i*w2 + j] = 1;
             else
-                final[i*w2+j] = 0;
+               *(final +i*w2+j) = 0;*/
         }
     }
 }
@@ -216,25 +219,20 @@ int* connected_components(int l, int w, int* matrix,int* l2, int* w2)
      * OUT:
      *  none
      */
-    int output[l*w];
+    int* output = malloc(sizeof(int)*l*w);
     for(int i =0; i< l;i++)
         for(int j=0; j<w; j++)
             *(output + i*w +j) = 0;
-
     int nb_obj = get_partitioned_matrix(l,w,matrix,output);
     int pos[5];
-
     get_biggest_submat(l, w, output, nb_obj, pos);
-
     *l2 = pos[2] - pos[0] +1;
     *w2 = pos[3] - pos[1] +1;
-
+    printf("%d %d-%d %d-%d\n",pos[0],pos[1], pos[2], pos[3], pos[4]);
     int* final = malloc(sizeof(int)**l2**w2);
-
     extract_biggest_obj(pos, l, w,output, final);
-    //print_mat(l,w,matrix);
-    //printf("Extracted matrix:\n");
-    //print_mat(pos[2] - pos[0] +1 , pos[3] - pos[1]+1, final);
+    print_mat(*l2,*w2,final);
+    free(output);
     return final;
 
 }

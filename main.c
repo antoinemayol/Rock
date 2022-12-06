@@ -1,3 +1,9 @@
+#include "image_processing/processing_final.h"
+#include "detection/detection.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+
 int main()
 {
     /*  
@@ -17,7 +23,12 @@ int main()
      *      must return a none empty matrix with solve sudoku
      *  7-resolved sudoku display
     */
-    int* bin_mat = image_processing("images/image_01.jpeg"); 
+    int w = 0;
+    int h = 0;
+    int* bin_mat = image_processing("images/image_06.jpeg",&w,&h);
+    int** cases = detection(bin_mat, w, h);
+    free(bin_mat); 
+    printf("lol\n");
     return 1;
 
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "components_connexes.h"
-#include "haugh_transform.h"
+#include "old/components_connexes.h"
+#include "old/haugh_transform.h"
 #include <math.h>
 #include <stdlib.h>
 int main()

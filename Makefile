@@ -2,26 +2,28 @@
 
 CC = gcc
 CPPFLAGS =
-CFLAGS = -Wall -g -Wextra -fsanitize=address
+CFLAGS = -Wall -g -Wextra `pkg-config --cflags sdl2 SDL2_image` -fsanitize=address -g
 LDFLAGS =
-LDLIBS = -lm 
-SUBDIRS = image_processing detection
+LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
 
-SRC = main.c
-OBJ = ${SRC:.c=.o}
-EXE = ${SRC:.c=}
+SUBDIRS = image_processing detection 
+MAKECMDGOALS = all
 
-all: subdirs main
-
-main: $(OBJ)
-	gcc -o main $(CFLAGS) $^ $(LDLIBS)
+TARGET = main.c
+SRC = $(shell find ./image_processing -name "*.c" ! -name "test.c" ! -name "demo.c")  $(shell find ./detection -name "*.c" ! -name "test.c" ! -name "demo.c")
+OBJ = $(patsubst %.c, %.o, $(SRC))
+EXE = ${TARGET:.c=}
 
 
-subdirs:$(SUBDIRS)
+all: $(SUBDIRS)
+	gcc -o $(EXE) $(CFLAGS) $(TARGET) $(OBJ) $(LDLIBS)
+
 $(SUBDIRS):
-	$(MAKE) -C $@
+	$(MAKE) -C $@ $(MAKECMDGOALS)
+
+
+.PHONY: all $(SUBDIRS)
+
 clean:
-	${RM} ${OBJ}
-	${RM} ${EXE}
-	${RM} main
+	$(RM) -f $(EXE) $(OBJ)
 # END

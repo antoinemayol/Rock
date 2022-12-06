@@ -1,17 +1,38 @@
 #include <stdio.h>
-#include "components_connexes.h"
-#include "haugh_transform.h"
+#include "HT.h"
+#include "filter.h"
 #include <math.h>
 #include <stdlib.h>
 
+#include "LineParameter.h"
+void print_lines(LineParameter* lines, int nb)
+{
+    for(int i = 0; i < nb; i++)
+        printf("%f %f\n", (lines + i)->angle, (lines + i)->distance);
+}
+
+/*void free_cases()
+{
+
+}*/
+
 int** detection(int* mat, int w, int h)
 {
-    int w2 = 0;
-    int h2 = 0;
-    int* output = connected_components(w,h,mat,&h2,&w2);
-    int** cases = hough_traitement(h2, w2, output);
+    for(int i =0; i<h;i++)
+        for(int j =0; j<w;j++)
+            *(mat +i*w +h) = !*(mat +i*w +h);
 
-    free(output);
-    return cases;
+    int* nb_lines= malloc(sizeof(int));;
+    *nb_lines = 20;
+    struct LineParameter* detected_lines = malloc(sizeof(LineParameter)**nb_lines);
+
+    HTLineDetection(mat, nb_lines, detected_lines, h, w);
+    
+    struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
+    print_lines(new_lines, *nb_lines);
+    printf("nb:%d\n",*nb_lines);
+    free(nb_lines);
+    free(detected_lines);
+    return NULL;
 }
 

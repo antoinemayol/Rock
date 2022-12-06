@@ -16,7 +16,7 @@ void print_graph(int l, int w, int *matrix)
     {
     	for (int j = 0; j < w; ++j)
         {
-            if((i*w + j)[matrix] < 3)
+            if(*(matrix + i*w + j) < 3)
                 printf("\033[0;32m");
             else if((i*w + j)[matrix] < 64)
                 printf("\033[0;33m");
@@ -219,18 +219,15 @@ int** hough_traitement(int l, int w, int *mat)
     int* hough_val = malloc(mat_size*sizeof(int));
 
     hough_transform(l, w, mat, hough_val);
-    print_graph(max_p*2, 180, hough_val);
     int** coo = get_equation((int)max_p,90,hough_val);
-    print_case(coo, mat, w);
 
     int** cases = malloc(sizeof(int *)*nb_cases);
 
     stock_cases(coo, mat, w, cases); 
-
     for(int i = 0; i < nb_cases; i++)
         free(*(coo +i));
 
-    free(coo); 
+    free(coo);
     free(hough_val);
 
     return cases;
