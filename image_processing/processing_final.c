@@ -6,10 +6,10 @@
 
 #include "display.h"
 #include "grayscale.h"
+#include "otsu.h"
 #include "blur.h"
 #include "image.h"
 #include "threshold.h"
-#include "otsu.h"
 #include "processing_final.h"
 #include "intermediate_process.h"
 
@@ -43,7 +43,6 @@ int* image_processing(char* path, int *w, int *h)
 
     //Converting pixels array to int array
     int *res = pixels_to_int(&image);
-
     return res;
 }
 

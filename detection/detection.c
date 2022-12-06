@@ -29,7 +29,7 @@ int** detection(int* mat, int w, int h)
     HTLineDetection(mat, nb_lines, detected_lines, h, w);
     
     struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
-    print_lines(new_lines, *nb_lines);
+    //print_lines(new_lines, *nb_lines);
     printf("nb:%d\n",*nb_lines);
     free(nb_lines);
     free(detected_lines);

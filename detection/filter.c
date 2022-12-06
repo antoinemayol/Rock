@@ -5,9 +5,9 @@
 #include <stdio.h>
 
 #include "LineParameter.h"
+#include "list_line.h"
 float __abs(float x);
-int get_most_used_angle(struct LineParameter* DetectedLines, int nb_lines);
-
+struct LineParameter* supp_equivalent(struct LineParameter* DetectedLines, float theta_threshold, int* nb_lines);
 struct LineParameter* FilterLines(struct LineParameter* DetectedLines, float rho_threshold, float theta_threshold, int* nb_lines)
 {
     struct list* similar_lines = malloc(sizeof(struct list)**nb_lines);
@@ -47,8 +47,10 @@ struct LineParameter* FilterLines(struct LineParameter* DetectedLines, float rho
                 k++;
             }
         }
-   
-
+    /*for(int i = 0; i < *nb_lines; i++)
+    {
+        free_all(similar_lines + i);
+    }*/
     int* line_flags = malloc(sizeof(int)**nb_lines);
     for(int i = 0; i < *nb_lines; i++)
         *(line_flags + i) = 1;
@@ -78,20 +80,17 @@ struct LineParameter* FilterLines(struct LineParameter* DetectedLines, float rho
         }
     free(line_flags);
     *nb_lines = nb_new_lines;
-    printf("anglesmax:%d\n",get_most_used_angle(DetectedLines, *nb_lines));
+    struct LineParameter* FinalLines = supp_equivalent(FilteredLines, theta_threshold, nb_lines);
     return FilteredLines;
-}
-
-void supp_equivalent(struct LineParameter* DetectedLines, float rho_threshold, float theta_threshold, int* nb_lines)
-{
-   return; 
 }
 
 int get_most_used_angle(struct LineParameter* DetectedLines, int nb_lines)
 {
-    int* angles = calloc(0,sizeof(int)*91);
+    int* angles = malloc(sizeof(int)*91);
     for(int i = 0; i < nb_lines; i++)
-        angles[(int)(DetectedLines + i)->angle] +=1;
+        angles[i] = 0;
+    for(int i = 0; i < nb_lines; i++)
+        angles[(int)DetectedLines[i].angle] +=1;
 
     int max = 0;
     for(int i = 1; i < nb_lines; i++)
@@ -99,6 +98,50 @@ int get_most_used_angle(struct LineParameter* DetectedLines, int nb_lines)
             max = i;
     free(angles);
     return max;
+}
+
+struct LineParameter* supp_equivalent(struct LineParameter* DetectedLines, float theta_threshold, int* nb_lines)
+{
+   int max_angle = get_most_used_angle(DetectedLines, *nb_lines);
+   struct LineParameter* final = malloc(sizeof(struct LineParameter)*4);
+
+    struct listl* hori_list =malloc(sizeof(struct listl));
+    listl_init(hori_list);
+    struct listl* verti_list =malloc(sizeof(struct listl));
+    listl_init(verti_list);
+
+    for(int i = 0; i < *nb_lines; i++)
+    {
+        int angle = (int)DetectedLines[i].angle;
+        if(DetectedLines[i].angle < 0 || DetectedLines[i].angle > 90)
+            angle = -1;
+        if(abs(max_angle - angle) <= theta_threshold || abs(abs(max_angle-90) - angle) <= theta_threshold)
+        {
+           
+           struct listl* elm = malloc(sizeof(struct listl));;
+           elm->data = DetectedLines +i;
+           if(angle < 45 && angle >=0)
+           {
+                listl_insert(hori_list, elm);
+           }
+           else if(angle >= 45 && angle <=90)
+           {
+                listl_insert(verti_list, elm);
+           }
+        }
+
+    }
+    struct LineParameter* minHori = get_min(hori_list);
+    struct LineParameter* minVerti = get_min(verti_list);
+    struct LineParameter* maxHori = get_max(hori_list);
+    struct LineParameter* maxVerti = get_max(verti_list);
+    printf("minhori %f : %f\n", minHori->distance, minHori->angle); 
+    printf("minverti %f : %f\n", minVerti->distance, minVerti->angle); 
+    printf("maxhori %f : %f\n", maxHori->distance, maxHori->angle); 
+    printf("maxVerti %f : %f\n", maxVerti->distance, maxVerti->angle); 
+    free_alll(hori_list);
+    free_alll(verti_list);
+   return final;
 }
 
 float __abs(float x)

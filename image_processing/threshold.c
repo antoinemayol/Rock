@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "otsu.h"
 #include "blur.h"
 #include "image.h"
 
