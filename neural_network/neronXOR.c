@@ -272,6 +272,7 @@ void proceed_from_scratch(int limit)
 			for(int j = 0; j < nbHidNod; j++)
 			{
 				double z = hidLayBias[j];
+                printf("z = %f\n",z);
 				for(int k = 0; k < nbIn; k++)
 				{
 					z +=  trainIn[i][k] * hidWght[k * nbHidNod + j];
@@ -391,7 +392,7 @@ void proceed_from_node(int limit, char* num)
         trainOut[i][i] = 1.0f;
     }
 	int order[18] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
-
+    
 	//-----
 	for(int step = 0; step < limit; step++)
 	{
@@ -422,10 +423,11 @@ void proceed_from_node(int limit, char* num)
 			}
 
 			//Printing results as they come
-			if(limit-step <= 1)
+			if(step % 100 == 0)
 			{
 		    	printf ("Input : %d \nOutputs :\n 0 : %f\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n",
                     	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8], outLay[9]);
+                printf("files : %s\n",num);
 			}
 			//-----
 
@@ -448,6 +450,7 @@ void proceed_from_node(int limit, char* num)
 				}
 				deltaHid[j] = errorHid * Dsig(hidLay[j]);
 			}
+
 
 			//Update weights between nodes
 			for(int j = 0; j < nbOut; j++)
@@ -616,7 +619,6 @@ int main(int argc, char **argv)
         }
         printf("done %d iter\n",i+1);
     }
-    /*
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -720,7 +722,7 @@ int main(int argc, char **argv)
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
-    forward(inMat2);*/
+    forward(inMat9);
    /*
     double** test = get_trainset("1");
 
