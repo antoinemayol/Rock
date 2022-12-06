@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
+
+
+
+
+GtkWidget *spin;
 GtkWidget *window;
 GtkWidget *window1;
 GtkWidget *label;
@@ -10,6 +17,7 @@ GtkWidget *image;
 GdkPixbuf *pixbuf;
 GtkWidget *buton_next;
 GtkWidget *buton_preview;
+double degree = 0;
 int state = 0;
 
 
@@ -33,7 +41,6 @@ int main (int argc, char *argv[])
 	gtk_builder_connect_signals(builder,NULL);
 
 	g_object_unref(builder);
-
 
 	//show the window
 	gtk_widget_show_all(window);
@@ -79,7 +86,8 @@ void button_label()
 	image = GTK_WIDGET(gtk_builder_get_object(builder,"image_grille"));
     buton_next = GTK_WIDGET(gtk_builder_get_object(builder,"button_next"));
     buton_preview = GTK_WIDGET(gtk_builder_get_object(builder,"button_preview"));
-
+    spin = GTK_WIDGET(gtk_builder_get_object(builder,"spin"));
+    label = GTK_WIDGET(gtk_builder_get_object(builder,"error"));
     state = 1;
 	gtk_builder_connect_signals(builder,NULL);
 
@@ -92,8 +100,10 @@ void button_label()
 
 }
 
+
 char *on_file1_file_set(GtkFileChooserButton *f)
 {
+    printf("%f\n",degree); 
 	char *res = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(f));
 	printf("filename : %s\n",res);
 	pixbuf = gdk_pixbuf_new_from_file(res,NULL);
@@ -153,8 +163,10 @@ void button_preview()
     {
         state-=1;
     }
+}
 
-
-
+void spin_boutton()
+{
+    degree = gtk_spin_button_get_value (GTK_SPIN_BUTTON(spin));
 
 }

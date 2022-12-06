@@ -22,6 +22,7 @@ int state = 2;
 //
 // renderer: Renderer to draw on.
 // texture: Texture that contains the image.
+/*
 void draw(SDL_Renderer* renderer, SDL_Texture* texture)
 {
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -52,7 +53,7 @@ void event_loop(SDL_Renderer* renderer, SDL_Texture* texture)
                 break;
         }
     }
-}
+}*/
 //______________________________________________________________________________________________________________________________
 int absentOnRow (int k, int *grid, int i)
 {
@@ -133,8 +134,7 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 
 	if(state == 2)
 	{
-		
-		int bb[81]; 
+		int bb[81];
 		memcpy(bb, board, 81 * sizeof(int));
 		backtracking(bb,0);
 		int j = 0;
@@ -144,29 +144,29 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 
 			if(bb[j] != 0)
 			{
-				printf("pos : %d\n",j);
+
 				char x[2];
-			
+
 				x[0] = bb[j] + 48;
 				x[1] = '\0';
-			
+
 				char *target = malloc(sizeof(char)*16);
 
 				strcpy(target,"data/num_");
 				strcat(target,x);
 				strcat(target,"g.png");
-				printf("target :%s\n",target);
-			
+
+
 				surface_i = IMG_Load(target);
-			
+
 				dstrect.x = pos[j%9];
 				dstrect.y = pos[j/9];
-			
 
-				printf("pos x : %d pos y : %d\n",dstrect.x,dstrect.y);
+
+
 
 				SDL_BlitSurface(surface_i,NULL,surface_p,&dstrect);
-				printf("pas de segfault \n");	
+
 				newT = SDL_CreateTextureFromSurface(renderer,surface_p);
 				free(target);
 
@@ -174,59 +174,55 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 			j+=1;
 		}
 	}
-	
+
 	int i = 0;
-	
+
 	while(i<81)
 	{
-        printf("%d\n",i);
+        
 		if(board[i] != 0)
 		{
-			printf("pos : %d\n",i);
+
 			char x[2];
-			
+
 			x[0] = board[i] + 48;
 			x[1] = '\0';
-			
+
 			char *target = malloc(sizeof(char)*30);
-            
+
 
 			strcpy(target,"data/num_");
 			strcat(target,x);
 			strcat(target,".png");
-			printf("target :%s\n",target);
-			
+
+
 			surface_i = IMG_Load(target);
-			
+
 			dstrect.x = pos[i%9];
 			dstrect.y = pos[i/9];
-			
 
-			printf("pos x : %d pos y : %d\n",dstrect.x,dstrect.y);
+
 
 			SDL_BlitSurface(surface_i,NULL,surface_p,&dstrect);
-			printf("pas de segfault \n");	
+
 			newT = SDL_CreateTextureFromSurface(renderer,surface_p);
-		    printf("la vie c'est de la merde\n");
+
+
             free(target);
 		}
 	    i+=1;
-	}	
-				
+	}
+
 	return newT;
 
 }
 
-int main(int argc, char** argv)
+int main()
 {
-    // Checks the number of arguments.
-    if (argc != 2)
-        errx(EXIT_FAILURE, "Usage: image-file");
-
-    // TODO:
+    
     // - Initialize the SDL.
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
+    //if (SDL_Init(SDL_INIT_VIDEO) != 0)
+        //errx(EXIT_FAILURE, "%s", SDL_GetError());
 
     // - Create a window.
     SDL_Window* window = SDL_CreateWindow("Image", 0, 0,0,0,
@@ -244,7 +240,7 @@ int main(int argc, char** argv)
 
 
     // - Create a texture from the image.
-    SDL_Texture* texture = IMG_LoadTexture(renderer, argv[1]);
+    SDL_Texture* texture;/*   = IMG_LoadTexture(renderer, "data/blank_grid.png");
     if(texture == NULL)
         errx(EXIT_FAILURE, "%s",SDL_GetError());
 
@@ -253,22 +249,21 @@ int main(int argc, char** argv)
     if (SDL_QueryTexture(texture, NULL, NULL, &w, &h) != 0)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
-    // TODO:
     // - Resize the window according to the size of the image.
-    SDL_SetWindowSize(window, w, h);
+    SDL_SetWindowSize(window, w, h);*/
 
 	SDL_Surface *surface = IMG_Load("data/blank_grid.png");
-    
+
 	texture = change_board(grille,1,surface,renderer);
-    
+
 	SDL_SaveBMP(surface,"grille.bmp");
 
     texture = change_board(grille,2,surface,renderer);
 
     SDL_SaveBMP(surface,"grille_g.bmp");
-    printf("a\n");
-    event_loop(renderer,texture);
-    
+
+    //event_loop(renderer,texture);
+
 
     // - Destroy the objects.
     SDL_DestroyTexture(texture);
