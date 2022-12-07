@@ -5,5 +5,6 @@
 #include <SDL/SDL_image.h>
 
 SDL_Texture *change_board(int *board,int state,SDL_Surface *surface,SDL_Renderer *renderer);
+int New_img(int *grille);
 
 #endif

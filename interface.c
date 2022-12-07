@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "solver/solver.h"
+#include "solver/parser.h"
+
+#include "interface/display.h"
+
 
 
 
@@ -134,7 +139,7 @@ void button_next()
 	    gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
         
 	}
-    else
+    else if (state < 3)
         state+=1;
 
 
@@ -159,7 +164,7 @@ void button_preview()
 	    gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
 	    gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
 	}
-    else
+    else if (state > 0)
     {
         state-=1;
     }

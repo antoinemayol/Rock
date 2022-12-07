@@ -17,11 +17,10 @@ int absentOnCol(int k,int *grid,int j);
 int absentOnBloc(int k, int *grid,int i,int j);
 int backtracking(int *grid,int position);
 
-int test_grid[9][9];
 /*------------------------------------------------------*/
 
 
-int main(int argc,char **argv)
+int test(int argc,char **argv)
 {
     if(argc != 2)
     {
