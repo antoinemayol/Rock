@@ -106,7 +106,7 @@ void mix(int *array, size_t n)
 #define nbHidNod 122
 #define nbOut 10
 
-#define nbData 18
+#define nbData 19
 /*
 double testMat6[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,
