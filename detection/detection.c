@@ -10,8 +10,12 @@
 
 int** detection(int* mat, int w, int h)
 {
-    int* lol = flood_fill(h, w, mat); 
-
+    int* tmp_mat = malloc(sizeof(int)*w*h);
+    for(int i =  0; i < h; i++)
+        for(int j = 0; j < w; j++)
+            *(tmp_mat + i*w + j) = *(mat +i*w + j);
+    int* lol = flood_fill(h, w, tmp_mat); 
+    free(tmp_mat);
     for(int i =0; i<h;i++)
         for(int j =0; j<w;j++)
             *(mat +i*w +h) = !*(mat +i*w +h);
@@ -22,7 +26,7 @@ int** detection(int* mat, int w, int h)
 
     HTLineDetection(mat, nb_lines, detected_lines, h, w);
     struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
-    
+     
     free(nb_lines);
     free(detected_lines);
 

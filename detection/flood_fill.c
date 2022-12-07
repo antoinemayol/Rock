@@ -4,12 +4,8 @@
 int __flood_fill(int h, int w, int* matrix, int x, int y, int c)
 {
     *(matrix + x*w + y) = c;
-    printf("h%d\n",h);
-    printf("w%d\n",w);
-    printf("y%d\n",x);
-    printf("x%d\n",y);
-    printf("val%d\n",*(matrix + (x+1)*w + y));
     int size = 1;
+    printf("%d\n",h);
     if(x>0 && *(matrix + (x-1)*w + y)==0)
         size += __flood_fill(h, w, matrix, x-1, y, c);
     if(y>0 && *(matrix + x*w + (y-1))==0)
@@ -43,8 +39,10 @@ int* get_max_obj(int** colors, int nb)
         {
             max = size;
             max_i = i;
+            printf("%d\n",i);
         }
     }
+
     return *(colors + max_i);
 }
 
@@ -64,8 +62,15 @@ int* flood_fill(int h, int w, int* matrix)
                 if(val == 0)
                 {
                     int size = __flood_fill(h,w,matrix,x,y,c);
+                    
                     colors_coo = realloc(colors_coo, sizeof(int*)*(c+1));
                     *(colors_coo + c) = malloc(sizeof(int)*4);
+                    
+                    *(*(colors_coo + c)) = x;
+                    *(*(colors_coo + c) + 1) = y;
+                    *(*(colors_coo + c) + 2) = x;
+                    *(*(colors_coo + c) + 3) = y;
+                    
                     if(size > max_size)
                     {
                         max_size = size;
@@ -79,16 +84,16 @@ int* flood_fill(int h, int w, int* matrix)
                     if(x < *(*(colors_coo + val) + 0))
                         *(*(colors_coo + val)) = x;
                     if(y < *(*(colors_coo + val) + 1))
-                        *(*(colors_coo + val)) = y;
+                        *(*(colors_coo + val) + 1) = y;
                     if(x > *(*(colors_coo + val) + 2))
-                        *(*(colors_coo + val)) = x;
+                        *(*(colors_coo + val) + 2) = x;
                     if(y > *(*(colors_coo + val) + 3))
-                        *(*(colors_coo + val)) = y;
+                        *(*(colors_coo + val) + 3) = y;
                 }
             }
         }
     }
-    int* max_area = get_max_obj(colors_coo, c);
+    int* max_area = *(colors_coo + max_color);
     int x1 = *(max_area);
     int y1 = *(max_area + 1);
     int x2 = *(max_area + 2);
