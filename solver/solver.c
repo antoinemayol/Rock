@@ -19,7 +19,7 @@ int backtracking(int *grid,int position);
 
 /*------------------------------------------------------*/
 
-
+/*  
 int test(int argc,char **argv)
 {
     if(argc != 2)
@@ -47,7 +47,7 @@ int test(int argc,char **argv)
     sudok_to_file(to_solve,fi);
 
 	return 0;
-}
+}*/
 
 void print_grid(int *grid) // Prints the grid in a square format
 {

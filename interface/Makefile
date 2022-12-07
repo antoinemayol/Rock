@@ -18,6 +18,7 @@ all: display.o
 
 clean:
 	${RM} $(EXE)
+	${RM} interface
 	${RM} display.o
 	${RM} $(IMG)
 

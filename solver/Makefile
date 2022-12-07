@@ -15,8 +15,8 @@ DEP = ${SRC:.c=.d}
 
 
 
-main: parser.o solver.o  
-	${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
+all: 
+	${CC} -c ${CFLAGS} ${SRC}
 
 -include ${DEP}
 
@@ -25,6 +25,5 @@ main: parser.o solver.o
 clean:
 	${RM} ${OBJ}
 	${RM} ${DEP}
-	${RM} main
 
 # END

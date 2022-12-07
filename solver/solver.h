@@ -1,5 +1,5 @@
-#ifndef <SOLVER_H>
-#define <SOLVER_H>
+#ifndef SOLVER_H
+#define SOLVER_H
 
 void print_grid(int *grid);
 int absentOnRow(int k,int *grid,int i);
