@@ -33,9 +33,9 @@ int main(int argc, char** argv)
 
     //Increasing contrasts
     Image image3 = image_copy(&image2);
-    //increase_contrast(&image3, 12);
+    increase_contrast(&image3, 0.6);
     increase_brightness(&image3);
-    noise_reduction(&image3);
+    //noise_reduction(&image3);
 
 
     //Applying Gaussian Blur
@@ -53,23 +53,29 @@ int main(int argc, char** argv)
     Image image5 = image_copy(&image4);
     otsu(&image5);
 
-    SDL_Surface **surfaces = malloc(sizeof(SDL_Surface*)*5);
+    //Applying Sobel
+    Image image6 = image_copy(&image5);
+    sobel(&image6);
+
+    SDL_Surface **surfaces = malloc(sizeof(SDL_Surface*)*6);
     surfaces[0] = create_surface(&image1);
     surfaces[1] = create_surface(&image2);
     surfaces[2] = create_surface(&image3);
     surfaces[3] = create_surface(&image4);
     surfaces[4] = create_surface(&image5);
-    //surfaces[5] = create_surface(&image6);
+    surfaces[5] = create_surface(&image6);
     //surfaces[6] = create_surface(&image7);
 
     //Drawing step by steps final image
-    draw(surfaces, 5);
+    draw(surfaces, 6);
+    //draw_image(&image5);
     free_image(&image1);
     free_image(&image2);
     free_image(&image3);
     free_image(&image4);
     free_image(&image5);
-    for(int i=0; i<5; i++)
+    free_image(&image6);
+    for(int i=0; i<6; i++)
     {
         SDL_FreeSurface(surfaces[i]);
     }

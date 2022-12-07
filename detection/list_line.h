@@ -9,7 +9,7 @@ struct listl
   struct LineParameter* data;
 };
 void free_alll(struct listl* l);
-size_t listl_len(struct listl *list);   
+size_t listl_len(struct listl *list);
 int average_diff(struct listl* l);
 // Initialize the sentinel of an empty list.
 void listl_init(struct listl *list);

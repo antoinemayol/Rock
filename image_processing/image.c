@@ -4,8 +4,11 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include "image.h"
-
-
+#include "display.h"
+#include "otsu.h"
+#include "blur.h"
+#include "intermediate_process.h"
+#include "grayscale.h"
 /*****************************************************/
 /**********************CONVERTER**********************/
 /*****************************************************/
@@ -138,8 +141,28 @@ double* pixels_to_double(Image *image)
 /***********************************************/
 /********************IMAGE**********************/
 /***********************************************/
-/*Creates an empty image of size(w)x(h) filled with white pixels*/
+/*Applies all image processing and draws an image*/
+void draw_image(Image *image)
+{
+    //Grayscale process
+    grayscale(image);
 
+    //Increasing Brightness and inversing colors
+    increase_brightness(image);
+
+    //Bluring image
+    gaussian_blur(image,5);
+
+    //Final binarization process
+    otsu(image);
+
+    //Converting final image to surface
+    SDL_Surface *surface = create_surface(image);
+    //Drawing Image
+    draw(&surface, 1);
+}
+
+/*Returns an image filled with white pixels*/
 Image create_empty_image(int w, int h)
 {
     //Calling constructor/creating image

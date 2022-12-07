@@ -3,6 +3,7 @@
 #include "old/haugh_transform.h"
 #include <math.h>
 #include <stdlib.h>
+#include "draw_line.h"
 int main()
 {
     /*  
@@ -93,10 +94,10 @@ int main()
 
     int** cases = hough_traitement(lenght, width, input);
 
+    //draw_lines(lineparameter,"../image_processing/images/image_02.jpeg");
     for(int i = 0; i < 81; i++)
         free(*(cases + i));
     free(cases);
-    
     return 0;
 }
 

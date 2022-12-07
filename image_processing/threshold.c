@@ -18,7 +18,7 @@ void sobel(Image *image)
         ker_gx[i] = malloc(sizeof(double)*3);
         ker_gy[i] = malloc(sizeof(double)*3);
     }
-    for(int i = 0; i<3; i++)
+    /*for(int i = 0; i<3; i++)
     {
         for(int j = 0; j<3; j++)
         {
@@ -33,8 +33,29 @@ void sobel(Image *image)
                 ker_gy[j][2-i] = -2+2*i;
             }
         }
-    }
+    }*/
 
+    //KerGY
+    ker_gy[0][0]=1;
+    ker_gy[0][1]=2;
+    ker_gy[0][2]=1;
+    ker_gy[1][0]=0;
+    ker_gy[1][1]=0;
+    ker_gy[1][2]=0;
+    ker_gy[2][0]=-1;
+    ker_gy[2][1]=-2;
+    ker_gy[2][2]=-1;
+
+    //KerGX
+    ker_gx[0][0]=1;
+    ker_gx[0][1]=0;
+    ker_gx[0][2]=-1;
+    ker_gx[1][0]=2;
+    ker_gx[1][1]=0;
+    ker_gx[1][2]=-2;
+    ker_gx[2][0]=1;
+    ker_gx[2][1]=0;
+    ker_gx[2][2]=-1;
     Image gx = image_copy(image);
     Image gy = image_copy(image);
 

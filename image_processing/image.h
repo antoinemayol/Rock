@@ -1,6 +1,8 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL.h"
 
 /*********************STRUCTS**********************/
 
@@ -21,6 +23,8 @@ typedef struct Image
 
 
 /*********************METHODS**********************/
+
+void draw_image(Image *image);
 void free_image(Image *image);
 Image create_image(SDL_Surface* surface);
 SDL_Surface* create_surface(Image *image);

@@ -27,7 +27,7 @@ int** detection(int* mat, int w, int h)
     struct LineParameter* detected_lines = malloc(sizeof(LineParameter)**nb_lines);
 
     HTLineDetection(mat, nb_lines, detected_lines, h, w);
-    
+
     struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
     //print_lines(new_lines, *nb_lines);
     printf("nb:%d\n",*nb_lines);
