@@ -18,22 +18,6 @@ void sobel(Image *image)
         ker_gx[i] = malloc(sizeof(double)*3);
         ker_gy[i] = malloc(sizeof(double)*3);
     }
-    /*for(int i = 0; i<3; i++)
-    {
-        for(int j = 0; j<3; j++)
-        {
-            if(i !=1)
-            {
-                ker_gx[i][j] = i-1;
-                ker_gy[j][2-i] = i-1;
-            }
-            if(i == 1)
-            {
-                ker_gx[i][j] = -2+2*i;
-                ker_gy[j][2-i] = -2+2*i;
-            }
-        }
-    }*/
 
     //KerGY
     ker_gy[0][0]=1;
@@ -56,21 +40,41 @@ void sobel(Image *image)
     ker_gx[2][0]=1;
     ker_gx[2][1]=0;
     ker_gx[2][2]=-1;
-    Image gx = image_copy(image);
-    Image gy = image_copy(image);
-
-    convolution(&gx, ker_gx, 3);
-    convolution(&gy, ker_gy, 3);
-    for(int i =0; i<image->h; i++)
+    //Creating a copy of the initial surface
+    int c = 1;
+    int w = image->w;
+    int h = image->h;
+    for(int i=c; i<h-c; i++)
     {
-        for(int j=0; j<image->w; j++)
+        for(int j=c; j<w-c; j++)
         {
-            unsigned int g = sqrt(pow(gx.pixels[i][j].r, 2)+pow(gy.pixels[i][j].r, 2));
-            set_all(&image->pixels[i][j], g);
+            //Applying kernel to each pixel of the image
+            double sumx = 0;
+            double sumy = 0;
+            for(int k = 0; k<3; k++)
+            {
+                for(int l = 0; l<3; l++)
+                {
+                    if(i+k >= 0 && i+k < h && j+l >= 0 && j+l < w)
+                    {
+                        sumx+= image->pixels[i+k][j+l].r * ker_gx[k][l];
+                        sumy+= image->pixels[i+k][j+l].r * ker_gy[k][l];
+                    }
+                }
+            }
+            //printf("sumx:%d", sumx);
+            //printf("sumy:%d", sumy);
+            double g = sqrt(sumx*sumx + sumy*sumy);
+            if(g > 128)
+            {
+                set_all(&image->pixels[i][j], 255);
+            }
+            else
+            {
+                set_all(&image->pixels[i][j], 0);
+            }
         }
     }
-    free_image(&gx);
-    free_image(&gy);
     for(int i = 0; i<3; i++)
     {
        free(ker_gx[i]);
