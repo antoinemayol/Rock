@@ -10,6 +10,8 @@
 
 int** detection(int* mat, int w, int h)
 {
+    int* lol = flood_fill(h, w, mat); 
+
     for(int i =0; i<h;i++)
         for(int j =0; j<w;j++)
             *(mat +i*w +h) = !*(mat +i*w +h);

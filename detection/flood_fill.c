@@ -1,18 +1,51 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 int __flood_fill(int h, int w, int* matrix, int x, int y, int c)
 {
     *(matrix + x*w + y) = c;
+    printf("h%d\n",h);
+    printf("w%d\n",w);
+    printf("y%d\n",x);
+    printf("x%d\n",y);
+    printf("val%d\n",*(matrix + (x+1)*w + y));
     int size = 1;
     if(x>0 && *(matrix + (x-1)*w + y)==0)
         size += __flood_fill(h, w, matrix, x-1, y, c);
     if(y>0 && *(matrix + x*w + (y-1))==0)
         size += __flood_fill(h, w, matrix, x, y-1, c);
-    if(x<h && *(matrix + (x+1)*w + y)==0)
+    if(x<h-1 && *(matrix + (x+1)*w + y)==0)
         size += __flood_fill(h, w, matrix, x+1, y, c);
-    if(y<w && *(matrix + x*w + (y+1))==0)
+    if(y<w-1 && *(matrix + x*w + (y+1))==0)
         size += __flood_fill(h, w, matrix, x, y+1, c);
     return size;
+}
+
+int _calculate_size(int* colors_coo)
+{
+    int x1 = *(colors_coo);
+    int y1 = *(colors_coo + 1);
+    int x2 = *(colors_coo + 2);
+    int y2 = *(colors_coo + 3);
+
+    return (x2-x1)*(y2-x2);
+}
+
+int* get_max_obj(int** colors, int nb)
+{
+    int max = 0;
+    int max_i = 0;
+    
+    for(int i = 2; i < nb; i++)
+    {
+        int size = _calculate_size(*(colors + i));
+        if(size > max)
+        {
+            max = size;
+            max_i = i;
+        }
+    }
+    return *(colors + max_i);
 }
 
 int* flood_fill(int h, int w, int* matrix)
@@ -55,10 +88,11 @@ int* flood_fill(int h, int w, int* matrix)
             }
         }
     }
-    int x1 = *(*(colors_coo + max_color));
-    int y1 = *(*(colors_coo + max_color) + 1);
-    int x2 = *(*(colors_coo + max_color) + 2);
-    int y2 = *(*(colors_coo + max_color) + 3);
+    int* max_area = get_max_obj(colors_coo, c);
+    int x1 = *(max_area);
+    int y1 = *(max_area + 1);
+    int x2 = *(max_area + 2);
+    int y2 = *(max_area + 3);
 
     for(int i = 2; i < c + 1; i++)
     {

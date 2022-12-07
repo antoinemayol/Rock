@@ -90,7 +90,6 @@ int** get_cases(int h, int w, int* matrix, struct LineParameter* lines)
     int y2 = (int)(lines + 2)->distance;
     int x2 = (int)(lines + 3)->distance;
     printf("%d %d %d %d-%d\n", x1, y1, x2, y2,w);
-    print_mat(h, w, matrix, x1, y1, x2, y2);
     int** cases = malloc(sizeof(int*)*81);
     return cases;
 }
