@@ -426,7 +426,7 @@ void proceed_from_node(int limit, char* num)
 			}
 
 			//Printing results as they come
-			if(step % 100 == 0)
+			if(limit - step >= 1)
 			{
 		    	printf ("Input : %d \nOutputs :\n 0 : %f\n 1: %f\n 2: %f\n 3: %f\n 4: %f\n 5: %f\n 6: %f\n 7: %f\n 8: %f\n 9: %f\n",
                     	i, outLay[0], outLay[1], outLay[2], outLay[3], outLay[4], outLay[5], outLay[6], outLay[7], outLay[8], outLay[9]);
@@ -611,8 +611,9 @@ int main(int argc, char **argv)
     }
     errx(1,"Call with --train {arg} or --exec");
     */
+    /*
     set_scratch();
-    for(int i = 0; i < 50; i++)
+    for(int i = 0; i < 25; i++)
     {
         for(int j = 1; j <= nbData; j++)
         {
@@ -622,7 +623,7 @@ int main(int argc, char **argv)
         }
         printf("done %d iter\n",i+1);
     }
-    /*
+   */ 
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -726,9 +727,9 @@ int main(int argc, char **argv)
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
-    forward(inMat9);*/
-   /*
-    double** test = get_trainset("11");
+    forward(inMat6);
+  /* 
+    double** test = get_trainset("19");
 
     for(int i = 0; i<=9; i++)
     {
@@ -737,7 +738,10 @@ int main(int argc, char **argv)
         {
             if(j % 25 == 0)
                 printf("\n");
-            printf(" %.f, ",test[i][j]);
+            if(test[i][j] > 0.5f)
+                printf("%.f",test[i][j]);
+            else
+                printf(" ");
         }
         printf("\n");
     }*/
