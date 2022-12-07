@@ -57,7 +57,10 @@ double* create_ar(SDL_Surface *surface)
         {
             Uint32 pix = get_pixel2(surface, i, j);
             SDL_GetRGB(pix, surface->format, &color.r, &color.g, &color.b);
-            res[i * w +j] = 1 - color.r / 255;
+            if(color.r >=200)
+                res[i * w +j] = 0;//- color.r / 255;
+            else
+                res[i*w+j] = 1;
         }
     }
     return res;
@@ -154,7 +157,7 @@ double testMat3[225] =   	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
 double** get_trainset(char* num )
 {
-    double** res = malloc(18 * sizeof(625 * sizeof(double)));
+    double** res = malloc(nbData * sizeof(625 * sizeof(double)));
     struct dirent **namelist;
    	int n;
 	int i = 0;
@@ -619,6 +622,7 @@ int main(int argc, char **argv)
         }
         printf("done %d iter\n",i+1);
     }
+    /*
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -722,11 +726,11 @@ int main(int argc, char **argv)
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
-    forward(inMat9);
+    forward(inMat9);*/
    /*
-    double** test = get_trainset("1");
+    double** test = get_trainset("11");
 
-    for(int i = 0; i<9; i++)
+    for(int i = 0; i<=9; i++)
     {
         printf("img %u : \n",i);
         for(int j = 0; j < 625; j++)
@@ -736,6 +740,5 @@ int main(int argc, char **argv)
             printf(" %.f, ",test[i][j]);
         }
         printf("\n");
-    }
-    */
+    }*/
 }
