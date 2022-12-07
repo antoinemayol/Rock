@@ -3,13 +3,16 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "LineParameter.h"
 #include "list_line.h"
+#include "print_function.h"
+
 float __abs(float x);
 struct LineParameter* supp_equivalent(struct LineParameter* DetectedLines, float theta_threshold, int* nb_lines);
+
 struct LineParameter* FilterLines(struct LineParameter* DetectedLines, float rho_threshold, float theta_threshold, int* nb_lines)
 {
+    
     struct list* similar_lines = malloc(sizeof(struct list)**nb_lines);
     for(int i = 0; i <* nb_lines; i++)
         list_init(similar_lines + i);
@@ -81,7 +84,7 @@ struct LineParameter* FilterLines(struct LineParameter* DetectedLines, float rho
     free(line_flags);
     *nb_lines = nb_new_lines;
     struct LineParameter* FinalLines = supp_equivalent(FilteredLines, theta_threshold, nb_lines);
-    return FilteredLines;
+    return FinalLines;
 }
 
 int get_most_used_angle(struct LineParameter* DetectedLines, int nb_lines)
@@ -131,14 +134,10 @@ struct LineParameter* supp_equivalent(struct LineParameter* DetectedLines, float
         }
 
     }
-    struct LineParameter* minHori = get_min(hori_list);
-    struct LineParameter* minVerti = get_min(verti_list);
-    struct LineParameter* maxHori = get_max(hori_list);
-    struct LineParameter* maxVerti = get_max(verti_list);
-    printf("minhori %f : %f\n", minHori->distance, minHori->angle); 
-    printf("minverti %f : %f\n", minVerti->distance, minVerti->angle); 
-    printf("maxhori %f : %f\n", maxHori->distance, maxHori->angle); 
-    printf("maxVerti %f : %f\n", maxVerti->distance, maxVerti->angle); 
+    *(final ) = *get_min(hori_list);
+    *(final + 1) = *get_min(verti_list);
+    *(final + 2) = *get_max(hori_list);
+    *(final + 3) = *get_max(verti_list);
     free_alll(hori_list);
     free_alll(verti_list);
    return final;

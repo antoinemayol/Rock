@@ -3,26 +3,6 @@
 #include <limits.h>
 #include <stdlib.h>
 
-void print_mat(int l, int w, int *matrix)
-{
-    /* Print a matrix
-     * ARGS:
-     *  -lenght (int) : lenght of the matrix
-     *  -width (int) : width of the matrix
-     *  -matrix (int[]) : the matrix to print
-     * OUT:
-     *  none
-     */
-    for(int i = 0 ; i < l ; ++i)
-    {
-    	for (int j = 0; j < w; ++j)
-        {
-            printf("%d",*(matrix + i*w + j));
-        }
-    	printf("\n");
-    }
-    printf("\n");
-}
 
 int get_obj_nb(int *equivalence)
 {
