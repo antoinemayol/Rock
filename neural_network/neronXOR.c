@@ -491,8 +491,9 @@ int* final_fun(double** inputs)
     return res;
 }
 
-
+/*
 int main()
 {
     train_dataset();
 }
+*/
