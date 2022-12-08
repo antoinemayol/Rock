@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <err.h>
+
+double **create_empty_mat(int rows, int cols)
+{
+    double **Ar = malloc(sizeof(double*)*rows);
+    for(int i  = 0; i < rows; i++)
+    {
+        Ar[i] = malloc(sizeof(double)*cols);
+    }
+    for(int i = 0; i<rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            Ar[i][j] = 0;
+        }
+    }
+    return Ar;
+}
 
 void transvection(double **A, int k, int i, double alpha, int n)
 {
@@ -31,6 +49,31 @@ int p_search(double **A, int i, int n)
         }
     }
     return i_mem;
+}
+
+double **dot_matrix(double** mat1, double** mat2, int cols1, int cols2, int rows1, int rows2)
+{
+    if(cols1 == rows2)
+    {
+        double** res = create_empty_mat(rows1, cols2);
+        for(int i = 0; i < rows1; i++)
+        {
+            for(int j = 0; j < cols2; j++)
+            {
+                double tmp = 0;
+                for(int n = 0; n < rows2; n++)
+                {
+                    tmp += mat1[i][n] * mat2[n][j];
+                }
+                res[i][j] = tmp;
+            }
+        }
+        return res;
+    }
+    else
+    {
+        errx(1,"dim are not good for a dot ! m1 : %d m2 : %d",cols1,rows2);
+    }
 }
 
 void transpose(double **A, int n)
@@ -74,25 +117,6 @@ double **copy_mat(double **A, int n)
     }
     return Ar;
 }
-
-double **create_empty_mat(int n)
-{
-    double **Ar = malloc(sizeof(double*)*n);
-    for(int i  = 0; i < n; i++)
-    {
-        Ar[i] = malloc(sizeof(double)*n);
-    }
-    for(int i = 0; i<n; i++)
-    {
-        for(int j = 0; j < n; j++)
-        {
-            Ar[i][j] = 0;
-        }
-    }
-    return Ar;
-}
-
-
 double **create_id_mat(int n)
 {
     double **Ar = malloc(sizeof(double*)*n);
@@ -154,7 +178,7 @@ double **inverse(double **A0, int n)
 /*
 int main()
 {
-    double **A = create_empty_mat(3);
+    double **A = create_empty_mat(3,3);
     A[0][0] = 1;
     A[0][1] = 2;
     A[0][2] = 3;
