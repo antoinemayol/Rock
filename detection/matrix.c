@@ -151,7 +151,7 @@ double **inverse(double **A0, int n)
     }
     return inv;
 }
-
+/*
 int main()
 {
     double **A = create_empty_mat(3);
@@ -178,4 +178,4 @@ int main()
     }
     free(inv);
     free(A);
-}
+*/

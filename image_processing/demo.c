@@ -12,7 +12,7 @@
 #include "otsu.h"
 #include "processing_final.h"
 #include "intermediate_process.h"
-
+/*
 int main(int argc, char** argv)
 {
     // Checking the number of arguments.
@@ -43,12 +43,12 @@ int main(int argc, char** argv)
     gaussian_blur(&image4, 5);
 
     //Inversing colors
-    /*Image image5 = image_copy(&image4);
-      inverse(&image5);*/
+    Image image5 = image_copy(&image4);
+      inverse(&image5);*
 
     //Applying Sobel
-    /*Image image4 = image_copy(&image3);
-      sobel(&image4);*/
+    /Image image4 = image_copy(&image3);
+      sobel(&image4);
     //Final binarization process
     Image image5 = image_copy(&image4);
     otsu(&image5);
@@ -90,5 +90,5 @@ int main(int argc, char** argv)
     //Noise reducing
     //Gaussian Blur
 
-
+*/
 
