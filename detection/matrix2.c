@@ -51,10 +51,11 @@ int p_search(double **A, int i, int n)
     return i_mem;
 }
 
-double **dot_matrix(double** mat1, double** mat2, int cols1, int cols2, int rows1, int rows2)
+double **dot_matrix(double** mat1, double** mat2, int rows1, int cols1, int rows2, int cols2)
 {
     if(cols1 == rows2)
     {
+        printf("WIW");
         double** res = create_empty_mat(rows1, cols2);
         for(int i = 0; i < rows1; i++)
         {
@@ -63,11 +64,17 @@ double **dot_matrix(double** mat1, double** mat2, int cols1, int cols2, int rows
                 double tmp = 0;
                 for(int n = 0; n < rows2; n++)
                 {
+                    printf("i,n: %d,%d ", i,n);
+                    printf("n,j: %d,%d\n", n,j);
+                    //printf("Mat1: %f ", mat1[i][n]);
+                   // printf("i:%d,MAT2: %f ", n,mat2[n][j]);
                     tmp += mat1[i][n] * mat2[n][j];
                 }
+                printf("\n");
                 res[i][j] = tmp;
             }
         }
+        printf("Finished!");
         return res;
     }
     else

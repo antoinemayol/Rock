@@ -14,7 +14,7 @@ EXE = ${SRC:.c=}
 all: test
 
 test: $(OBJ)
-	gcc -c $(CFLAGS) $^ $(LDLIBS)
+	gcc -c test $(CFLAGS) $^ $(LDLIBS)
 
 .PHONY: clean
 
