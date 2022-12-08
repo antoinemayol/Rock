@@ -52,10 +52,10 @@ void print_case(int **coo, int* mat, int width)
         int l = X2 - X1;
         int w = Y2 - Y1;
         printf("case %d:\n",i+1);
-        for(int j = 0; j < l; j++)
+        for(int j = X1; j < X2; j++)
         {
-            for(int k = 0; k < w; k++)
-                printf("%d", mat[(X1 + j)*width + Y1 + k]);
+            for(int k = Y1; k < Y2; k++)
+                printf("%d", mat[j*width + k]);
             printf("\n");
         }
         printf("\n");

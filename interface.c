@@ -9,7 +9,7 @@
 #include "solver/parser.h"
 #include "image_processing/processing_final.h"
 #include "image_rotation/rotation.h"
-
+#include "detection/detection.h"
 #include "interface/display.h"
 
 
@@ -152,7 +152,7 @@ char *on_file1_file_set(GtkFileChooserButton *f)
         else
             printf("%d",mat[i]);
     }*/
-    int** cases = detection(mat, w, h);
+    double** cases = detection(mat, w, h);
 	pixbuf = gdk_pixbuf_new_from_file(res,NULL);
 	gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);

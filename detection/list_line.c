@@ -39,13 +39,6 @@ int average_diff(struct listl* l)
     }
     return diff/(int) listl_len(l) - 1;
 }
-
-void supp_none_average(struct listl* l)
-{
-    int av = average_diff(l);
-
-}
-
 void listl_init(struct listl *list)
 {
    list->next = NULL;
