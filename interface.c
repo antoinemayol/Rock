@@ -81,6 +81,9 @@ void exit_app1()
 void exit_app()
 {
 	printf("Button clicked\n");
+ 
+
+
 
 	gtk_main_quit();
     
@@ -141,6 +144,7 @@ char *on_file1_file_set(GtkFileChooserButton *f)
     int w = 0;
     int h = 0;
     int *mat = image_processing(res,&w,&h);
+
     /*for (int i = 0; i < w*h;i++)
     {
         if (i % w == 0)

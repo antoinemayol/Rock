@@ -153,7 +153,7 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 
 				char *target = malloc(sizeof(char)*40);
 
-				strcpy(target,"interface/data/num_");
+				strcpy(target,"data/num_");
 				strcat(target,x);
 				strcat(target,"g.png");
 
@@ -192,7 +192,7 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 			char *target = malloc(sizeof(char)*40);
 
 
-			strcpy(target,"interface/data/num_");
+			strcpy(target,"data/num_");
 			strcat(target,x);
 			strcat(target,".png");
 
@@ -252,7 +252,7 @@ void New_img(int *grille)
     // - Resize the window according to the size of the image.
     SDL_SetWindowSize(window, w, h);*/
 
-	SDL_Surface *surface = IMG_Load("interface/data/blank_grid.png");
+	SDL_Surface *surface = IMG_Load("data/blank_grid.png");
 
 	texture = change_board(grille,1,surface,renderer);
 
@@ -272,5 +272,4 @@ void New_img(int *grille)
     SDL_Quit();
     printf("smash\n");
 
- 
 }
