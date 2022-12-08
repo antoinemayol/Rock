@@ -48,6 +48,15 @@ int** detection(int* mat, int w, int h)
     struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
      
     print_lines(new_lines, 4);
+    int xa = (int)(new_lines + 0)->distance;
+    int xb = (int)(new_lines + 0)->distance;
+    int xc = (int)(new_lines + 2)->distance;
+    int xd = (int)(new_lines + 2)->distance;
+    int ya = (int)(new_lines + 1)->distance;
+    int yb = (int)(new_lines + 3)->distance;
+    int yc = (int)(new_lines + 1)->distance;
+    int yd = (int)(new_lines + 3)->distance;
+
     free(nb_lines);
     free(detected_lines);
 
