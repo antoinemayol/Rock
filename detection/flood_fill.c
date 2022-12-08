@@ -95,11 +95,6 @@ int* flood_fill(int h, int w, int* matrix)
     int* max_area = *(colors_coo + max_color);
     
 
-    for(int i = 2; i < c + 1; i++)
-    {
-        if(i != max_color)
-            free(*(colors_coo + i));
-    }
-    free(colors_coo);
+   
     return max_area;
 }

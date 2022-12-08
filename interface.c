@@ -141,13 +141,14 @@ char *on_file1_file_set(GtkFileChooserButton *f)
     int w = 0;
     int h = 0;
     int *mat = image_processing(res,&w,&h);
-    for (int i = 0; i < w*h;i++)
+    /*for (int i = 0; i < w*h;i++)
     {
         if (i % w == 0)
             printf("%d\n",mat[i]);
         else
             printf("%d",mat[i]);
-    }
+    }*/
+    int** cases = detection(mat, w, h);
 	pixbuf = gdk_pixbuf_new_from_file(res,NULL);
 	gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);

@@ -44,7 +44,7 @@ int** detection(int* mat, int w, int h)
     int* nb_lines= malloc(sizeof(int));
     *nb_lines = 20;
     struct LineParameter* detected_lines = malloc(sizeof(LineParameter)**nb_lines);
-    HTLineDetection(sudoku_mat, nb_lines, detected_lines, h2, w2);
+    detected_lines = HTLineDetection(sudoku_mat, nb_lines, detected_lines, h2, w2);
     struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
      
     print_lines(new_lines, 4);
@@ -56,9 +56,13 @@ int** detection(int* mat, int w, int h)
     int yb = (int)(new_lines + 3)->distance;
     int yc = (int)(new_lines + 1)->distance;
     int yd = (int)(new_lines + 3)->distance;
-
+    //a en haut à gauche
+    //b en haut à droite
+    //c en bas à gauche
     free(nb_lines);
     free(detected_lines);
+
+    //Homography avec les 4corners
 
     int** cases = get_cases(h, w, sudoku_mat, new_lines);
 

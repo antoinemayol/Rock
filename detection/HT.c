@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include "LineParameter.h"
 
-void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter* DetectedLine, int nHeight, int nWidth);
+struct LineParameter* HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter* DetectedLine, int nHeight, int nWidth);
 void HoughTransform_Line(int* BinaryImageDst, float MinAngle, float AngleInterval, int No_Angles, float MinDistance,  float DistanceInterval, int No_Distances, unsigned int** VoteTable, int nHeight, int nWidth );
 void FindMaxVote(unsigned int** VoteTable, int No_Angles, int No_Distances, int* M, int* N);
 int FindArrayMax(unsigned int* Array, int No_of_Element);
 int Larger_in_Array(unsigned int* Array, int x, int y);
 
 
-void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter* DetectedLine, int nHeight, int nWidth)
+struct LineParameter* HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter* DetectedLine, int nHeight, int nWidth)
 {
 	int VoteThreshold=6*nHeight/13;
 	float DiagonalLength = sqrt((float)(nHeight*nHeight+nWidth*nWidth));
@@ -51,7 +51,7 @@ void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter*
 		float Angle_withMaxVote_Coarse = MinimumAngle+M*AngleInterval_Coarse;
 		float Distance_withMaxVote_Coarse = N*DistanceInterval_Coarse;
 		(*LineNumber) = *LineNumber + 1;
-		//DetectedLine = realloc(DetectedLine,sizeof(struct LineParameter)**LineNumber);
+		DetectedLine = realloc(DetectedLine,sizeof(struct LineParameter)**LineNumber);
         DetectedLine[(*LineNumber)-1].angle = Angle_withMaxVote_Coarse;
 		DetectedLine[(*LineNumber)-1].distance=Distance_withMaxVote_Coarse;
         //printf("a%f - %f - %d\n",DetectedLine[(*LineNumber)-1].distance,DetectedLine[(*LineNumber)-1].angle, *LineNumber);
@@ -96,6 +96,7 @@ void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter*
 	for(int i=0; i< NumberofAngles_Coarse;i++)
 		free(VoteTable_Coarse[i]);
 	free(VoteTable_Coarse);
+    return DetectedLine;
 }
 
 
