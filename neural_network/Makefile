@@ -9,13 +9,13 @@ LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
 #all: mtest ntest ftest
 	#${CC} ${CPPFLAGS} ${CFLAGS} $^ -o $@
 
-SRC = 	math_tool.c save_and_load.c neronXOR.c
+SRC = save_and_load.c neronXOR.c
 
 
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
-nerons: neronXOR.o save_and_load.o math_tool.o
+nerons: neronXOR.o save_and_load.o
 	${CC} -o $@ ${CFLAGS} $^ $(LDLIBS)
 
 -include ${DEP}
