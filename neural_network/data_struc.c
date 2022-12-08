@@ -38,7 +38,7 @@ void save_brain(Brain b, int i)
 Brain load_brain(char* path)
 {
 	Brain res = get_empty();
-	res.array = load(path, &res.len);
+	res.array = load(path);
 	return res;
 }
 
@@ -105,16 +105,4 @@ Brain* create_base(size_t nb_in, size_t nb_layers, size_t* len)
 
 int main()
 {
-	size_t len = 0;
-	Brain* test = create_base(3000, 100, &len);
-	printf("len : %zu\n",len);
-	
-	for(size_t i =0; i < len; i++)
-	{
-		printf("neu%zu : \n",i);
-		for(size_t j = 0; j < test[i].len; j++)
-		{
-			printf("    val %zu : %f\n",j,test[i].array[j]);
-		}
-	}
 }
