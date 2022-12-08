@@ -8,7 +8,6 @@
 #include "../image_processing/display.h"
 #include "LineParameter.h"
 
-
 void draw_lines(struct LineParameter *lp, char* path)
 {
     //Creating Image

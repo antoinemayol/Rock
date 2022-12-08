@@ -33,6 +33,9 @@ int* image_processing(char* path, int *w, int *h)
     grayscale(&image);
 
     //Increasing Brightness and inversing colors
+    increase_contrast(&image, 0.6);
+
+    //Decreasing contrast
     increase_brightness(&image);
 
     //Bluring image
@@ -40,6 +43,9 @@ int* image_processing(char* path, int *w, int *h)
 
     //Final binarization process
     otsu(&image);
+
+    //Applying Sobel
+    sobel(&image);
 
     //Converting pixels array to int array
     int *res = pixels_to_int(&image);

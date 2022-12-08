@@ -7,7 +7,7 @@
 #include "blur.h"
 #include "image.h"
 
-/*Applies Sobel algo to the image*/
+/*Applies Sobel filter to the image*/
 void sobel(Image *image)
 {
     //Generating convolution vertical(ker_gy) and horizontal(ker_gx) kernels
