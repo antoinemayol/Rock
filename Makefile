@@ -2,7 +2,7 @@
 
 CC = gcc
 CPPFLAGS =
-CFLAGS = -Wall -g -Wextra `pkg-config --cflags sdl2 SDL2_image gtk+-3.0` -rdynamic -fsanitize=address
+CFLAGS = -Wall -g -Wextra `pkg-config --cflags sdl2 SDL2_image gtk+-3.0` -rdynamic 
 LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image gtk+-3.0`
 
 TARGET = interface

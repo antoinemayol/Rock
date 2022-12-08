@@ -54,8 +54,41 @@ int** extract_intersections(int* horizontal_equ, int* vertical_equ, int lenh, in
         }
     return coordonates;
 }
+void __tej_bordure(int h, int w, int* mat, int x, int y)
+{
+    if(x>=0 && y >=0 && x<h && y<w && *(mat + x*w +y) != 0)
+    {
+        *(mat+x*w+y) = 0;
+        __tej_bordure(h,w,mat, x, y + 1);
+        __tej_bordure(h,w,mat, x+1, y);
+        __tej_bordure(h,w,mat, x, y - 1);
+        __tej_bordure(h,w,mat, x-1, y);
+    }
+}
+void tej_bordure(int h, int w, int* mat)
+{
+    __tej_bordure(h,w,mat, 0,0);
+    __tej_bordure(h,w,mat, 0,w-1);
+    __tej_bordure(h,w,mat, h-1,0);
+    __tej_bordure(h,w,mat, h-1,w-1);
+}
 
-void stockage_cases(int** coo, int* matrix, int width, int** cases)
+double* convert_to_double(int* m)
+{
+    double* res = malloc(sizeof(double)*25*25);
+    int is_empty = 1;
+    for(int i = 0; i < 25*25;i++)
+    {
+        *(res + i) = (double)*(m + i);
+        if(*(res + i) == 1)
+            is_empty = 0;
+    }
+    if(is_empty)
+        return NULL;
+    return res;
+}
+
+double** stockage_cases(int** coo, int* matrix, int width, int** cases)
 {
     /* Stock all matrix of cases
      * ARGS:
@@ -69,6 +102,8 @@ void stockage_cases(int** coo, int* matrix, int width, int** cases)
     int nb_case = 81;
     int l = 0;
     int w = 0;
+
+    double** final = malloc(sizeof(double*)*81);
     for(int i = 0 ; i < nb_case ; ++i)
     {
         int X1 = *(*(coo+i));
@@ -82,21 +117,13 @@ void stockage_cases(int** coo, int* matrix, int width, int** cases)
             for(int k = 0; k < w; k++)
                 *(new +j*w + k) = *(matrix +(X1 + j)*width + Y1 + k);
         *(cases + i ) = new;
-
-    } 
-    int* new_bruh = resize(l, w, *(cases), 25);
-    print_mat(25,25,new_bruh,0,0,25,25);
+        int* resized = resize(l,w,*(cases +i),25);
+        tej_bordure(25,25,resized);
+               
+        *(final + i) = malloc(sizeof(double)*25*25);
+        *(final + i) = convert_to_double(resized);
+        if(*(final + i) != NULL)
+            print_mat(25,25,resized,0,0,25,25);
+    }
+    return final;
 }
-
-int** get_cases(int h, int w, int* matrix, struct LineParameter* lines)
-{
-    int y1 = (int)(lines)->distance;
-    int x1 = (int)(lines + 1)->distance;
-    int y2 = (int)(lines + 2)->distance;
-    int x2 = (int)(lines + 3)->distance;
-    printf("%d %d %d %d-%d\n", x1, y1, x2, y2,w);
-    int** cases = malloc(sizeof(int*)*81);
-    return cases;
-}
-
-

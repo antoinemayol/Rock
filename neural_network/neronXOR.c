@@ -69,15 +69,16 @@ double* create_ar(SDL_Surface *surface)
 //get the maximum value in in the "arr" double array
 int get_maxi(double* arr)
 {
-    int index = 0;
+    int i = 0;
     int res = 0;
-    while(index < 10)
+    while(i < 10)
     {
-        if(arr[index] > arr[res])
+        printf("mx = %f\n",arr[i]);
+        if(arr[i] >= arr[res])
         {
-            res = index;
+            res = i;
         }
-        index++;
+        i++;
     }
     return res;
 }
@@ -409,13 +410,13 @@ void set_scratch()
 //Proccess a prediction
 int forward(double* input)
 {
-    double* hidwgt = load("neurones/nerons1.txt");
-    double* hidlay = load("neurones/nerons2.txt");
-    double* hidlayBias = load("neurones/nerons3.txt");
+    double* hidwgt = load("neural_network/neurones/nerons1.txt");
+    double* hidlay = load("neural_network/neurones/nerons2.txt");
+    double* hidlayBias = load("neural_network/neurones/nerons3.txt");
 
-    double* outwgt = load("neurones/nerons4.txt");
-    double* outlay = load("neurones/nerons5.txt");
-    double* outlayBias = load("neurones/nerons6.txt");
+    double* outwgt = load("neural_network/neurones/nerons4.txt");
+    double* outlay = load("neural_network/neurones/nerons5.txt");
+    double* outlayBias = load("neural_network/neurones/nerons6.txt");
 
     for(int j = 0; j < nbHidNod; j++)
     {
@@ -437,11 +438,8 @@ int forward(double* input)
         outlay[j] = sig(z);
     }
 
-    for(int i = 0; i < nbOut; i++)
-    {
-        printf("number %d : %f \n",i,outlay[i]);
-    }
    int res = get_maxi(outlay);
+   printf("res = %d\n",res);
    free(hidwgt);
    free(hidlay);
    free(hidlayBias);
@@ -473,21 +471,21 @@ void train_dataset()
 //in "inputs"
 int* final_fun(double** inputs)
 {
+    int c = 0;
     int* res = malloc(81 * sizeof(int));
     for(int i = 0; i < 81 ; i++)
     {
         if(inputs[i] == NULL)
         {
             res[i] = 0;
+            c++;
         }
         else
         {
             res[i] = forward(inputs[i]);
         }
-        free(inputs[i]);
-        i++;
     }
-    free(inputs);
+    printf("c = %d\n",c);
     return res;
 }
 

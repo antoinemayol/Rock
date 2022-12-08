@@ -28,10 +28,8 @@ double** detection(int* mat, int w, int h)
         for(int j = 0; j < w; j++)
             *(tmp_mat + i*w + j) = *(mat +i*w + j)==0?1:0;
     
-
     int* max_area = flood_fill(h, w, tmp_mat); 
     free(tmp_mat);
-
     int x1 = *(max_area);
     int y1 = *(max_area + 1);
     int x2 = *(max_area + 2);
@@ -76,9 +74,7 @@ double** detection(int* mat, int w, int h)
     }
 
     int** cases = malloc(sizeof(int*)*81);
-    stockage_cases(coo, sudoku_mat, w2, cases);
-
-    double** final_cases = malloc(sizeof(double*)*81);
+    double** final_cases = stockage_cases(coo, sudoku_mat, w2, cases);
 
     //print_case(coo, sudoku_mat, w2);
 

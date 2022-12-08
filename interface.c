@@ -10,6 +10,7 @@
 #include "image_processing/processing_final.h"
 #include "image_rotation/rotation.h"
 #include "detection/detection.h"
+#include "neural_network/neronXOR.h"
 #include "interface/display.h"
 
 
@@ -140,7 +141,6 @@ char *on_file1_file_set(GtkFileChooserButton *f)
     {
         return NULL;
     }*/
-	printf("filename : %s\n",res);
     int w = 0;
     int h = 0;
     int *mat = image_processing(res,&w,&h);
@@ -153,12 +153,14 @@ char *on_file1_file_set(GtkFileChooserButton *f)
             printf("%d",mat[i]);
     }*/
     double** cases = detection(mat, w, h);
+    int *sudoku = final_fun(cases);
 	pixbuf = gdk_pixbuf_new_from_file(res,NULL);
 	gdk_pixbuf_scale_simple(pixbuf,50,50,GDK_INTERP_BILINEAR);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image),pixbuf);
     gdk_pixbuf_save(pixbuf,"base_grille.png","png",NULL,NULL);
     printf("pass\n"); 
-    New_img(grille);
+    New_img(sudoku);
+    printf("lol\n");
 	return res;
 }
 
