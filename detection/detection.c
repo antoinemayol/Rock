@@ -4,33 +4,54 @@
 #include "cut.h"
 #include <math.h>
 #include <stdlib.h>
-#include "print_function.h"
 #include "LineParameter.h"
 #include "flood_fill.h"
 
+int* extract_matrix(int l, int w, int *matrix, int x1, int y1, int x2, int y2)
+{
+
+    int h2 = x2 - x1;
+    int w2 = y2 - y1;
+
+    int* new_mat = malloc(sizeof(int)*h2*w2);
+    for(int i = x1 ; i < x2 ; ++i)
+    	for (int j = y1; j < y2; ++j)
+            *(new_mat+ (i-x1)*w2 + (j-y1))=*(matrix + i*w + j);
+    return new_mat;
+}
+
 int** detection(int* mat, int w, int h)
 {
+
     int* tmp_mat = malloc(sizeof(int)*w*h);
     for(int i =  0; i < h; i++)
         for(int j = 0; j < w; j++)
-            *(tmp_mat + i*w + j) = *(mat +i*w + j);
-    int* lol = flood_fill(h, w, tmp_mat); 
-    free(tmp_mat);
-    for(int i =0; i<h;i++)
-        for(int j =0; j<w;j++)
-            *(mat +i*w +h) = !*(mat +i*w +h);
+            *(tmp_mat + i*w + j) = *(mat +i*w + j)==0?1:0;
+    
 
+    int* max_area = flood_fill(h, w, tmp_mat); 
+    free(tmp_mat);
+
+    int x1 = *(max_area);
+    int y1 = *(max_area + 1);
+    int x2 = *(max_area + 2);
+    int y2 = *(max_area + 3);
+    int* sudoku_mat = extract_matrix(h,w,mat,x1,y1,x2,y2);
+    
+    int* h2 = x2-x1;
+    int* w2 = y2-y1;
+    
     int* nb_lines= malloc(sizeof(int));
     *nb_lines = 20;
     struct LineParameter* detected_lines = malloc(sizeof(LineParameter)**nb_lines);
-
-    HTLineDetection(mat, nb_lines, detected_lines, h, w);
+    HTLineDetection(sudoku_mat, nb_lines, detected_lines, h2, w2);
     struct LineParameter* new_lines = FilterLines(detected_lines, 50, 8, nb_lines);
      
+    print_lines(new_lines, 4);
     free(nb_lines);
     free(detected_lines);
 
-    int** cases = get_cases(h, w, mat, new_lines);
+    int** cases = get_cases(h, w, sudoku_mat, new_lines);
 
     free(new_lines);
     free(mat);

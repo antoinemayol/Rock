@@ -1,49 +1,48 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "dot.h"
+#include "flood_fill.h"
+#include "vector.h"
 
-int __flood_fill(int h, int w, int* matrix, int x, int y, int c)
+int __flood_fill(int h, int w, int* matrix, struct dot* d, int c)
 {
-    *(matrix + x*w + y) = c;
+    struct vector* v = vector_new();
+    vector_push(v,d);
     int size = 1;
-    printf("%d\n",h);
-    if(x>0 && *(matrix + (x-1)*w + y)==0)
-        size += __flood_fill(h, w, matrix, x-1, y, c);
-    if(y>0 && *(matrix + x*w + (y-1))==0)
-        size += __flood_fill(h, w, matrix, x, y-1, c);
-    if(x<h-1 && *(matrix + (x+1)*w + y)==0)
-        size += __flood_fill(h, w, matrix, x+1, y, c);
-    if(y<w-1 && *(matrix + x*w + (y+1))==0)
-        size += __flood_fill(h, w, matrix, x, y+1, c);
-    return size;
-}
-
-int _calculate_size(int* colors_coo)
-{
-    int x1 = *(colors_coo);
-    int y1 = *(colors_coo + 1);
-    int x2 = *(colors_coo + 2);
-    int y2 = *(colors_coo + 3);
-
-    return (x2-x1)*(y2-x2);
-}
-
-int* get_max_obj(int** colors, int nb)
-{
-    int max = 0;
-    int max_i = 0;
-    
-    for(int i = 2; i < nb; i++)
+    *(matrix + d->x*w + d->y) = c;
+    while(v->size>0)
     {
-        int size = _calculate_size(*(colors + i));
-        if(size > max)
+        int i = vector_pop(v, d);
+        int x = d->x;
+        int y = d->y;
+
+        size++;
+        if(y<w-1 && *(matrix + x*w + (y+1)) == 0)
         {
-            max = size;
-            max_i = i;
-            printf("%d\n",i);
+            struct dot* d1 = init_dot(x,y+1);
+            vector_push(v,d1);
+            *(matrix + x*w + (y+1)) = c;
+        }
+        if(x<h-1 && *(matrix + (x+1)*w + y) == 0)
+        {
+            struct dot* d2 = init_dot(x+1,y);
+            vector_push(v,d2);
+            *(matrix + (x+1)*w + y) = c;
+        }
+        if(y>0 && *(matrix + x*w + (y-1)) == 0)
+        {
+            struct dot* d3 = init_dot(x,y-1);
+            vector_push(v,d3);
+            *(matrix + x*w + (y-1)) = c;
+        }
+        if(x>0 && *(matrix + (x-1)*w + y) == 0)
+        {
+            struct dot* d4 = init_dot(x-1,y);
+            vector_push(v,d4);
+            *(matrix + (x-1)*w + y) = c;
         }
     }
-
-    return *(colors + max_i);
+    return size;
 }
 
 int* flood_fill(int h, int w, int* matrix)
@@ -61,8 +60,8 @@ int* flood_fill(int h, int w, int* matrix)
             {
                 if(val == 0)
                 {
-                    int size = __flood_fill(h,w,matrix,x,y,c);
-                    
+                    struct dot* d = init_dot(x,y);
+                    int size = __flood_fill(h,w,matrix,d,c);
                     colors_coo = realloc(colors_coo, sizeof(int*)*(c+1));
                     *(colors_coo + c) = malloc(sizeof(int)*4);
                     
@@ -94,16 +93,13 @@ int* flood_fill(int h, int w, int* matrix)
         }
     }
     int* max_area = *(colors_coo + max_color);
-    int x1 = *(max_area);
-    int y1 = *(max_area + 1);
-    int x2 = *(max_area + 2);
-    int y2 = *(max_area + 3);
+    
 
     for(int i = 2; i < c + 1; i++)
     {
-        free(*(colors_coo + i));
+        if(i != max_color)
+            free(*(colors_coo + i));
     }
-    printf("%d %d %d %d\n",x1, y1, x2, y2);
     free(colors_coo);
-    return NULL;
+    return max_area;
 }
