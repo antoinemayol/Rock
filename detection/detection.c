@@ -20,7 +20,7 @@ int* extract_matrix(int w, int *matrix, int x1, int y1, int x2, int y2)
     return new_mat;
 }
 
-int** detection(int* mat, int w, int h)
+double** detection(int* mat, int w, int h)
 {
 
     int* tmp_mat = malloc(sizeof(int)*w*h);
@@ -78,10 +78,13 @@ int** detection(int* mat, int w, int h)
     int** cases = malloc(sizeof(int*)*81);
     stockage_cases(coo, sudoku_mat, w2, cases);
 
+    double** final_cases = malloc(sizeof(double*)*81);
+
     //print_case(coo, sudoku_mat, w2);
 
     free(new_lines);
     free(mat);
-    return cases;
+    free(cases);
+    return final_cases;
 }
 
