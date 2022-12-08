@@ -18,9 +18,7 @@ struct LineParameter* HTLineDetection(int* BinaryImageDst, int* LineNumber, stru
 	float MinimumAngle = 0;
 	float MaximumAngle = 90;
 	float AngleInterval_Coarse = 2;
-	float AngleInterval_Fine = 0.1;
 	float DistanceInterval_Coarse =2;
-	float DistanceInterval_Fine =1;
 
 	int NumberofAngles_Coarse = (int)(MaximumAngle/AngleInterval_Coarse)+1;
 	int NumberofDistances_Coarse = (int)DiagonalLength/DistanceInterval_Coarse+1;

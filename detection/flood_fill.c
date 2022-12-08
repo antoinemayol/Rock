@@ -12,7 +12,7 @@ int __flood_fill(int h, int w, int* matrix, struct dot* d, int c)
     *(matrix + d->x*w + d->y) = c;
     while(v->size>0)
     {
-        int i = vector_pop(v, d);
+        vector_pop(v, d);
         int x = d->x;
         int y = d->y;
 

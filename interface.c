@@ -9,7 +9,7 @@
 #include "solver/parser.h"
 #include "image_processing/processing_final.h"
 #include "image_rotation/rotation.h"
-
+#include "detection/detection.h"
 #include "interface/display.h"
 
 

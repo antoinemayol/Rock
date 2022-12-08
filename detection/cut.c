@@ -12,8 +12,8 @@ int* resize(int h, int w, int* matrix, int new)
     float x_rat = (float)(w - 1)/(new - 1);
     float y_rat = (float)(h - 1)/(new - 1);
 
-    for(int i = 0; i < h; i++)
-        for(int j = 0; j< w; j++)
+    for(int i = 0; i < new; i++)
+        for(int j = 0; j< new; j++)
         {
             int x_l = floor(x_rat * j);
             int y_l = floor(x_rat * i);
@@ -32,7 +32,7 @@ int* resize(int h, int w, int* matrix, int new)
                     + b * x_w * (1 - y_w) +
                     c * y_w * (1 - y_w) +
                     d * x_w * y_w;
-            resized[i*w + j] = pixel;
+            resized[i*new + j] = pixel;
         }
     return resized;
 }
@@ -67,20 +67,25 @@ void stockage_cases(int** coo, int* matrix, int width, int** cases)
      *  none
      */
     int nb_case = 81;
+    int l = 0;
+    int w = 0;
     for(int i = 0 ; i < nb_case ; ++i)
     {
         int X1 = *(*(coo+i));
         int Y1 = *(*(coo+i) +1);
         int X2 = *(*(coo+i) +2);
         int Y2 = *(*(coo+i) +3);
-        int l = X2 - X1;
-        int w = Y2 - Y1;
+        l = X2 - X1;
+        w = Y2 - Y1;
         int* new = malloc(sizeof(int)*l*w); 
         for(int j = 0; j < l; j++)
             for(int k = 0; k < w; k++)
                 *(new +j*w + k) = *(matrix +(X1 + j)*width + Y1 + k);
-        *(cases + (i/9)*9 + 9 - i % 9 - 1) = new;
+        *(cases + i ) = new;
+
     } 
+    int* new_bruh = resize(l, w, *(cases), 25);
+    print_mat(25,25,new_bruh,0,0,25,25);
 }
 
 int** get_cases(int h, int w, int* matrix, struct LineParameter* lines)

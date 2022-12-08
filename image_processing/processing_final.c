@@ -45,7 +45,7 @@ int* image_processing(char* path, int *w, int *h)
     otsu(&image);
 
     //Applying Sobel
-    sobel(&image);
+    //sobel(&image);
 
     //Converting pixels array to int array
     int *res = pixels_to_int(&image);
