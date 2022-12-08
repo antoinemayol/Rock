@@ -79,7 +79,7 @@ matrix* mult_m(matrix* mat1, matrix* mat2)
     }
     else
     {
-        errx(1,"matrices does not have same dim !");
+        errx(1,"mutl : matrices does not have same dim !");
     }
 }
 
@@ -99,7 +99,7 @@ matrix* add_m(matrix* mat1, matrix* mat2)
     }
     else
     {
-        errx(1,"matrices does not have same dim !");
+        errx(1,"add : matrices does not have same dim ! m1 : %d %d m2 : %d %d",mat1->rows,mat1->cols,mat2->rows,mat2->cols);
     }
 }
 
@@ -119,7 +119,7 @@ matrix* sub_m(matrix* mat1, matrix* mat2)
     }
     else
     {
-        errx(1,"matrices does not have same dim !");
+        errx(1,"sub : matrices does not have same dim !");
     }
 }
 
@@ -189,12 +189,13 @@ matrix* add_scale_m(matrix* mat, double lamb)
 
 matrix* trans_m(matrix* mat)
 {
-    matrix* res = create_mat(mat->rows, mat->cols);
+    matrix* res = create_mat(mat->cols, mat->rows);
     for(int i = 0; i < mat->rows; i++)
     {
         for(int j = 0; j < mat->cols; j++)
         {
-            res->inputs[i][j] = mat->inputs[j][i];
+            printf("here2 : %d\n",j);
+            res->inputs[j][i] = mat->inputs[i][j];
         }
     }
     return res;
