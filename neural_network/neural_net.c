@@ -6,10 +6,11 @@ neuralnet* create_neur(double lr, int in, int hid, int out)
     neuralnet* neu = malloc(sizeof(neuralnet));
     neu->lr = lr;
     neu->input = in;
+    neu->hidden = hid;
     neu->output = out;
 
-    matrix* hidd_wgt = create_mat(out, hid);
-    matrix* out_wgt = create_mat(hid,in);
+    matrix* hidd_wgt = create_mat(hid, in);//old ---> inverse
+    matrix* out_wgt = create_mat(out, hid);
 
     fill_rand_m(hidd_wgt);
     fill_rand_m(out_wgt);
@@ -29,10 +30,9 @@ void train_net(neuralnet* neu, matrix* in, matrix* out)
     matrix* out_ins = dot_m(neu->output_w, hidd_out);
     matrix* out_out = sig_m(out_ins);
 
-
     //Compute error rate
     matrix* out_err = sub_m(out, out_out);
-
+    
     matrix* tmp_err = trans_m(neu->output_w);
     matrix* hid_err = dot_m(tmp_err,out_err);
     free_m(tmp_err);
@@ -60,7 +60,9 @@ void train_net(neuralnet* neu, matrix* in, matrix* out)
     matrix* t_m = trans_m(in);
     matrix* d_m = dot_m(t_m, m_m);
     matrix* lr_m = mult_scale_m(d_m, neu->lr);
+    printf("aqui %f\n",neu->hidden_w->inputs[0][0]);
     matrix* a_m = add_m(neu->hidden_w, lr_m);
+    printf("aqui2\n");
     neu->hidden_w = a_m;
 
     free_m(a_m);
