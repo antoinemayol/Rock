@@ -2,28 +2,38 @@
 
 CC = gcc
 CPPFLAGS =
-CFLAGS = -Wall -g -Wextra `pkg-config --cflags sdl2 SDL2_image` -fsanitize=address -g
-LDFLAGS =
-LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image`
+CFLAGS = -Wall -g -Wextra `pkg-config --cflags sdl2 SDL2_image gtk+-3.0` -rdynamic
+LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image gtk+-3.0`
 
-SUBDIRS = image_processing detection solver
-MAKECMDGOALS = all
+TARGET = interface
+BUILD := build
 
-TARGET = main.c
-SRC = $(shell find ./image_processing -name "*.c" ! -name "test.c" ! -name "demo.c")  $(shell find ./detection -name "*.c" ! -name "test.c" ! -name "demo.c") $(shell find ./solver -name "*.c" ! -name "test.c" ! -name "demo.c")
-OBJ = $(patsubst %.c, %.o, $(SRC))
-EXE = ${TARGET:.c=}
+SRC = $(shell find ./ -name "*.c" ! -name "main.c")
+OBJ = $(SRC:%.c=$(BUILD)/%.o)
+DEP = $(SRC:%.c=$(BUILD)/%.d)
 
+all: init main clear
 
-all:$(SUBDIRS)
-	gcc -o $(EXE) $(CFLAGS) $(TARGET) $(OBJ) $(LDLIBS)
+clear:
+	find . -type d -empty -delete
 
-$(SUBDIRS):
-	$(MAKE) -C $@ $(MAKECMDGOALS)
+init:
+	$(shell mkdir -p $(BUILD))
+	$(shell mkdir -p $(SRC:%.c=$(BUILD)/%))
 
+main: $(OBJ)
+	gcc -o $@ $(CFLAGS) $^ $(LDLFLAGS) $(LDLIBS)
+
+$(BUILD)/%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@ $(LDLFLAGS) $(CPPFLAGS) $(LDLIBS)
 
 .PHONY: all $(SUBDIRS)
 
 clean:
 	$(RM) -f $(EXE) $(OBJ)
+	rm -rf $(BUILD)
+	${RM} ${OBJ} ${DEP} main
+	${RM} grille.bmp grille_g.bmp
+	clear
+
 # END

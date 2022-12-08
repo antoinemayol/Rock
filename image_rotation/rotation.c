@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+const int INIT_WIDTH = 640;
+const int INIT_HEIGHT = 400;
 
 
 /*Determine pixel value at position x,y*/
@@ -123,4 +125,105 @@ SDL_Surface* SDL_RotationCentrala(SDL_Surface* origine, float angle)
 			}
 		}
 	return destination;
+}
+
+
+//take a new SDL_Surface from an image to use her
+SDL_Surface* load_image1(const char* path)
+{
+    SDL_Surface* new_surface = IMG_Load(path);
+    SDL_Surface* format = SDL_ConvertSurfaceFormat( new_surface, SDL_PIXELFORMAT_RGB888, 0);
+    return format;
+}
+
+//change the name of the new file
+char *name_filled(char* img_name)
+{
+    int i = 0;
+    for(;img_name[i] != '\0';i++);
+    char *res = malloc(sizeof(int)*i+8);
+    char *end = "Rot.bmp";
+    int y = 0;
+    for(;img_name[y]!= '\0';y++)
+    {
+        res[y]=img_name[y];
+    }
+    y++;
+    int z =0;
+    while(z < 8)
+    {
+        res[y]= end[z];
+        y++;
+        z++;
+    }
+ 
+    return res;
+
+}
+
+int princip(char* argv,float angle)
+{
+    // Checks the number of arguments.
+
+
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+
+    SDL_Window* window = SDL_CreateWindow("Display", 0, 0, INIT_WIDTH, INIT_HEIGHT,
+            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    if (window == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    // - Create a window.
+    // - Create a renderer.
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+    
+
+   
+    
+
+    // - Create a texture from the image.
+    const char *img_P = argv;
+    SDL_Texture* texture= IMG_LoadTexture(renderer,img_P);
+    if(texture == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    SDL_Surface* surface= load_image1(img_P);
+
+    // Gets the width and the height of the texture.
+    int w = surface->w;
+    int h = surface->h;
+
+    if (SDL_QueryTexture(texture, NULL, NULL, &w, &h) != 0)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+
+
+    SDL_SetWindowSize(window, w, h);
+    
+
+    // - Dispatch the events.
+    //event_loop(renderer,texture,surface,angle);
+
+    SDL_Surface *result = SDL_RotationCentrala(surface,angle);
+
+    //char *res = name_filled(argv[1]);
+    if(SDL_SaveBMP(result,"imageRot.bmp") != 0)
+    {
+        printf("SDL_SaveBMP failed: %s\n", SDL_GetError());
+    }
+
+
+
+    // - Destroy the objects.i
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return EXIT_SUCCESS;
 }

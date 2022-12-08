@@ -17,7 +17,7 @@ int grille[9*9] = { 0, 0, 6, 2, 0, 0, 0, 8, 0 ,
            		0, 5, 0, 0, 0, 1, 2, 0, 0 };*/
 
 int pos[9] = {8,112,216,324,428,532,640,744,848};
-int state = 2;
+
 
 // Updates the display.
 //
@@ -151,9 +151,9 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 				x[0] = bb[j] + 48;
 				x[1] = '\0';
 
-				char *target = malloc(sizeof(char)*16);
+				char *target = malloc(sizeof(char)*40);
 
-				strcpy(target,"data/num_");
+				strcpy(target,"interface/data/num_");
 				strcat(target,x);
 				strcat(target,"g.png");
 
@@ -189,10 +189,10 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 			x[0] = board[i] + 48;
 			x[1] = '\0';
 
-			char *target = malloc(sizeof(char)*30);
+			char *target = malloc(sizeof(char)*40);
 
 
-			strcpy(target,"data/num_");
+			strcpy(target,"interface/data/num_");
 			strcat(target,x);
 			strcat(target,".png");
 
@@ -218,7 +218,7 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 
 }
 
-int New_img(int *grille)
+void New_img(int *grille)
 {
 
     // - Initialize the SDL.
@@ -239,7 +239,6 @@ int New_img(int *grille)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
 
-
     // - Create a texture from the image.
     SDL_Texture* texture;/*   = IMG_LoadTexture(renderer, "data/blank_grid.png");
     if(texture == NULL)
@@ -253,24 +252,25 @@ int New_img(int *grille)
     // - Resize the window according to the size of the image.
     SDL_SetWindowSize(window, w, h);*/
 
-	SDL_Surface *surface = IMG_Load("data/blank_grid.png");
+	SDL_Surface *surface = IMG_Load("interface/data/blank_grid.png");
 
 	texture = change_board(grille,1,surface,renderer);
+
 
 	SDL_SaveBMP(surface,"grille.bmp");
 
     texture = change_board(grille,2,surface,renderer);
 
     SDL_SaveBMP(surface,"grille_g.bmp");
-
     //event_loop(renderer,texture);
 
 
     // - Destroy the objects.
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    //SDL_DestroyTexture(texture);
+    //SDL_DestroyRenderer(renderer);
+    //SDL_DestroyWindow(window);
     SDL_Quit();
+    printf("smash\n");
 
-    return EXIT_SUCCESS;
+ 
 }
