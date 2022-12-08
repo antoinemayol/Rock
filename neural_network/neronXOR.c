@@ -66,7 +66,7 @@ double* create_ar(SDL_Surface *surface)
     return res;
 }
 
-int get_max(double* arr)
+int get_maxi(double* arr)
 {
     int index = 0;
     int res = 0;
@@ -436,7 +436,7 @@ int forward(double* input)
     {
         printf("number %d : %f \n",i,outlay[i]);
     }
-   int res = get_max(outlay);
+   int res = get_maxi(outlay);
    free(hidwgt);
    free(hidlay);
    free(hidlayBias);
@@ -446,31 +446,8 @@ int forward(double* input)
    return res;
 }
 
-int main()
+void train_dataset()
 {
-    /*
-	if(strcmp("--train",argv[1]) == 0 && argc == 3)
-    {
-        int limit = atoi(argv[2]);
-        printf("SETTED LIMIT : %d\n\n",limit);
-
-        if(limit < 0 || limit > 50000)
-        {
-            errx(1,"limit is too high !\n");
-        }
-
-        proceed(limit);
-        return 0;
-    }
-
-    if(strcmp(argv[1], "--exec") == 0 && argc == 2)
-    {
-        forward(testMat1);
-        return 0;
-    }
-    errx(1,"Call with --train {arg} or --exec");
-    */
-   
     set_scratch();
     for(int i = 0; i < 25; i++)
     {
@@ -483,8 +460,31 @@ int main()
         }
         printf("done %d iter\n",i+1);
     }
-    
-    
+
+}
+
+int* final_fun(double** inputs)
+{
+    int* res = malloc(81 * sizeof(int));
+    for(int i = 0; i < 81 ; i++)
+    {
+        if(inputs[i] == NULL)
+        {
+            res[i] = 0;
+        }
+        else
+        {
+            res[i] = forward(inputs[i]);
+        }
+        free(inputs[i]);
+        i++;
+    }
+    return res;
+}
+/*
+int main()
+{
+    train_dataset();
     double inMat2[625] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
                            0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
@@ -589,11 +589,11 @@ int main()
                             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
     //printf("result : %d\n",forward(inMat7));
-    printf("result : %d\n",forward(inMat6));
+    //printf("result : %d\n",forward(inMat6));
     //printf("result : %d\n",forward(inMat9));
     //printf("result : %d\n",forward(inMat2));
-  /* 
-    double** test = get_trainset("19");
+  
+    double** test = get_trainset("9");
 
     for(int i = 0; i<=9; i++)
     {
@@ -608,5 +608,5 @@ int main()
                 printf(" ");
         }
         printf("\n");
-    }*/
-}
+    }
+}*/
