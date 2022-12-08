@@ -6,24 +6,19 @@ LDLIBS = `pkg-config --libs gtk+-3.0` -lm `pkg-config --libs sdl2 SDL2_image`
 
 
 
-EXE =  interface disp
+EXE = disp
 IMG = grille.bmp grille_g.bmp
 OBJ = ${all:.c=.o}
 
 
-
-all: interface display
-
-$(foreach f, $(EXE), $(eval *(f):))
-
-
-display: display.o
+all: display.o
 	gcc -o disp $(CFLAGS) $^ $(LDLIBS)
 
 .PHONY: clean
 
 clean:
 	${RM} $(EXE)
+	${RM} interface
 	${RM} display.o
 	${RM} $(IMG)
 

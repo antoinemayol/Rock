@@ -50,11 +50,11 @@ void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter*
 		MaxVote = VoteTable_Coarse[M][N];
 		float Angle_withMaxVote_Coarse = MinimumAngle+M*AngleInterval_Coarse;
 		float Distance_withMaxVote_Coarse = N*DistanceInterval_Coarse;
-		(*LineNumber) = *LineNumber + 1;;
-		DetectedLine[(*LineNumber)-1].angle = Angle_withMaxVote_Coarse;
+		(*LineNumber) = *LineNumber + 1;
+		//DetectedLine = realloc(DetectedLine,sizeof(struct LineParameter)**LineNumber);
+        DetectedLine[(*LineNumber)-1].angle = Angle_withMaxVote_Coarse;
 		DetectedLine[(*LineNumber)-1].distance=Distance_withMaxVote_Coarse;
-		//printf("%f - %f - %d",Angle_withMaxVote_Coarse,Distance_withMaxVote_Coarse,MaxVote);
-
+        //printf("a%f - %f - %d\n",DetectedLine[(*LineNumber)-1].distance,DetectedLine[(*LineNumber)-1].angle, *LineNumber);
 		VoteTable_Coarse[M][N]=0;
 
 		if(N>0){
@@ -86,7 +86,6 @@ void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter*
 		{
 			VoteTable_Coarse[M+1][N]=0;
 		}
-
 		
 	}
 	
@@ -95,10 +94,7 @@ void HTLineDetection(int* BinaryImageDst, int* LineNumber, struct LineParameter*
 
 
 	for(int i=0; i< NumberofAngles_Coarse;i++)
-	{
 		free(VoteTable_Coarse[i]);
-	}
-
 	free(VoteTable_Coarse);
 }
 

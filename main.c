@@ -25,9 +25,10 @@ int main()
     */
     int w = 0;
     int h = 0;
-    int* bin_mat = image_processing("images/image_06.jpeg",&w,&h);
+    int* bin_mat = image_processing("images/image_04.jpeg",&w,&h);
     int** cases = detection(bin_mat, w, h);
-    free(bin_mat); 
+    free(bin_mat);
+    free(cases);
     printf("lol\n");
     return 1;
 

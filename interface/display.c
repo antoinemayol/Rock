@@ -1,9 +1,10 @@
 #include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "../solver/solver.h"
 
 
-
+/*
 
 int grille[9*9] = { 0, 0, 6, 2, 0, 0, 0, 8, 0 ,
       	   		0, 0, 8, 9, 7, 0, 0, 0, 0 ,
@@ -13,7 +14,7 @@ int grille[9*9] = { 0, 0, 6, 2, 0, 0, 0, 8, 0 ,
            		6, 0, 0, 0, 5, 0, 0, 0, 0 ,
            		0, 0, 2, 0, 4, 7, 1, 0, 0 ,
            		0, 0, 3, 0, 2, 8, 4, 0, 0 ,
-           		0, 5, 0, 0, 0, 1, 2, 0, 0 };
+           		0, 5, 0, 0, 0, 1, 2, 0, 0 };*/
 
 int pos[9] = {8,112,216,324,428,532,640,744,848};
 int state = 2;
@@ -53,12 +54,12 @@ void event_loop(SDL_Renderer* renderer, SDL_Texture* texture)
                 break;
         }
     }
-}*/
+}*//*
 //______________________________________________________________________________________________________________________________
 int absentOnRow (int k, int *grid, int i)
 {
 	for(int j = 0; j < 9;j++)
-	{
+
 		if(grid[i*9+j] == k)
 			return 0;
 	}
@@ -122,7 +123,7 @@ int backtracking(int *grid,int position)
 			
 		grid[i*9+j] = 0;
 		return 0;
-}
+}*/
 
 //______________________________________________________________________________________________________________________________________
 
@@ -217,9 +218,9 @@ SDL_Texture *change_board(int *board,int state, SDL_Surface *surface_p,SDL_Rende
 
 }
 
-int main()
+int New_img(int *grille)
 {
-    
+
     // - Initialize the SDL.
     //if (SDL_Init(SDL_INIT_VIDEO) != 0)
         //errx(EXIT_FAILURE, "%s", SDL_GetError());
